@@ -129,15 +129,15 @@ const firstNameScreen = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-//   fightrText: {
-//     fontSize: 40,
-//     fontWeight: '700',
-//     lineHeight: 48,
-//     color: 'black',
-//     position: 'absolute',
-//     left: 14,
-//     top: 55,
-//   },
+  //   fightrText: {
+  //     fontSize: 40,
+  //     fontWeight: '700',
+  //     lineHeight: 48,
+  //     color: 'black',
+  //     position: 'absolute',
+  //     left: 14,
+  //     top: 55,
+  //   },
   questionText: {
     fontSize: 24,
     fontWeight: '700',
@@ -214,7 +214,7 @@ const birthdayScreen = StyleSheet.create({
     ...commonStyles.firstText,
     letterSpacing: 0,
     top: 115,
-    
+
   },
   birthdaydateText: {
     fontFamily: 'Inter',
@@ -245,8 +245,8 @@ const birthdayScreen = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },  
-/// End of birthday.js styles
+  },
+  /// End of birthday.js styles
 });
 
 const photosScreen = StyleSheet.create({
@@ -281,6 +281,11 @@ const photosScreen = StyleSheet.create({
     ...commonStyles.firstText,
     fontSize: 24,
     top: 115,
+  },
+  icon: {
+    alignSelf: 'center',
+    marginTop: 'auto',
+    marginBottom: 'auto',
   },
   // photosrectanglesContainer: {
   //   flexDirection: 'row',
@@ -344,6 +349,33 @@ const fightingStyleScreen = StyleSheet.create({
     left: 8.072509765625,
     top: 217,
   },
+  // Added in textStyle and innerCircle for the text and rectangle elements in the
+  // fighting screen + fighting level screen
+  textStyle: {
+    height: 31,
+    width: 268,
+    left: 67,
+    top: 24,
+    fontFamily: 'Inter',
+    fontSize: 24,
+    fontWeight: '700',
+    lineHeight: 29,
+    letterSpacing: 0,
+    textAlign: 'left',
+    color: '#FFFFFF', // set text color to white
+  },
+  innerRectangle: {
+    height: 35,
+    width: 36,
+    left: 324,
+    top: 13,
+    borderRadius: 5,
+    backgroundColor: '#000000',
+    borderColor: '#000000',
+    borderWidth: 1,
+    position: 'absolute',
+    backgroundColor: '#FFFFFF', // set background color to white
+  },
   fightingstylebuttonsContainer: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -365,6 +397,7 @@ const fightingStyleScreen = StyleSheet.create({
     fontWeight: '700',
     color: 'white',
   },
+
 });
 
 const fightingLevelScreen = StyleSheet.create({
