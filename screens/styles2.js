@@ -4,7 +4,7 @@
 3) Delete styles.js once all cleaned up 
 */
 
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 const commonStyles = StyleSheet.create({
   fightrText: {
@@ -28,6 +28,7 @@ const commonStyles = StyleSheet.create({
     position: 'absolute',
     left: 14,
   },
+
 });
 
 const loginScreen = StyleSheet.create({
@@ -122,76 +123,117 @@ const loginScreen = StyleSheet.create({
   /// End of index.js styles
 });
 
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
+
+const navbarStyles = StyleSheet.create({
+  banner: {
+    position: 'absolute',
+    width: screenWidth,
+    height: screenHeight * 0.1,
+    top: 0, // Add this line
+    left: 0, // Add this line
+    right: 0, // Add this line
+    zIndex: 1000, // Add this line
+    backgroundColor: '#000000',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fightrText: {
+    fontFamily: 'Inter',
+    fontWeight: '700',
+    fontSize: screenWidth * 0.1,
+    lineHeight: screenHeight * 0.064,
+    color: '#FFFFFF',
+  },
+  backButton: {
+    position: 'absolute',
+    left: screenWidth * 0.05,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
 const firstNameScreen = StyleSheet.create({
-  ...commonStyles,
-  /// Start of firstname.js styles
   container: {
     flex: 1,
     backgroundColor: 'white',
   },
-  //   fightrText: {
-  //     fontSize: 40,
-  //     fontWeight: '700',
-  //     lineHeight: 48,
-  //     color: 'black',
-  //     position: 'absolute',
-  //     left: 14,
-  //     top: 55,
-  //   },
+  // fightrText: {
+  //   fontSize: screenWidth * 0.1,
+  //   fontWeight: '700',
+  //   lineHeight: screenHeight * 0.064,
+  //   color: 'black',
+  //   position: 'absolute',
+  //   left: screenWidth * 0.037,
+  //   top: screenHeight * 0.092,
+  // },
   questionText: {
-    fontSize: 24,
+    fontSize: screenWidth * 0.06,
     fontWeight: '700',
-    lineHeight: 29,
+    lineHeight: screenHeight * 0.038,
     color: 'black',
     position: 'absolute',
-    left: 14,
-    top: 115,
+    left: screenWidth * 0.037,
+    top: screenHeight * 0.15,
   },
   rectangle: {
     backgroundColor: 'black',
-    width: 374.22193,
-    height: 60.443413,
+    width: screenWidth * 0.8,
+    height: screenHeight * 0.1,
     borderRadius: 40,
     position: 'absolute',
-    left: 8.072479,
-    top: 161,
+    left: screenWidth * 0.1,
+    top: screenHeight * 0.227,
+    paddingLeft: screenWidth * 0.04,
+    fontSize: screenWidth * 0.04,
+    color: 'white',
   },
-  rectangle2: {
-    backgroundColor: 'red',
-    width: 374.22193,
-    height: 60.443413,
-    borderRadius: 40,
-    position: 'absolute',
-    left: 8.072479,
-    top: 250,
-  },
-  icon: {
-    backgroundColor: 'black',
-    width: 34.833332,
-    height: 34.833332,
-    position: 'absolute',
-    left: 1.583328,
-    top: 1.583313,
-  },
-  didYouKnowText: {
-    fontSize: 24,
+});
+// const bottomButtons = StyleSheet.create({
+//   buttonContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-around',
+//     position: 'absolute',
+//     bottom: screenHeight * 0.05,
+//     width: screenWidth,
+//   },
+//   button: {
+//     backgroundColor: '#000000',
+//     paddingHorizontal: screenWidth * 0.1,
+//     paddingVertical: screenHeight * 0.015,
+//     borderRadius: 5,
+//   },
+//   buttonText: {
+//     fontFamily: 'Inter',
+//     fontSize: screenWidth * 0.04,
+//     fontWeight: '700',
+//     color: 'white',
+//   },
+// });
+const lastNameScreen = StyleSheet.create({
+  questionText: {
+    fontSize: screenWidth * 0.06,
     fontWeight: '700',
-    lineHeight: 29,
+    lineHeight: screenHeight * 0.038,
     color: 'black',
     position: 'absolute',
-    left: 58,
-    top: 783,
+    left: screenWidth * 0.037,
+    top: screenHeight * 0.357,
   },
-  ellipse: {
-    backgroundColor: '#D9D9D9',
-    width: 58,
-    height: 59,
-    borderRadius: 29.5, // Half of width and height for a perfect ellipse
+  rectangle: {
+    backgroundColor: 'black',
+    width: screenWidth * 0.8,
+    height: screenHeight * 0.1,
+    borderRadius: 40,
     position: 'absolute',
-    left: 0,
-    top: 0,
+    left: screenWidth * 0.1,
+    top: screenHeight * 0.427,
+    paddingLeft: screenWidth * 0.04,
+    fontSize: screenWidth * 0.04,
+    color: 'white',
   },
-  /// End of firstname.js styles
 });
 
 const birthdayScreen = StyleSheet.create({
@@ -199,34 +241,33 @@ const birthdayScreen = StyleSheet.create({
   birthdaycontainer: {
     flex: 1,
     backgroundColor: 'white',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingTop: screenHeight * 0.1,
   },
-  birthdayfightrText: {
-    ...commonStyles.firstText,
-    fontSize: 40,
-    lineHeight: 48,
-    letterSpacing: 0,
-    top: 60,
-  },
-  birthdayquestionText: {
-    fontSize: 24,
-    ...commonStyles.firstText,
-    letterSpacing: 0,
-    top: 115,
-
-  },
+  // birthdayfightrText: {
+  //   ...commonStyles.firstText,
+  //   fontSize: screenWidth * 0.1,
+  //   lineHeight: screenHeight * 0.065,
+  //   letterSpacing: 0,
+  // },
+  // birthdayquestionText: {
+  //   fontSize: screenWidth * 0.06,
+  //   ...commonStyles.firstText,
+  //   letterSpacing: 0,
+  //   marginTop: screenHeight * 0.02,
+  // },
   birthdaydateText: {
     fontFamily: 'Inter',
-    fontSize: 48,
+    fontSize: screenWidth * 0.12,
     fontWeight: '700',
-    lineHeight: 58,
+    lineHeight: screenHeight * 0.08,
     letterSpacing: 0,
-    textAlign: 'left',
-    position: 'absolute',
-    left: 30,
-    top: 161,
-    color: 'black'
+    textAlign: 'center',
+    color: 'black',
+    // marginTop: screenHeight * 0.1,
+    // left: screenWidth * 0,
+    top: screenHeight * 0.14,
   },
   birthdaybutton: {
     backgroundColor: '#000000',
@@ -237,16 +278,14 @@ const birthdayScreen = StyleSheet.create({
   },
   birthdaybuttonText: {
     fontFamily: 'Inter',
-    fontSize: 16,
+    fontSize: screenWidth * 0.04,
     fontWeight: '700',
     color: 'white',
   },
-  birthdaycontainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  buttonContainer: {
+    marginTop: 'auto',
+    marginBottom: screenHeight * 0.05,
   },
-  /// End of birthday.js styles
 });
 
 const photosScreen = StyleSheet.create({
@@ -254,150 +293,217 @@ const photosScreen = StyleSheet.create({
   photoscontainer: {
     flex: 1,
     backgroundColor: 'white',
-    paddingHorizontal: 18,
+    paddingHorizontal: screenWidth * 0.05,
   },
   headerContainer: {
-    height: 160, // Add this line
+    height: screenHeight * 0.25,
   },
   photosrectanglesContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginTop: 50, // Adjust this value to fit your needs
+    marginTop: screenHeight * 0.08,
+
   },
   photosfightrText: {
-    fontFamily: 'Inter',
-    fontSize: 40,
+    fontSize: screenWidth * 0.1,
     fontWeight: '700',
-    lineHeight: 48,
-    letterSpacing: 0,
-    textAlign: 'left',
-    color: '#000000',
+    lineHeight: screenHeight * 0.064,
+    color: 'black',
     position: 'absolute',
-    left: 14,
-    top: 60,
+    left: screenWidth * 0.037,
+    top: screenHeight * 0.092,
   },
   photosaddPhotosText: {
     ...commonStyles.firstText,
-    fontSize: 24,
-    top: 115,
+    fontSize: screenHeight * 0.03,
+    top: screenHeight * 0.15,
   },
   icon: {
     alignSelf: 'center',
     marginTop: 'auto',
     marginBottom: 'auto',
   },
-  // photosrectanglesContainer: {
-  //   flexDirection: 'row',
-  //   flexWrap: 'wrap',
-  //   justifyContent: 'space-between',
-  //   marginTop: 15,
-  // },
   photosrectangle: {
     backgroundColor: '#D9D9D9',
     borderRadius: 10,
-    width: 117,
-    height: 109,
-    marginBottom: 15,
+    width: (screenWidth * 0.9) / 3 - screenWidth * 0.03, // Updated width property
+    height: screenHeight * 0.15,
+    marginBottom: screenHeight * 0.025,
+    marginRight: screenWidth * 0.015, // Updated marginRight property
+    marginLeft: screenWidth * 0.015, // Added marginLeft property
   },
   photosbutton: {
     backgroundColor: '#000000',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingHorizontal: screenWidth * 0.06,
+    paddingVertical: screenHeight * 0.012,
     borderRadius: 5,
-    marginVertical: 10,
+    marginVertical: screenHeight * 0.0125,
   },
   photosbuttonText: {
     fontFamily: 'Inter',
-    fontSize: 16,
+    fontSize: screenHeight * 0.02,
     fontWeight: '700',
     color: 'white',
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: screenHeight * 0.0125,
+    left: screenWidth * 0.025,
+    right: screenWidth * 0.025,
+  },
+  nextButton: {
+    position: 'absolute',
+    right: screenWidth * 0.05,
+    bottom: screenHeight * 0.05,
+    width: screenHeight * 0.1,
+    height: screenHeight * 0.1,
+    borderRadius: screenHeight * 0.05,
+    backgroundColor: '#D9D9D9',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  nextButtonText: {
+    fontFamily: 'Inter',
+    fontSize: screenHeight * 0.02,
+    fontWeight: '700',
+    color: 'white',
+  },
+});
 
+const heightWeightScreen = StyleSheet.create({
+  heightUnitToggle: {
+    position: 'absolute',
+    right: screenWidth * 0.1,
+    top: screenHeight * 0.33,
+    flexDirection: 'row',
+  },
+  weightUnitToggle: {
+    position: 'absolute',
+    right: screenWidth * 0.1,
+    top: screenHeight * 0.53,
+    flexDirection: 'row',
+  },
+  unitText: {
+    color: 'grey',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  activeUnit: {
+    color: 'black',
+  },
+  separator: {
+    color: 'black',
+  },
 });
 
 const fightingStyleScreen = StyleSheet.create({
-  ...commonStyles,
-  fightingstylecontainer: {
+  // Add this to the existing styles
+  rectangleText: {
+    fontFamily: 'Inter',
+    fontSize: screenWidth * 0.06,
+    fontWeight: '700',
+    lineHeight: screenHeight * 0.036,
+    color: 'white',
+  },
+  firstRectangle: {
+    marginTop: screenHeight * 0.05,
+  },
+  // Level screen
+  radioButton: {
+    height: 24,
+    width: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 10,
+    top: 18,
+  },
+  radioButtonInner: {
+    height: 12,
+    width: 12,
+    borderRadius: 6,
+    backgroundColor: '#000',
+  },
+  // End of level screen
+  container: {
     flex: 1,
     backgroundColor: 'white',
   },
-  fightingstylefightrText: {
-    fontFamily: 'Inter',
-    fontSize: 40,
+  fightrText: {
+    fontSize: screenWidth * 0.1,
     fontWeight: '700',
-    lineHeight: 48,
-    letterSpacing: 0,
-    textAlign: 'left',
-    color: '#000000',
+    lineHeight: screenHeight * 0.064,
+    color: 'black',
     position: 'absolute',
-    left: 18,
-    top: 61,
+    left: screenWidth * 0.037,
+    top: screenHeight * 0.092,
   },
-  fightingstylesubtitle: {
-    ...commonStyles.firstText,
-    fontSize: 24,
-    top: 115,
-    width: 362,
+  questionText: {
+    fontSize: screenWidth * 0.06,
+    fontWeight: '700',
+    lineHeight: screenHeight * 0.038,
+    color: 'black',
+    position: 'absolute',
+    left: screenWidth * 0.037,
+    top: screenHeight * 0.193,
   },
-  fightingstylerectangle: {
-    backgroundColor: '#000000',
+  list: {
+    paddingTop: screenHeight * 0.27,
+    paddingHorizontal: screenWidth * 0.1,
+  },
+  rectangle: {
+    backgroundColor: 'black',
+    width: screenWidth * 0.8,
+    height: screenHeight * 0.1,
     borderRadius: 40,
-    width: 374.2219251726353,
-    height: 60.443412997923744,
-    position: 'absolute',
-    left: 8.072509765625,
-    top: 217,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: screenWidth * 0.04,
+    paddingRight: screenWidth * 0.05,
+    marginBottom: screenHeight * 0.02,
   },
-  // Added in textStyle and innerCircle for the text and rectangle elements in the
-  // fighting screen + fighting level screen
   textStyle: {
-    height: 31,
-    width: 268,
-    left: 67,
-    top: 24,
-    fontFamily: 'Inter',
-    fontSize: 24,
-    fontWeight: '700',
-    lineHeight: 29,
-    letterSpacing: 0,
-    textAlign: 'left',
-    color: '#FFFFFF', // set text color to white
-  },
-  innerRectangle: {
-    height: 35,
-    width: 36,
-    left: 324,
-    top: 13,
-    borderRadius: 5,
-    backgroundColor: '#000000',
-    borderColor: '#000000',
-    borderWidth: 1,
-    position: 'absolute',
-    backgroundColor: '#FFFFFF', // set background color to white
-  },
-  fightingstylebuttonsContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  fightingstylebutton: {
-    backgroundColor: '#000000',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginVertical: 10,
-    width: '80%',
-    alignItems: 'center',
-  },
-  fightingstylebuttonText: {
-    fontFamily: 'Inter',
-    fontSize: 16,
+    fontSize: screenWidth * 0.04,
     fontWeight: '700',
     color: 'white',
   },
-
+  checkBox: {
+    width: screenHeight * 0.035,
+    height: screenHeight * 0.035,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'white',
+  },
+  checked: {
+    backgroundColor: 'white',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingBottom: screenHeight * 0.025,
+  },
+  photosbutton: {
+    backgroundColor: '#000000',
+    paddingHorizontal: screenWidth * 0.06,
+    paddingVertical: screenHeight * 0.012,
+    borderRadius: 5,
+    marginVertical: screenHeight * 0.0125,
+  },
+  photosbuttonText: {
+    fontFamily: 'Inter',
+    fontSize: screenHeight * 0.02,
+    fontWeight: '700',
+    color: 'white',
+  },
 });
 
 const fightingLevelScreen = StyleSheet.create({
@@ -461,8 +567,11 @@ const fightingLevelScreen = StyleSheet.create({
 export {
   loginScreen,
   firstNameScreen,
+  lastNameScreen,
+  heightWeightScreen,
   birthdayScreen,
   photosScreen,
   fightingStyleScreen,
   fightingLevelScreen,
+  navbarStyles,
 };

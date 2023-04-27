@@ -1,49 +1,70 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { fightingStyleScreen } from './styles2';
-// import styles from './styles';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { fightingStyleScreen, firstNameScreen, photosScreen } from './styles2';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Navbar from './Navbar';
+import NextButton from './NextButton';
+
+const CheckBox = ({ isChecked, onToggle }) => (
+  <TouchableOpacity
+    style={[fightingStyleScreen.checkBox, isChecked && fightingStyleScreen.checked]}
+    onPress={onToggle}
+  />
+);
+
+const martialArts = [
+  'Karate', 'Judo', 'Taekwondo', 'Kung Fu', 'Brazilian Jiu-Jitsu',
+  'Muay Thai', 'Boxing', 'Krav Maga', 'Capoeira', 'Aikido'
+];
 
 const FightingScreen = ({ navigation }) => {
-    return (
-        <View style={fightingStyleScreen.fightingstylecontainer}>
-            <Text style={fightingStyleScreen.fightingstylefightrText}>Fightr.</Text>
-            <Text style={fightingStyleScreen.fightingstylesubtitle}>
-                What fighting styles are you interested in?{'\n'}Tick at least one.
-            </Text>
-            <View style={fightingStyleScreen.fightingstylerectangle}>
-                <Text style={fightingStyleScreen.textStyle}>Boxing</Text>
-                <View style={fightingStyleScreen.innerRectangle}></View>
-            </View>
-            <View style={[fightingStyleScreen.fightingstylerectangle, { top: 288 }]}>
-                <Text style={fightingStyleScreen.textStyle}>Muay Thai</Text>
-                <View style={fightingStyleScreen.innerRectangle}></View>
-            </View>
-            <View style={[fightingStyleScreen.fightingstylerectangle, { top: 359 }]}>
-                <Text style={fightingStyleScreen.textStyle}>Wing Chun</Text>
-                <View style={fightingStyleScreen.innerRectangle}></View>
-            </View>
-            <View style={[fightingStyleScreen.fightingstylerectangle, { top: 430 }]}>
-                <Text style={fightingStyleScreen.textStyle}>Kick-Boxing</Text>
-                <View style={fightingStyleScreen.innerRectangle}></View>
-            </View>
+  const [checkedMartialArts, setCheckedMartialArts] = useState([]);
 
-            <View style={fightingStyleScreen.fightingstylebuttonsContainer}>
-                <TouchableOpacity
-                    style={fightingStyleScreen.fightingstylebutton}
-                    onPress={() => navigation.navigate('Photos')}
-                >
-                    <Text style={fightingStyleScreen.fightingstylebuttonText}>Go to Photos</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={fightingStyleScreen.fightingstylebutton}
-                    onPress={() => navigation.navigate('FightingLevelScreen')}
-                >
-                    <Text style={fightingStyleScreen.fightingstylebuttonText}>Go to FightingLevel</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    );
+  const toggleCheckbox = (martialArt) => {
+    if (checkedMartialArts.includes(martialArt)) {
+      setCheckedMartialArts(checkedMartialArts.filter(item => item !== martialArt));
+    } else {
+      setCheckedMartialArts([...checkedMartialArts, martialArt]);
+    }
+  };
+
+  const renderItem = (item, index) => (
+    <View
+      style={[
+        fightingStyleScreen.rectangle,
+        index === 0 ? fightingStyleScreen.firstRectangle : null
+      ]}
+      key={item}
+    >
+      <Text style={[fightingStyleScreen.textStyle, fightingStyleScreen.rectangleText]}>{item}</Text>
+      <CheckBox
+        isChecked={checkedMartialArts.includes(item)}
+        onToggle={() => toggleCheckbox(item)}
+      />
+    </View>
+  );
+
+  return (
+    <View style={fightingStyleScreen.container}>
+      <Navbar navigation={navigation} />
+      <ScrollView contentContainerStyle={fightingStyleScreen.list}>
+        {/* <Text style={fightingStyleScreen.fightrText}>Fightr.</Text> */}
+        <Text style={firstNameScreen.questionText}>
+          What fighting styles are you interested in? Tick at least one.
+        </Text>
+        {martialArts.map(renderItem)}
+      </ScrollView>
+      {/* <TouchableOpacity
+        style={photosScreen.nextButton}
+        onPress={() => navigation.navigate('FightingLevelScreen')}
+      >
+        <Text style={photosScreen.nextButtonText}>Next</Text>
+      </TouchableOpacity> */}
+      <NextButton
+        onPress={() => navigation.navigate('FightingLevelScreen')}
+      />
+    </View>
+  );
 };
-
 
 export default FightingScreen;

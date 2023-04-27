@@ -1,35 +1,65 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import {fightingStyleScreen} from './styles2';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { fightingStyleScreen, firstNameScreen, photosScreen } from './styles2';
+import Navbar from './Navbar';
+import NextButton from './NextButton';
 
-const FightingLevelScreen = ({ navigation }) => { 
+const CheckBox = ({ isChecked, onToggle }) => (
+    <TouchableOpacity
+        style={[fightingStyleScreen.checkBox, isChecked && fightingStyleScreen.checked]}
+        onPress={onToggle}
+    />
+);
+
+const levels = [
+    'Professional', 'Intermediate', 'Amateur', 'No Experience'
+];
+
+const FightingLevelScreen = ({ navigation }) => {
+    const [checkedLevel, setCheckedLevel] = useState(null);
+
+    const toggleCheckbox = (level) => {
+        setCheckedLevel(checkedLevel === level ? null : level);
+    };
+
+    const renderItem = (item, index) => (
+        <View
+            style={[
+                fightingStyleScreen.rectangle,
+                index === 0 ? fightingStyleScreen.firstRectangle : null
+            ]}
+            key={item}
+        >
+            <Text style={[fightingStyleScreen.textStyle, fightingStyleScreen.rectangleText]}>{item}</Text>
+            <CheckBox
+                isChecked={checkedLevel === item}
+                onToggle={() => toggleCheckbox(item)}
+            />
+        </View>
+    );
+
     return (
-        <View style={fightingStyleScreen.fightingstylecontainer}>
-            <Text style={fightingStyleScreen.fightingstylefightrText}>Fightr.</Text>
-            <Text style={fightingStyleScreen.fightingstylesubtitle}>
-            How good are you?{'\n'}This may determine the partners you find
-            </Text>
-            <View style={fightingStyleScreen.fightingstylerectangle} />
-            <View style={[fightingStyleScreen.fightingstylerectangle, { top: 288 }]} />
-            <View style={[fightingStyleScreen.fightingstylerectangle, { top: 359 }]} />
-            <View style={[fightingStyleScreen.fightingstylerectangle, { top: 430 }]} />
-            <View style={fightingStyleScreen.fightingstylebuttonsContainer}>
-                <TouchableOpacity
-                    style={fightingStyleScreen.fightingstylebutton}
-                    onPress={() => navigation.navigate('FightingScreen')}
-                >
-                    <Text style={fightingStyleScreen.fightingstylebuttonText}>Go to FightingScreen</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={fightingStyleScreen.fightingstylebutton}
-                    onPress={() => navigation.navigate('Home')}
-                >
-                    <Text style={fightingStyleScreen.fightingstylebuttonText}>Go to Home</Text>
-                </TouchableOpacity>
-            </View>
+        <View style={fightingStyleScreen.container}>
+            <Navbar navigation={navigation} />
+            <ScrollView contentContainerStyle={fightingStyleScreen.list}>
+                {/* <Text style={fightingStyleScreen.fightrText}>Fightr.</Text> */}
+                <Text style={firstNameScreen.questionText}>
+                    How good is your fight game? This will help us match you others!
+                </Text>
+                {levels.map(renderItem)}
+            </ScrollView>
+            {/* <TouchableOpacity
+        style={photosScreen.nextButton}
+        onPress={() => navigation.navigate('FightingLevelScreen')}
+      >
+        <Text style={photosScreen.nextButtonText}>Next</Text>
+      </TouchableOpacity> */}
+            <NextButton
+                onPress={() => navigation.navigate('Photos')}
+            />
         </View>
     );
 };
-
 
 export default FightingLevelScreen;

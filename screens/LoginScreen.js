@@ -9,7 +9,7 @@ const Home = ({ navigation }) => {
             {/* <StatusBar backgroundColor="black" barStyle="light-content" /> */}
             {/* <Video source={require('./assets/pexels.mp4')} style={styles.video} repeat={true} resizeMode='cover' /> */}
             <Text style={styles.title}>Fightr.</Text>
-            <Text style={styles.subtitle}>Elevate your fighting game!</Text>
+            <Text style={styles.subtitle}>The Game's The Game</Text>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.topButton} onPress={() => console.log('Continue with Apple')}>
                     <Text style={styles.buttonText}>Continue with Apple</Text>
