@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StatusBar } from 'react-native';
-import { firstNameScreen, lastNameScreen, photosScreen } from './styles2';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { View, Text, TextInput, StatusBar } from 'react-native';
+import { firstNameScreen, lastNameScreen } from '../../components/styles2';
 
-import Navbar from './Navbar';
-import NextButton from './NextButton';
+import Navbar from '../../components/Navbar';
+import NextButton from '../../components/NextButton';
 
-const FirstName = ({ navigation, route }) => {
+const FirstName = ({ navigation }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+
+  const handlePress = () => {
+    navigation.navigate('EmailAndNumber', { firstName, lastName });
+  };
 
   return (
     <View style={firstNameScreen.container}>
@@ -30,22 +33,9 @@ const FirstName = ({ navigation, route }) => {
         placeholder="Last Name"
         placeholderTextColor="white"
       />
-      <View style={photosScreen.buttonContainer}>
-        {/* <TouchableOpacity
-        style={photosScreen.nextButton}
-        onPress={() => navigation.navigate('Birthday')}
-      >
-        <Text style={photosScreen.nextButtonText}>Next</Text>
-        <Icon name="arrow-right" size={30} color="#000" />
-      </TouchableOpacity> */}
-        <NextButton
-          onPress={() => navigation.navigate('EmailAndNumber')}
-        />
-      </View>
+      <NextButton onPress={handlePress} />
     </View>
   );
 };
 
 export default FirstName;
-
-

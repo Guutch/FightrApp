@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { fightingStyleScreen, firstNameScreen, photosScreen } from './styles2';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { fightingStyleScreen, firstNameScreen } from '../../components/styles2';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Navbar from './Navbar';
-import NextButton from './NextButton';
+import Navbar from '../../components/Navbar';
+import NextButton from '../../components/NextButton';
 
 const CheckBox = ({ isChecked, onToggle }) => (
   <TouchableOpacity
@@ -17,7 +17,7 @@ const martialArts = [
   'Muay Thai', 'Boxing', 'Krav Maga', 'Capoeira', 'Aikido'
 ];
 
-const FightingScreen = ({ navigation }) => {
+const FightingScreen = ({ navigation, route }) => {
   const [checkedMartialArts, setCheckedMartialArts] = useState([]);
 
   const toggleCheckbox = (martialArt) => {
@@ -26,6 +26,13 @@ const FightingScreen = ({ navigation }) => {
     } else {
       setCheckedMartialArts([...checkedMartialArts, martialArt]);
     }
+  };
+
+  const handleNextPress = () => {
+    navigation.navigate('FightingLevelScreen', {
+      ...route.params, // Pass the data from previous signup steps
+      checkedMartialArts,
+    });
   };
 
   const renderItem = (item, index) => (
@@ -48,21 +55,12 @@ const FightingScreen = ({ navigation }) => {
     <View style={fightingStyleScreen.container}>
       <Navbar navigation={navigation} />
       <ScrollView contentContainerStyle={fightingStyleScreen.list}>
-        {/* <Text style={fightingStyleScreen.fightrText}>Fightr.</Text> */}
         <Text style={firstNameScreen.questionText}>
           What fighting styles are you interested in? Tick at least one.
         </Text>
         {martialArts.map(renderItem)}
       </ScrollView>
-      {/* <TouchableOpacity
-        style={photosScreen.nextButton}
-        onPress={() => navigation.navigate('FightingLevelScreen')}
-      >
-        <Text style={photosScreen.nextButtonText}>Next</Text>
-      </TouchableOpacity> */}
-      <NextButton
-        onPress={() => navigation.navigate('FightingLevelScreen')}
-      />
+      <NextButton onPress={handleNextPress} />
     </View>
   );
 };

@@ -2,14 +2,9 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import SignUpFlow from './SignUpFlow';
 import LoginScreen from './screens/LoginScreen';
-import FirstName from './screens/FirstName';
-import EmailAndNumber from './screens/EmailAndNumber';
-import HeightAndWeight from './screens/HeightAndWeight';
-import BirthdayScreen from './screens/Birthday';
-import PhotosScreen from './screens/PhotosScreen';
-import FightingScreen from './screens/FightingScreen';
-import FightingLevelScreen from './screens/FightingLevel';
+import EmailLogin from './screens/EmalLogIn';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,19 +13,20 @@ const MyStack = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Login"
+          name="LoginScreen"
           component={LoginScreen}
-          //   options={{title: 'Home'}}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="FirstName" component={FirstName} options={{ headerShown: false }} />
-        <Stack.Screen name="EmailAndNumber" component={EmailAndNumber} options={{ headerShown: false }} />
-        <Stack.Screen name="HeightAndWeight" component={HeightAndWeight} options={{ headerShown: false }} />
-        <Stack.Screen name="Birthday" component={BirthdayScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Photos" component={PhotosScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="FightingScreen" component={FightingScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="FightingLevelScreen" component={FightingLevelScreen} options={{ headerShown: false }} />
-
+        <Stack.Screen
+          name="EmailLogin"
+          component={EmailLogin}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SignUpFlow"
+          component={SignUpFlow}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
