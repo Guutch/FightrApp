@@ -28,7 +28,7 @@ const FightingScreen = ({ navigation, route }) => {
     }
   };
 
-  const handleNextPress = () => {
+  const handlePress = () => {
     navigation.navigate('FightingLevelScreen', {
       ...route.params, // Pass the data from previous signup steps
       checkedMartialArts,
@@ -53,14 +53,19 @@ const FightingScreen = ({ navigation, route }) => {
 
   return (
     <View style={fightingStyleScreen.container}>
-      <Navbar navigation={navigation} />
+      <Navbar
+        navigation={navigation}
+        showBackButton={true}
+        showNextButton={true}
+        onNext={handlePress}
+      />
       <ScrollView contentContainerStyle={fightingStyleScreen.list}>
         <Text style={firstNameScreen.questionText}>
           What fighting styles are you interested in? Tick at least one.
         </Text>
         {martialArts.map(renderItem)}
       </ScrollView>
-      <NextButton onPress={handleNextPress} />
+      {/* <NextButton onPress={handleNextPress} /> */}
     </View>
   );
 };

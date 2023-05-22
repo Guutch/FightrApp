@@ -5,7 +5,7 @@ import Navbar from '../../components/Navbar';
 import NextButton from '../../components/NextButton';
 
 const HeightAndWeight = ({ navigation, route }) => {
-  const { firstName, lastName, email, phoneNumber } = route.params;
+  // const { firstName, lastName, email, phoneNumber } = route.params;
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [heightUnit, setHeightUnit] = useState('cm');
@@ -26,7 +26,12 @@ const HeightAndWeight = ({ navigation, route }) => {
   return (
     <View style={firstNameScreen.container}>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
-      <Navbar navigation={navigation} />
+      <Navbar
+        navigation={navigation}
+        showBackButton={true}
+        showNextButton={true}
+        onNext={handlePress}
+      />
       <Text style={firstNameScreen.questionText}>How tall are you?</Text>
       <TextInput
         style={firstNameScreen.rectangle}
@@ -55,7 +60,6 @@ const HeightAndWeight = ({ navigation, route }) => {
         <Text style={heightWeightScreen.separator}>/</Text>
         <Text style={[heightWeightScreen.unitText, weightUnit === 'lbs' && heightWeightScreen.activeUnit]}>lbs</Text>
       </TouchableOpacity>
-      <NextButton onPress={handlePress} />
     </View>
   );
 };

@@ -18,7 +18,12 @@ const EmailAndNumber = ({ navigation, route }) => {
   return (
     <View style={firstNameScreen.container}>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
-      <Navbar navigation={navigation} />
+      <Navbar
+        navigation={navigation}
+        showBackButton={true}
+        showNextButton={true}
+        onNext={handlePress}
+      />
       <Text style={firstNameScreen.questionText}>What's your email address?</Text>
       <TextInput
         style={firstNameScreen.rectangle}
@@ -38,7 +43,7 @@ const EmailAndNumber = ({ navigation, route }) => {
         placeholderTextColor="white"
         keyboardType="phone-pad"
       />
-      <NextButton onPress={handlePress} />
+      {/* <NextButton onPress={handlePress} /> */}
     </View>
   );
 };

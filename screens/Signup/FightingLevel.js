@@ -21,7 +21,7 @@ const FightingLevelScreen = ({ navigation, route }) => {
     setCheckedLevel(checkedLevel === level ? null : level);
   };
 
-  const handleNextPress = () => {
+  const handlePress = () => {
     navigation.navigate('SignUpLocation', {
       ...route.params, // Pass the data from previous signup steps
       checkedLevel,
@@ -45,14 +45,19 @@ const FightingLevelScreen = ({ navigation, route }) => {
 
   return (
     <View style={fightingStyleScreen.container}>
-      <Navbar navigation={navigation} />
+      <Navbar
+        navigation={navigation}
+        showBackButton={true}
+        showNextButton={true}
+        onNext={handlePress}
+      />
       <ScrollView contentContainerStyle={fightingStyleScreen.list}>
         <Text style={firstNameScreen.questionText}>
           How good is your fight game? This will help us match you with others!
         </Text>
         {levels.map(renderItem)}
       </ScrollView>
-      <NextButton onPress={handleNextPress} />
+      {/* <NextButton onPress={handleNextPress} /> */}
     </View>
   );
 };

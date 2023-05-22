@@ -99,9 +99,9 @@ const navbarStyles = StyleSheet.create({
     width: screenWidth,
     height: screenHeight * 0.1,
     top: 0,
-    left: 0, 
-    right: 0, 
-    zIndex: 1000, 
+    left: 0,
+    right: 0,
+    zIndex: 1000,
     backgroundColor: '#000000',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -118,6 +118,15 @@ const navbarStyles = StyleSheet.create({
     left: screenWidth * 0.05,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  nextButton: {
+    position: 'absolute',
+    right: screenWidth * 0.05,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconSize: {
+    width: screenWidth * 0.08, // Adjust this value to change the size of the icons
   },
 });
 
@@ -569,6 +578,90 @@ const signUpLocation = StyleSheet.create({
     textAlign: 'center',
   },
 });
+const welcomeStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'space-between',
+  },
+  boxingIcon: {
+    position: 'absolute',
+    top: screenHeight * 0.15,  // responsive top position
+    // left: screenWidth * 0.435,  // responsive left position
+    height: screenHeight * 0.06,  // responsive height
+    width: screenWidth * 0.12,  // responsive width
+  },
+  welcomeText: {
+    marginTop: screenHeight * 0.205,
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#000',
+  },
+  subText: {
+    width: screenWidth * 0.7,
+    fontSize: 12,
+    fontWeight: '700',
+    textAlign: 'center',
+    color: '#000',
+  },
+  rulesContainer: {
+    marginTop: screenHeight * 0.02,
+    alignSelf: 'flex-start',
+    marginLeft: 25,
+    width: screenWidth * 0.8,
+  },
+  rule: {
+    flexDirection: 'row',
+    marginBottom: screenHeight * 0.03,
+    alignItems: 'flex-start',
+    // backgroundColor: 'red', // Keep this if you want to see the boundary
+  },
+  tickIcon: {
+    marginRight: screenWidth * 0.03,
+    height: screenHeight * 0.042,  // responsive height
+    width: screenWidth * 0.08,  // responsive width
+    // height: 30,
+    // width: 30,
+  },
+  ruleTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#000',
+  },
+  ruleText: {
+    marginTop: screenHeight * 0.01,
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#000',
+  },
+  termsAndConditions: {
+    marginBottom: screenHeight * 0.01,
+    width: screenWidth * 0.7,
+    fontSize: 13,
+    fontWeight: '700',
+    textAlign: 'center',
+    color: '#000',
+  },
+  agreeButton: {
+    marginBottom: screenHeight * 0.02,
+    height: screenHeight * 0.08,  // responsive height
+    width: screenWidth * 0.67,  // responsive width
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
+  },
+  agreeButtonText: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#FFF',
+  },
+  ruleContent: {
+    width: '85%', // adjust this as needed
+  },
+});
 
 export {
   loginScreen,
@@ -581,5 +674,6 @@ export {
   fightingStyleScreen,
   fightingLevelScreen,
   signUpLocation,
+  welcomeStyles,
   navbarStyles,
 };

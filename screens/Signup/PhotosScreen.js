@@ -48,7 +48,7 @@ const Photos = ({ navigation, route }) => {
 
     ImagePicker.openPicker(options)
       .then(async (response) => {
-        console.log('Selected photo path:', response.path);
+        // console.log('Selected photo path:', response.path);
 
         if (Platform.OS === 'android') {
           for (const image of images) {
@@ -65,8 +65,10 @@ const Photos = ({ navigation, route }) => {
         }
 
         const newImages = [...images];
-        newImages[index] = response;
+        newImages[index] = { path: response.path, data: response.data, name: response.path.split("/").pop(), type: 'image/jpeg' };
         setImages(newImages);
+        
+
 
         setImagePaths((prevPaths) => [...prevPaths, response.path]);
       })
@@ -85,20 +87,27 @@ const Photos = ({ navigation, route }) => {
     });
   };
 
-  const handleBackPress = () => {
-    navigation.navigate('Birthday');
-  };
+  // const handleBackPress = () => {
+  //   navigation.navigate('Birthday');
+  // };
 
-  const handleNextPress = () => {
+  const handlePress = () => {
     navigation.navigate('FightingScreen', {
       ...route.params,
-      imagePaths,
+      images, // Pass the images array instead of imagePaths
     });
   };
+  
 
   return (
     <View style={photosScreen.photoscontainer}>
-      <Navbar navigation={navigation} backNavigation={handleBackPress} />
+      {/* <Navbar navigation={navigation} backNavigation={handleBackPress} /> */}
+      <Navbar
+        navigation={navigation}
+        showBackButton={true}
+        showNextButton={true}
+        onNext={handlePress}
+      />
       <View style={photosScreen.headerContainer}>
         <Text style={firstNameScreen.questionText}>
           Add some photos{'\n'}Upload at least one photo
@@ -132,7 +141,7 @@ const Photos = ({ navigation, route }) => {
           </TouchableOpacity>
         ))}
       </View>
-      <NextButton onPress={handleNextPress} />
+      {/* <NextButton onPress={handleNextPress} /> */}
     </View>
   );
   

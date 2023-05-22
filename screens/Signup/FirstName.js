@@ -1,9 +1,9 @@
+// FirstName.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, StatusBar } from 'react-native';
 import { firstNameScreen, lastNameScreen } from '../../components/styles2';
 
 import Navbar from '../../components/Navbar';
-import NextButton from '../../components/NextButton';
 
 const FirstName = ({ navigation }) => {
   const [firstName, setFirstName] = useState('');
@@ -16,7 +16,13 @@ const FirstName = ({ navigation }) => {
   return (
     <View style={firstNameScreen.container}>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
-      <Navbar navigation={navigation} />
+      <Navbar
+        navigation={navigation}
+        showBackButton={true}
+        showNextButton={true}
+        onNext={handlePress}
+      />
+
       <Text style={firstNameScreen.questionText}>What's your first name?</Text>
       <TextInput
         style={firstNameScreen.rectangle}
@@ -33,7 +39,6 @@ const FirstName = ({ navigation }) => {
         placeholder="Last Name"
         placeholderTextColor="white"
       />
-      <NextButton onPress={handlePress} />
     </View>
   );
 };

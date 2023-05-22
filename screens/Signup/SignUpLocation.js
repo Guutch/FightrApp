@@ -14,7 +14,7 @@ const SignUpLocation = ({ navigation, route }) => {
       if (result === RESULTS.GRANTED) {
         Geolocation.getCurrentPosition(
           async (position) => {
-            console.log('Data from previous steps, photos, martial arts, and fighting level:', route.params);
+            // console.log('Data from previous steps, photos, martial arts, and fighting level:', route.params);
             Alert.alert('Location granted', `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
   
             // Call the createUser function with the user data and location
@@ -26,7 +26,7 @@ const SignUpLocation = ({ navigation, route }) => {
               height: route.params.height,
               weight: route.params.weight,
               birthday: route.params.birthday,
-              photos: route.params.imagePaths,
+              photos: route.params.images,
               fightingStyle: route.params.checkedMartialArts.join(', '), // Assuming the fighting styles are stored as an array and should be joined into a single string
               fightingLevel: route.params.checkedLevel,
               location: {
@@ -35,11 +35,10 @@ const SignUpLocation = ({ navigation, route }) => {
               },
             };
 
-            console.log(userData.location.coordinates[0])
             await createUser(userData);
   
             // Navigate to another screen if needed
-            navigation.navigate('SomeScreen');
+            navigation.navigate('Welcome');
           },
           (error) => {
             console.log(error);
@@ -57,6 +56,12 @@ const SignUpLocation = ({ navigation, route }) => {
   return (
     <View style={signUpLocation.container}>
       <Navbar navigation={navigation} />
+      <Navbar
+        navigation={navigation}
+        showBackButton={true}
+        showNextButton={false}
+        // onNext={handlePress}
+      />
       <View style={signUpLocation.iconContainer}>
         <Icon name="map-marker" size={150} color="#FFFFFF" />
       </View>

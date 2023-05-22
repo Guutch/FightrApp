@@ -4,27 +4,55 @@ import axios from 'axios';
 const API_URL = 'http://10.0.2.2:3000';
 
 export const createUser = async (userData) => {
-  console.log(userData.firstName)
-  const data = {
-    firstName: userData.firstName,
-    lastName: userData.lastName,
-    email: userData.email,
-    phoneNumber: userData.phoneNumber,
-    birthday: userData.birthday, // Need to test this
-    height: userData.height,
-    weight: userData.weight,
-    photos: userData.photos,
-    fightingStyle: userData.fightingStyle,
-    fightingLevel: userData.fightingLevel,
-    location: {
-      type: "Point",
-      coordinates: [userData.location.coordinates[0], userData.location.coordinates[1]]
-    }
-  };
+  // console.log(userData.firstName)
 
+  // Create a new FormData instance
+  let data = new FormData();
+
+  // Append all non-photo properties
+  data.append('firstName', userData.firstName);
+  data.append('lastName', userData.lastName);
+  data.append('email', userData.email);
+  data.append('phoneNumber', userData.phoneNumber);
+  data.append('birthday', userData.birthday);
+  data.append('height', userData.height);
+  data.append('weight', userData.weight);
+  data.append('fightingStyle', userData.fightingStyle);
+  data.append('fightingLevel', userData.fightingLevel);
+
+  // Append location data
+  data.append('location[type]', userData.location.type);
+  data.append('location[coordinates]', JSON.stringify(userData.location.coordinates));
+
+  // Append photos
+  for (const [index, photo] of userData.photos.entries()) {
+    if (photo) {
+      if (Platform.OS === 'android' && photo.data) {
+        // if on Android and photo data is available, append as a blob
+        const photoBlob = {
+          uri: `data:image/jpeg;base64,${photo.data}`,
+          type: 'image/jpeg',
+          name: photo.name || `photo_${index}.jpg`,
+        };
+        data.append('photos', photoBlob);
+      } else {
+        // if on iOS or photo data is not available, append as a file
+        data.append('photos', {
+          uri: photo.uri,
+          type: 'image/jpeg',
+          name: photo.name || `photo_${index}.jpg`,
+        });
+      }
+    }
+  }
 
   try {
-    const response = await axios.post(`${API_URL}/users/register`, data);
+    const response = await axios.post(`${API_URL}/users/register`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
     console.log('User created successfully:', response.data);
     return response.data;
   } catch (error) {
@@ -41,4 +69,3 @@ export const createUser = async (userData) => {
     throw error;
   }
 };
-

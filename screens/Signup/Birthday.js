@@ -39,7 +39,12 @@ const BirthdayScreen = ({ navigation, route }) => {
 
   return (
     <View style={birthdayScreen.birthdaycontainer}>
-      <Navbar navigation={navigation} />
+      <Navbar
+        navigation={navigation}
+        showBackButton={true}
+        showNextButton={true}
+        onNext={handlePress}
+      />
       <Text style={firstNameScreen.questionText}>When is your birthday?</Text>
       <TouchableOpacity onPress={showDatePicker} activeOpacity={1} style={birthdayScreen.birthdayTouchable}>
         <Text style={birthdayScreen.birthdaydateText}>{formatDate(date)}</Text>
@@ -53,7 +58,7 @@ const BirthdayScreen = ({ navigation, route }) => {
           maximumDate={new Date()}
         />
       )}
-      <NextButton onPress={handlePress} />
+      {/* <NextButton onPress={handlePress} /> */}
     </View>
   );
 };

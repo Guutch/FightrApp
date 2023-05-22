@@ -9,6 +9,7 @@ import PhotosScreen from './screens/Signup/PhotosScreen';
 import FightingScreen from './screens/Signup/FightingScreen';
 import FightingLevelScreen from './screens/Signup/FightingLevel';
 import SignUpLocation from './screens/Signup/SignUpLocation';
+import Welcome from './screens/Signup/Welcome';
 
 const SignUpStack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ const SignUpFlow = () => {
       <SignUpStack.Screen name="FightingScreen" component={FightingScreen} options={{ headerShown: false }} />
       <SignUpStack.Screen name="FightingLevelScreen" component={FightingLevelScreen} options={{ headerShown: false }} />
       <SignUpStack.Screen name="SignUpLocation" component={SignUpLocation} options={{ headerShown: false }} />
+      <SignUpStack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
     </SignUpStack.Navigator>
   );
 };
