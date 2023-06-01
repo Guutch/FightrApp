@@ -636,6 +636,20 @@ const welcomeStyles = StyleSheet.create({
     fontWeight: '700',
     color: '#000',
   },
+  avoidText: {
+    position: 'absolute',
+    textAlign: 'center',
+    width: screenWidth * 0.7, // adjust this as needed
+    left: screenWidth * 0.175, // adjust this as needed
+    top: screenHeight * 0.48, // adjust this as needed
+    fontFamily: 'Inter',
+    fontWeight: '700',
+    fontSize: 14, // adjust this as needed
+    // fontSize: screenHeight * 0.02, // adjust this as needed
+    // lineHeight: screenHeight * 0.025, // adjust this as needed
+    color: '#000000',
+  },
+  
   termsAndConditions: {
     marginBottom: screenHeight * 0.01,
     width: screenWidth * 0.7,

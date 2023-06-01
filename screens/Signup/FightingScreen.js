@@ -13,8 +13,7 @@ const CheckBox = ({ isChecked, onToggle }) => (
 );
 
 const martialArts = [
-  'Karate', 'Judo', 'Taekwondo', 'Kung Fu', 'Brazilian Jiu-Jitsu',
-  'Muay Thai', 'Boxing', 'Krav Maga', 'Capoeira', 'Aikido'
+  'Boxing', 'Brazilian Jiu-Jitsu', 'Muay Thai', 'Wrestling', 'Kickboxing', 'Jiu-Jitsu', 'Judo', 'Karate', 'Kung Fu', 'Taekwondo'
 ];
 
 const FightingScreen = ({ navigation, route }) => {
@@ -29,6 +28,7 @@ const FightingScreen = ({ navigation, route }) => {
   };
 
   const handlePress = () => {
+    console.log(route.params.heightUnit)
     navigation.navigate('FightingLevelScreen', {
       ...route.params, // Pass the data from previous signup steps
       checkedMartialArts,

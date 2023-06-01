@@ -10,9 +10,15 @@ app.use(cors());
 app.use(express.json());
 
 const usersRoute = require('./routes/users');
+const mediasRoute = require('./routes/medias');
+const matchesRoute = require('./routes/matches');
 
 // Set up the routes for the "/users" path
 app.use('/users', usersRoute);
+
+app.use('/medias', mediasRoute)
+
+app.use('/matches', matchesRoute)
 
 
 console.log(process.env.MONGODB_URI);

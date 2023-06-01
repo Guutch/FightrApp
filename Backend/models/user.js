@@ -26,16 +26,24 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  heightUnit: {
+    type: String,
+    required: false,
+  },
+  weightUnit: {
+    type: String,
+    required: false,
+  },
   birthday: {
     type: Date,
     required: false,
   },
-  photos: {
-    type: [String],
-    required: false,
-  },
+  // media: [{
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'Media'
+  // }],
   fightingStyle: {
-    type: String,
+    type: [String],
     required: false,
   },
   fightingLevel: {
@@ -52,12 +60,11 @@ const UserSchema = new mongoose.Schema({
       type: [Number],
       required: true,
     },
+  },
+  password: {
+    type: String,
+    required: false,
   }
-  
-  // password: {
-  //   type: String,
-  //   required: false,
-  // },
 });
 
 module.exports = mongoose.model('User', UserSchema);

@@ -4,12 +4,10 @@ import axios from 'axios';
 const API_URL = 'http://10.0.2.2:3000';
 
 export const createUser = async (userData) => {
-  // console.log(userData.firstName)
 
   // Create a new FormData instance
   let data = new FormData();
 
-  // Append all non-photo properties
   data.append('firstName', userData.firstName);
   data.append('lastName', userData.lastName);
   data.append('email', userData.email);
@@ -17,6 +15,8 @@ export const createUser = async (userData) => {
   data.append('birthday', userData.birthday);
   data.append('height', userData.height);
   data.append('weight', userData.weight);
+  data.append('heightUnit', userData.heightUnit);
+  data.append('weightUnit', userData.weightUnit);
   data.append('fightingStyle', userData.fightingStyle);
   data.append('fightingLevel', userData.fightingLevel);
 
@@ -67,5 +67,23 @@ export const createUser = async (userData) => {
       console.error('Error message:', error.message);
     }
     throw error;
+  }
+};
+
+export const postmanTest = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/medias/testMedia`);
+    console.log('Get response:', response.data);
+  } catch (error) {
+    console.error('Error during GET request:', error);
+    if (error.response) {
+      console.error('Error response data:', error.response.data);
+      console.error('Error response status:', error.response.status);
+      console.error('Error response headers:', error.response.headers);
+    } else if (error.request) {
+      console.error('Error request:', error.request);
+    } else {
+      console.error('Error message:', error.message);
+    }
   }
 };

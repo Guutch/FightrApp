@@ -12,7 +12,7 @@ const CheckBox = ({ isChecked, onToggle }) => (
   />
 );
 
-const levels = ['Professional', 'Intermediate', 'Amateur', 'No Experience'];
+const levels = ['Professional', 'Amateur Competitor', 'Advanced', 'Intermediate', 'Beginner', 'Novice'];
 
 const FightingLevelScreen = ({ navigation, route }) => {
   const [checkedLevel, setCheckedLevel] = useState(null);

@@ -12,7 +12,7 @@ const Navbar = ({ navigation, showBackButton, showNextButton, onNext }) => {
                     <Icon name="arrow-left" size={navbarStyles.iconSize.width} color="#FFFFFF" />
                 </TouchableOpacity>
             )}
-            <Text style={navbarStyles.fightrText}>Fightr.</Text>
+            <Text style={navbarStyles.fightrText}>Fytr</Text>
             {showNextButton && (
                 <TouchableOpacity style={navbarStyles.nextButton} onPress={onNext}>
                     <Icon name="check" size={navbarStyles.iconSize.width} color="#FFFFFF" />

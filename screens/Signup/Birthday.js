@@ -13,11 +13,12 @@ const formatDate = (date) => {
   const day = date.getDate();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
-  return `${day < 10 ? '0' + day : day}/${month < 10 ? '0' + month : month}/${year}`;
+  // return `${day < 10 ? '0' + day : day}/${month < 10 ? '0' + month : month}/${year}`;
+  return `${month < 10 ? '0' + month : month}/${day < 10 ? '0' + day : day}/${year}`;
 };
 
 const BirthdayScreen = ({ navigation, route }) => {
-  const { firstName, lastName, email, phoneNumber, weight, height } = route.params;
+  // const { firstName, lastName, email, phoneNumber, weight, height } = route.params;
   const [date, setDate] = useState(null);
   const [show, setShow] = useState(false);
 
@@ -34,7 +35,7 @@ const BirthdayScreen = ({ navigation, route }) => {
   };
 
   const handlePress = () => {
-    navigation.navigate('Photos', { firstName, lastName, email, phoneNumber, weight, height, birthday: formatDate(date) });
+    navigation.navigate('Photos', { ...route.params, birthday: formatDate(date) });
   };
 
   return (

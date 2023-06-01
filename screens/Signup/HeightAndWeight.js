@@ -20,7 +20,9 @@ const HeightAndWeight = ({ navigation, route }) => {
   };
 
   const handlePress = () => {
-    navigation.navigate('Birthday', { firstName, lastName, email, phoneNumber, weight, height });
+    console.log(heightUnit)
+    console.log(weightUnit)
+    navigation.navigate('Birthday', { ...route.params, height, weight, heightUnit, weightUnit });
   };
 
   return (

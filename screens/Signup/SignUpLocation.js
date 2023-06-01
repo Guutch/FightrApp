@@ -25,16 +25,19 @@ const SignUpLocation = ({ navigation, route }) => {
               phoneNumber: route.params.phoneNumber,
               height: route.params.height,
               weight: route.params.weight,
+              heightUnit: route.params.heightUnit,
+              weightUnit: route.params.weightUnit,
               birthday: route.params.birthday,
               photos: route.params.images,
-              fightingStyle: route.params.checkedMartialArts.join(', '), // Assuming the fighting styles are stored as an array and should be joined into a single string
+              fightingStyle: route.params.checkedMartialArts.join(', '), 
               fightingLevel: route.params.checkedLevel,
               location: {
                 type: 'Point',
                 coordinates: [position.coords.latitude, position.coords.longitude],
               },
             };
-
+            
+            // console.log(route.params.birthday)
             await createUser(userData);
   
             // Navigate to another screen if needed

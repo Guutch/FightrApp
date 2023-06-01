@@ -44,7 +44,7 @@ const Welcome = ({ navigation }) => {
         </View>
       </View>
       <Text style={welcomeStyles.termsAndConditions}>By pressing I agree, you are agreeing to our Terms and Conditions and Privacy Policy.</Text>
-      <TouchableOpacity style={welcomeStyles.agreeButton} onPress={() => navigation.navigate('SomeScreen')}>
+      <TouchableOpacity style={welcomeStyles.agreeButton} onPress={() => navigation.navigate('AvoidContact')}>
         <Text style={welcomeStyles.agreeButtonText}>I Agree</Text>
       </TouchableOpacity>
     </View>

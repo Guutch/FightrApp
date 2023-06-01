@@ -7,12 +7,11 @@ import Navbar from '../../components/Navbar';
 import NextButton from '../../components/NextButton';
 
 const EmailAndNumber = ({ navigation, route }) => {
-  const { firstName, lastName } = route.params;
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const handlePress = () => {
-    navigation.navigate('HeightAndWeight', { firstName, lastName, email, phoneNumber });
+    navigation.navigate('SignUpPassword', { ...route.params, email, phoneNumber });
   };
 
   return (
