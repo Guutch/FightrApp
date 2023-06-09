@@ -1,5 +1,6 @@
 // api.js
 import axios from 'axios';
+import { userLoggedIn } from 'redux/actions'; // import the action
 
 const API_URL = 'http://10.0.2.2:3000';
 
@@ -19,6 +20,7 @@ export const createUser = async (userData) => {
   data.append('weightUnit', userData.weightUnit);
   data.append('fightingStyle', userData.fightingStyle);
   data.append('fightingLevel', userData.fightingLevel);
+  data.append('password', userData.password);
 
   // Append location data
   data.append('location[type]', userData.location.type);
@@ -54,6 +56,9 @@ export const createUser = async (userData) => {
     });
 
     console.log('User created successfully:', response.data);
+
+    // dispatch(userLoggedIn(response.data.user)); // dispatch the action here
+
     return response.data;
   } catch (error) {
     console.error('Error creating user:', error);
@@ -67,6 +72,16 @@ export const createUser = async (userData) => {
       console.error('Error message:', error.message);
     }
     throw error;
+  }
+};
+
+export const loginUser = async (email, password) => {
+  try {
+    const response = await axios.post(`${API_URL}/users/login`, { email, password });
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    console.error('[api.js] Error logging in:', error);
   }
 };
 

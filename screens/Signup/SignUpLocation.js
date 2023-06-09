@@ -6,8 +6,11 @@ import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 import { signUpLocation } from '../../components/styles2';
 import Navbar from '../../components/Navbar';
 import { createUser } from '../../api'; // Import the createUser function from your API file
+import { useDispatch } from 'react-redux';
+import { userLoggedIn } from '../../redux/actions';
 
 const SignUpLocation = ({ navigation, route }) => {
+  const dispatch = useDispatch();
   const requestLocationPermission = useCallback(async () => {
     try {
       const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
@@ -31,17 +34,22 @@ const SignUpLocation = ({ navigation, route }) => {
               photos: route.params.images,
               fightingStyle: route.params.checkedMartialArts.join(', '), 
               fightingLevel: route.params.checkedLevel,
+              password: route.params.password,
               location: {
                 type: 'Point',
                 coordinates: [position.coords.latitude, position.coords.longitude],
               },
             };
             
-            // console.log(route.params.birthday)
-            await createUser(userData);
+            console.log(route.params.password)
+            const returnedUserData = await createUser(userData);
   
-            // Navigate to another screen if needed
-            navigation.navigate('Welcome');
+      // Use dispatch to fire the userLoggedIn action with the returned user data
+      dispatch(userLoggedIn(returnedUserData.user));
+
+      // Navigate to another screen if needed
+      navigation.navigate('Welcome');
+            await createUser(userData);
           },
           (error) => {
             console.log(error);

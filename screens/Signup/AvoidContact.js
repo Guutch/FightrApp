@@ -4,8 +4,10 @@ import Navbar from '../../components/Navbar';
 import boxingIcon from '../../assets/boxing-glove-icon2.png';
 import tickIcon from '../../assets/FightrTick.png';
 import { welcomeStyles } from '../../components/styles2';
+import { useSelector } from 'react-redux';
 
 const Welcome = ({ navigation }) => {
+  const userId = useSelector((state) => state.user.userId); // replace 'state.user.userId' with the correct path to the user ID in your Redux state
   return (
     <View style={welcomeStyles.container}>
 <Navbar showBackButton={false} showNextButton={false} />
@@ -19,9 +21,15 @@ const Welcome = ({ navigation }) => {
   with anyone with the data you provided.
 </Text>
       <Text style={welcomeStyles.termsAndConditions}>You can learn more about how Fytr processess your contacts here.</Text>
-      <TouchableOpacity style={welcomeStyles.agreeButton} onPress={() => navigation.navigate('SomeScreen')}>
-        <Text style={welcomeStyles.agreeButtonText}>Continue</Text>
-      </TouchableOpacity>
+      <TouchableOpacity
+      style={welcomeStyles.agreeButton}
+      onPress={() => {
+        console.log('User ID:', userId); // print the user ID
+        navigation.navigate('Waiver');
+      }}
+    >
+      <Text style={welcomeStyles.agreeButtonText}>I Agree</Text>
+    </TouchableOpacity>
     </View>
   );
 };

@@ -38,15 +38,15 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     required: false,
   },
-  // media: [{
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'Media'
-  // }],
   fightingStyle: {
     type: [String],
     required: false,
   },
   fightingLevel: {
+    type: String,
+    required: false,
+  },
+  bio: {
     type: String,
     required: false,
   },

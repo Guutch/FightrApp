@@ -79,6 +79,7 @@ router.post('/register', upload, async (req, res) => {
     // Create a new User instance
 
     const salt = await bcrypt.genSalt(10);
+    // console.log(req.body.password)
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
     const user = new User({
@@ -95,6 +96,7 @@ router.post('/register', upload, async (req, res) => {
       fightingStyle: req.body.fightingStyle,
       fightingLevel: req.body.fightingLevel,
       location: req.body.location,
+      bio: req.body.bio,
     });
 
     // Calculate age based on the birthday using moment
@@ -149,7 +151,7 @@ router.post('/register', upload, async (req, res) => {
 // Add more routes (e.g., login) here
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  console.log(email)
+  
   try {
     const user = await User.findOne({ email });
 
@@ -170,12 +172,106 @@ router.post('/login', async (req, res) => {
     // res.status(200).json({ auth: true, token: token });
 
     // or just inform the client about successful authentication
-    res.status(200).json({ auth: true, message: 'Logged in successfully' });
-
+    res.status(200).json({ auth: true, message: 'Logged in successfully', userId: user._id });
+    console.log(email)
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
   }
 });
+
+// Update user's bio
+router.put('/:userId/bio', async (req, res) => {
+  const { userId } = req.params;
+  const { bio } = req.body;
+
+  try {
+    await User.updateOne({ _id: userId }, { bio: bio });
+    res.status(200).send('Bio updated successfully');
+  } catch (error) {
+    res.status(500).send('Error updating bio');
+  }
+});
+
+// Update user's height
+router.put('/:userId/height', async (req, res) => {
+  const { userId } = req.params;
+  const { height, heightUnit } = req.body;
+
+  try {
+    await User.updateOne({ _id: userId }, { height: height, heightUnit: heightUnit });
+    res.status(200).send('Height and height unit updated successfully');
+  } catch (error) {
+    res.status(500).send('Error updating height');
+  }
+});
+
+
+// Update user's weight
+router.put('/:userId/weight', async (req, res) => {
+  const { userId } = req.params;
+  const { weight, weightUnit } = req.body;
+
+  try {
+    await User.updateOne({ _id: userId }, { weight: weight, weightUnit: weightUnit });
+    res.status(200).send('Weight and weight unit updated successfully');
+  } catch (error) {
+    res.status(500).send('Error updating weight');
+  }
+});
+
+// Update user's fight styles
+router.put('/:userId/fightStyles', async (req, res) => {
+  const { userId } = req.params;
+  const { fightStyles } = req.body;
+
+  try {
+    await User.updateOne({ _id: userId }, { fightingStyle: fightStyles });
+    res.status(200).send('Fight styles updated successfully');
+  } catch (error) {
+    res.status(500).send('Error updating fight styles');
+  }
+});
+
+// Update user's fight level
+router.put('/:userId/fightLevel', async (req, res) => {
+  const { userId } = req.params;
+  const { fightLevel } = req.body;
+
+  try {
+    await User.updateOne({ _id: userId }, { fightingLevel: fightLevel });
+    res.status(200).send('Fight level updated successfully');
+  } catch (error) {
+    res.status(500).send('Error updating fight level');
+  }
+});
+
+// Update user's first name - Not done
+router.put('/:userId/firstName', async (req, res) => {
+  const { userId } = req.params;
+  const { firstName } = req.body;
+
+  try {
+    await User.updateOne({ _id: userId }, { firstName: firstName });
+    res.status(200).send('First name updated successfully');
+  } catch (error) {
+    res.status(500).send('Error updating first name');
+  }
+});
+
+// Update user's last name - Not done
+router.put('/:userId/firstName', async (req, res) => {
+  const { userId } = req.params;
+  const { firstName } = req.body;
+
+  try {
+    await User.updateOne({ _id: userId }, { firstName: firstName });
+    res.status(200).send('First name updated successfully');
+  } catch (error) {
+    res.status(500).send('Error updating first name');
+  }
+});
+
+// Need update user's location, number, and email address and photos 
 
 module.exports = router;

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StatusBar } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux'; // import useSelector
+import { login } from '../redux/actions';
 
 import { firstNameScreen, lastNameScreen, emailLogin } from '../components/styles2';
 import Navbar from '../components/Navbar';
@@ -7,9 +9,14 @@ import Navbar from '../components/Navbar';
 const EmailLogin = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+
+  // Get the userId from the Redux state
+  const userId = useSelector(state => state.user);
 
   const handleSignIn = () => {
-    // Handle the sign-in process here
+    dispatch(login(email, password)); // dispatch the login action when the sign-in button is pressed
+    console.log(userId); // Print the userId to the console
   };
 
   return (

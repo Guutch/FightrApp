@@ -4,8 +4,10 @@ import Navbar from '../../components/Navbar';
 import boxingIcon from '../../assets/boxing-glove-icon2.png';
 import tickIcon from '../../assets/FightrTick.png';
 import { welcomeStyles } from '../../components/styles2';
+import { useSelector } from 'react-redux';
 
 const Welcome = ({ navigation }) => {
+  const userId = useSelector((state) => state.user.userId); // replace 'state.user.userId' with the correct path to the user ID in your Redux state
   return (
     <View style={welcomeStyles.container}>
 <Navbar showBackButton={false} showNextButton={false} />
@@ -44,9 +46,18 @@ const Welcome = ({ navigation }) => {
         </View>
       </View>
       <Text style={welcomeStyles.termsAndConditions}>By pressing I agree, you are agreeing to our Terms and Conditions and Privacy Policy.</Text>
-      <TouchableOpacity style={welcomeStyles.agreeButton} onPress={() => navigation.navigate('AvoidContact')}>
+      {/* <TouchableOpacity style={welcomeStyles.agreeButton} onPress={() => navigation.navigate('AvoidContact')}>
         <Text style={welcomeStyles.agreeButtonText}>I Agree</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+      <TouchableOpacity
+      style={welcomeStyles.agreeButton}
+      onPress={() => {
+        console.log('User ID:', userId); // print the user ID
+        navigation.navigate('AvoidContact');
+      }}
+    >
+      <Text style={welcomeStyles.agreeButtonText}>I Agree</Text>
+    </TouchableOpacity>
     </View>
   );
 };
