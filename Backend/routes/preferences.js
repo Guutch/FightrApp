@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const Preference = require('../models/preference');
+const User = require('../models/user');
 
 // Location radius endpoint - Done
 router.put('/:userId/radius', async (req, res) => {
@@ -131,6 +132,34 @@ router.put('/:userId/level', async (req, res) => {
     res.status(200).send('Fighting styles updated successfully');
   } catch (error) {
     res.status(500).send('Error updating fighting styles');
+  }
+});
+
+// Get Age prefereence endpoint
+router.get('/:id/preferences', async (req, res) => {
+  try {
+      const { id } = req.params;
+      const preference = await Preference.findOne({ user_id: id });
+      if (preference) {
+          res.status(200).json(preference);
+      } else {
+          res.status(404).json({ error: 'Preference not found' });
+      }
+  } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Get user's metric preferences
+router.get('/:id/metrics', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+      const user = await User.findById({_id: id}).select('heightUnit weightUnit');
+      console.log(user)
+      res.send(user);
+  } catch (error) {
+      res.status(500).send({ error: 'Server error' });
   }
 });
 

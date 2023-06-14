@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { fightingStyleScreen, firstNameScreen } from '../../components/styles2';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -12,12 +12,20 @@ const CheckBox = ({ isChecked, onToggle }) => (
   />
 );
 
+
+
 const martialArts = [
   'Boxing', 'Brazilian Jiu-Jitsu', 'Muay Thai', 'Wrestling', 'Kickboxing', 'Jiu-Jitsu', 'Judo', 'Karate', 'Kung Fu', 'Taekwondo'
 ];
 
 const FightingScreen = ({ navigation, route }) => {
   const [checkedMartialArts, setCheckedMartialArts] = useState([]);
+
+  useEffect(() => {
+    if (route.params.userPreferences) {
+        setCheckedMartialArts(route.params.userPreferences);
+    }
+}, []);
 
   const toggleCheckbox = (martialArt) => {
     if (checkedMartialArts.includes(martialArt)) {
@@ -28,12 +36,16 @@ const FightingScreen = ({ navigation, route }) => {
   };
 
   const handlePress = () => {
-    console.log(route.params.heightUnit)
-    navigation.navigate('FightingLevelScreen', {
-      ...route.params, // Pass the data from previous signup steps
-      checkedMartialArts,
-    });
-  };
+    if (route.params.isUpdate) {
+        // Update user preferences code
+        navigation.goBack();
+    } else {
+        navigation.navigate('FightingLevelScreen', {
+            ...route.params, // Pass the data from previous signup steps
+            checkedMartialArts,
+        });
+    }
+};
 
   const renderItem = (item, index) => (
     <View

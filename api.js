@@ -85,20 +85,43 @@ export const loginUser = async (email, password) => {
   }
 };
 
-export const postmanTest = async () => {
+export const fetchUserPreferences = async (userId) => {
   try {
-    const response = await axios.get(`${API_URL}/medias/testMedia`);
-    console.log('Get response:', response.data);
+    const [preferenceResponse, metricsResponse] = await Promise.all([
+      axios.get(`${API_URL}/preferences/${userId}/preferences`),
+      axios.get(`${API_URL}/preferences/${userId}/metrics`),
+    ]);
+    
+    // Merging both responses
+    const data = {
+      ...preferenceResponse.data,
+      ...metricsResponse.data,
+    };
+    
+    console.log("response.data");
+    console.log(data);
+    
+    return data;
   } catch (error) {
-    console.error('Error during GET request:', error);
-    if (error.response) {
-      console.error('Error response data:', error.response.data);
-      console.error('Error response status:', error.response.status);
-      console.error('Error response headers:', error.response.headers);
-    } else if (error.request) {
-      console.error('Error request:', error.request);
-    } else {
-      console.error('Error message:', error.message);
-    }
+    console.error(error);
+    return null;
   }
 };
+
+// export const postmanTest = async () => {
+//   try {
+//     const response = await axios.get(`${API_URL}/medias/testMedia`);
+//     console.log('Get response:', response.data);
+//   } catch (error) {
+//     console.error('Error during GET request:', error);
+//     if (error.response) {
+//       console.error('Error response data:', error.response.data);
+//       console.error('Error response status:', error.response.status);
+//       console.error('Error response headers:', error.response.headers);
+//     } else if (error.request) {
+//       console.error('Error request:', error.request);
+//     } else {
+//       console.error('Error message:', error.message);
+//     }
+//   }
+// };

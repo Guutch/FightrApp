@@ -5,7 +5,7 @@ const Media = require('../models/media');
 const Preference = require('../models/preference'); 
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-const { S3Client } = require('@aws-sdk/client-s3');
+const { S3Client, GetObjectCommand  } = require('@aws-sdk/client-s3');
 
 const bcrypt = require('bcrypt');
 // const saltRounds = 10;
@@ -64,6 +64,19 @@ const determineWeightRange = (weight, weightUnit) => {
   }
 };
 
+// router.get('/:id/image', async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const user = await User.findById(id); // Assumes User is your Mongoose model
+//     if (!user) {
+//       return res.status(404).send({ error: 'User not found' });
+//     }
+//     res.send({ imageUrl: user.imageUrl }); // Assumes imageUrl is the name of the field that contains the image URL
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send({ error: 'Server error' });
+//   }
+// });
 
 router.post('/register', upload, async (req, res) => {
   // Check if the email is already registered

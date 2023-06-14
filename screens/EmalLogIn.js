@@ -2,27 +2,45 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StatusBar } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'; // import useSelector
 import { login } from '../redux/actions';
+import { useNavigation } from '@react-navigation/native';
 
 import { firstNameScreen, lastNameScreen, emailLogin } from '../components/styles2';
 import Navbar from '../components/Navbar';
+
 
 const EmailLogin = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+  // const navigation = useNavigation();
 
   // Get the userId from the Redux state
   const userId = useSelector(state => state.user);
 
-  const handleSignIn = () => {
-    dispatch(login(email, password)); // dispatch the login action when the sign-in button is pressed
-    console.log(userId); // Print the userId to the console
-  };
+  const handleSignIn = async () => {
+    const result = await dispatch(login(email, password)); // login is now an async action
+    
+    console.log(result);
+    
+    if (result) {
+      navigation.navigate('MainFlow');
+    } else {
+      // handle unsuccessful login
+      // console.log("lol")
+    }
+    
+    // dispatch(login(email, password, () => {
+    //   navigation.reset({
+    //     index: 0,
+    //     routes: [{ name: 'MainFlow' }],
+    //   });
+    // }));
+};
 
   return (
     <View style={firstNameScreen.container}>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
-      <Navbar navigation={navigation} />
+      <Navbar navigation={navigation} backgroundColor="#000000" textColor="#FFFFFF"/>
 
       <Text style={firstNameScreen.questionText}>Email address</Text>
       <TextInput

@@ -677,6 +677,149 @@ const welcomeStyles = StyleSheet.create({
   },
 });
 
+const settingsStyles = StyleSheet.create({
+  container: {
+    paddingTop: screenHeight * 0.1, // this adds padding on top equal to navbar height
+    padding: 20, // this can be adjusted as needed
+  },
+  fytrPlus: {
+    fontFamily: 'Inter',
+    fontWeight: '700',
+    fontSize: 20,
+    lineHeight: 24,
+    color: '#000000',
+    marginTop: 20,
+    marginBottom: 20, // adjust as needed
+  },
+  sectionContainer: {
+    marginBottom: 20, // adjust as needed
+  },
+  sectionTitle: {
+    fontFamily: 'Inter',
+    fontWeight: '700',
+    fontSize: 15,
+    lineHeight: 18,
+    color: '#000000',
+    // marginBottom: 10, // adjust as needed
+  },
+  preferenceText: {
+    color: 'white'
+  }, 
+  sliderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  titleAndValueContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  sectionRectangle: {
+    width: '100%',
+    height: 45,
+    backgroundColor: '#000000',
+    borderRadius: 40,
+    marginTop: 10,
+    justifyContent: 'center',  // center items vertically
+    alignItems: 'flex-start',  // align items to the left
+    paddingLeft: 10  // padding on the left
+  },
+  insideRectangleText: {
+    fontFamily: 'Inter',
+    fontWeight: '700',
+    fontSize: 15,
+    lineHeight: 18,
+    color: '#ffffff'  // white color
+  },
+  slider: {
+    marginTop: 20,
+  },
+  sliderValue: {
+    fontSize: 15, // adjust this as needed
+    lineHeight: 18, // adjust this as needed
+    color: '#000000', // adjust this as needed
+  },
+  sliderMarker: {
+    height: 15,
+    width: 15,
+    borderRadius: 15,
+    backgroundColor: 'black',
+  },
+  sliderTrack: {
+    height: 5,
+    borderRadius: 5,
+    backgroundColor: 'black',
+  },
+  unitToggle: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  metricsMargin: {
+    marginBottom: 10
+  },
+  unitText: {
+    color: 'grey',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  dividerTitle: {
+    fontFamily: 'Inter',
+    fontWeight: '700',
+    fontSize: 25,
+    lineHeight: 24,
+    paddingTop: 2,
+    color: '#000000',
+    // alignSelf: 'center',  // to center the title horizontally
+    marginVertical: 10,  // adds spacing above and below the title
+  },
+  activeUnit: {
+    color: 'black',
+  },
+  separator: {
+    color: 'black',
+    marginHorizontal: 5, // Added for spacing between units
+  },
+});
+
+const swipingStyles = StyleSheet.create({
+  container: {
+    paddingTop: screenHeight * 0.11, // This is for the top navbar
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cardContainer: {
+    width: screenWidth * 0.92, // Card stretches to near the end of the screen horizontally
+    height: screenHeight * 0.82, // Card stretches from just below the navbar to just above the bottom navbar
+    backgroundColor: '#000000', // Assuming the card has a white background
+    borderRadius: 10, // Giving the card some round corners
+    justifyContent: 'flex-end',
+    alignItems: 'center', // This will center the cards horizontally
+    paddingBottom: screenHeight * 0.02, // Margin from the bottom
+  },
+  card1: {
+    position: 'absolute',
+    width: '95%', // Adjust as per your requirement
+    height: '8%', // Adjust as per your requirement
+    backgroundColor: 'red',
+    opacity: 0.5,
+    borderRadius: 10,
+    bottom: 0, // Makes the card hug the bottom of the cardContainer
+    alignSelf: 'center' // This will center the card horizontally
+  },
+  card2: {
+    position: 'absolute',
+    width: '90%', // Adjust as per your requirement
+    height: '20%', // Adjust as per your requirement
+    backgroundColor: '#898989',
+    opacity: 0.5,
+    borderRadius: 10,
+    bottom: '8%', // Position from the bottom of the cardContainer. Adjust this to position card2 above card1
+    alignSelf: 'center' // This will center the card horizontally
+  },
+});
+
 export {
   loginScreen,
   emailLogin,
@@ -689,5 +832,7 @@ export {
   fightingLevelScreen,
   signUpLocation,
   welcomeStyles,
-  navbarStyles,
+  settingsStyles,
+  swipingStyles,
+  navbarStyles
 };
