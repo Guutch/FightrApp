@@ -13,6 +13,8 @@ const usersRoute = require('./routes/users');
 const mediasRoute = require('./routes/medias');
 const matchesRoute = require('./routes/matches');
 const preferencesRoute = require('./routes/preferences');
+const swipesRoute = require('./routes/swipes');
+const connectionsRoute = require('./routes/connections');
 
 // Set up the routes for the "/users" path
 app.use('/users', usersRoute);
@@ -22,6 +24,10 @@ app.use('/medias', mediasRoute)
 app.use('/matches', matchesRoute)
 
 app.use('/preferences', preferencesRoute)
+
+app.use('/swipes', swipesRoute)
+
+app.use('/connections', connectionsRoute)
 
 // app.put('/preferences/:userId/radius', (req, res) => {
 //     res.send(`UserId is ${req.params.userId}`);

@@ -7,27 +7,14 @@ import { welcomeStyles } from '../../components/styles2';
 const ProfileScreen = ({ navigation }) => {
 
   return (
-    <View style={welcomeStyles.container}>
-      <Navbar showBackButton={false} showNextButton={false} />
-
-      <Image source={boxingIcon} style={welcomeStyles.boxingIcon} />
+    <View>
+      <Navbar 
+        backgroundColor="#FFFFFF" 
+        textColor="#000000" 
+        homeStyle={true} 
+        navigation={navigation}  // Here we pass navigation as a prop to Navbar
+      />
       
-      <Text style={welcomeStyles.welcomeText}>A little waiver before getting started...</Text>
-
-      <View style={welcomeStyles.waiverBox}>
-        <ScrollView contentContainerStyle={welcomeStyles.waiverContent}>
-          <Text>
-            {/* The waiver text goes here */}
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu laoreet metus. Nulla sit amet semper arcu...
-          </Text>
-        </ScrollView>
-      </View>
-
-      <Text style={welcomeStyles.termsAndConditions}>You can learn more about how Fytr processes your contacts here.</Text>
-
-      <TouchableOpacity style={welcomeStyles.agreeButton} onPress={() => {navigation.navigate('AvoidContact')}}>
-        <Text style={welcomeStyles.agreeButtonText}>I Agree</Text>
-      </TouchableOpacity>
     </View>
   );
 };

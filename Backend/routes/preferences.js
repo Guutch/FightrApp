@@ -4,7 +4,7 @@ const router = express.Router();
 const Preference = require('../models/preference');
 const User = require('../models/user');
 
-// Location radius endpoint - Done
+// Location radius preference endpoint - Done
 router.put('/:userId/radius', async (req, res) => {
   const { userId } = req.params;
   const { radius } = req.body;
@@ -26,7 +26,7 @@ router.put('/:userId/radius', async (req, res) => {
   }
 });
 
-// Age endpoint - Done
+// Age preference endpoint - Done
 router.put('/:userId/age', async (req, res) => {
   const { userId } = req.params;
   const { minAge, maxAge } = req.body;
@@ -101,7 +101,7 @@ router.put('/:userId/weight', async (req, res) => {
 
 
 
-// Fighting style endpoint - Done
+// Fighting style preference endpoint - Done
 router.put('/:userId/style', async (req, res) => {
   const { userId } = req.params;
   const { fightingStyles } = req.body; // Assuming this will be an array of fighting styles
@@ -118,7 +118,7 @@ router.put('/:userId/style', async (req, res) => {
   }
 });
 
-// Fighting level endpoint - Done
+// Fighting level preference endpoint - Done
 router.put('/:userId/level', async (req, res) => {
   const { userId } = req.params;
   const { fightingLevels } = req.body; // Assuming this will be an array of fighting styles

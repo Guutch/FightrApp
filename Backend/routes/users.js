@@ -6,6 +6,7 @@ const Preference = require('../models/preference');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const { S3Client, GetObjectCommand  } = require('@aws-sdk/client-s3');
+// const Media = require('../models/Media');
 
 const bcrypt = require('bcrypt');
 // const saltRounds = 10;
@@ -22,7 +23,7 @@ const upload = multer({
   storage: multerS3({
     s3: s3,
     bucket: process.env.AWS_BUCKET_NAME,
-    // acl: 'public-read', // This will make the files publicly accessible
+    acl: 'public-read', // This will make the files publicly accessible
     key: function (request, file, cb) {
       console.log(file);
       cb(null, Date.now().toString() + "-" + file.originalname);
@@ -64,19 +65,22 @@ const determineWeightRange = (weight, weightUnit) => {
   }
 };
 
-// router.get('/:id/image', async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const user = await User.findById(id); // Assumes User is your Mongoose model
-//     if (!user) {
-//       return res.status(404).send({ error: 'User not found' });
-//     }
-//     res.send({ imageUrl: user.imageUrl }); // Assumes imageUrl is the name of the field that contains the image URL
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send({ error: 'Server error' });
-//   }
-// });
+// Get user image - needs updating to handle multiple
+router.get('/:id/image', async (req, res) => {
+  const { id } = req.params;
+  console.log(id)
+  // console.log(req.body.id)
+  try {
+    const media = await Media.findOne({ user_id: id }); // Assumes user_id is the field that contains the user ID
+    if (!media) {
+      return res.status(404).send({ error: 'Media not found for this user' });
+    }
+    res.send({ imageUrl: media.url }); // Assumes url is the name of the field that contains the image URL
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Server error' });
+  }
+});
 
 router.post('/register', upload, async (req, res) => {
   // Check if the email is already registered
@@ -272,19 +276,45 @@ router.put('/:userId/firstName', async (req, res) => {
   }
 });
 
-// Update user's last name - Not done
-router.put('/:userId/firstName', async (req, res) => {
+// Update user's last name
+router.put('/:userId/lastName', async (req, res) => {
   const { userId } = req.params;
-  const { firstName } = req.body;
+  const { lastName } = req.body;
 
   try {
-    await User.updateOne({ _id: userId }, { firstName: firstName });
-    res.status(200).send('First name updated successfully');
+    await User.updateOne({ _id: userId }, { lastName: lastName });
+    res.status(200).send('Last name updated successfully');
   } catch (error) {
-    res.status(500).send('Error updating first name');
+    res.status(500).send('Error updating last name');
   }
 });
 
-// Need update user's location, number, and email address and photos 
+// Update user's number
+router.put('/:userId/number', async (req, res) => {
+  const { userId } = req.params;
+  const { number } = req.body;
+
+  try {
+    await User.updateOne({ _id: userId }, { phoneNumber: number });
+    res.status(200).send('Number updated successfully');
+  } catch (error) {
+    res.status(500).send('Error updating Number');
+  }
+});
+
+// Update user's email
+router.put('/:userId/email', async (req, res) => {
+  const { userId } = req.params;
+  const { email } = req.body;
+
+  try {
+    await User.updateOne({ _id: userId }, { email: email });
+    res.status(200).send('email updated successfully');
+  } catch (error) {
+    res.status(500).send('Error updating email');
+  }
+});
+
+// Need update user's location and photos 
 
 module.exports = router;

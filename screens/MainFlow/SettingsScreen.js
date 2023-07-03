@@ -84,7 +84,7 @@ const SettingsScreen = ({ navigation }) => {
   // const API_URL = 'http://10.0.2.2:3000';
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchUserPreferences('647f7dd72c6f64115221f611');  // replace with the user's id
+      const data = await fetchUserPreferences('6488bb6a88352f4d19c12f9e');  // replace with the user's id
       // const metricData = await ;
       
       console.log("data")

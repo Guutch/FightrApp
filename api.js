@@ -85,6 +85,20 @@ export const loginUser = async (email, password) => {
   }
 };
 
+export const fetchImage = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/users/${userId}/image`); // Note the template string
+    if (response.data) {
+      console.log(response.data)
+      return response.data;
+    } else {
+      throw new Error("No data in response");
+    }
+  } catch (error) {
+    console.error('[api.js] Error fetching image:', error);
+  }
+};
+
 export const fetchUserPreferences = async (userId) => {
   try {
     const [preferenceResponse, metricsResponse] = await Promise.all([
