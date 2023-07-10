@@ -25,7 +25,7 @@ const Welcome = ({ navigation }) => {
       style={welcomeStyles.agreeButton}
       onPress={() => {
         console.log('User ID:', userId); // print the user ID
-        navigation.navigate('Waiver');
+        navigation.navigate('MainFlow');
       }}
     >
       <Text style={welcomeStyles.agreeButtonText}>I Agree</Text>

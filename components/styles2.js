@@ -789,19 +789,24 @@ const swipingStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  cardImage: {
+    width: screenWidth * 0.92,
+    height: screenHeight * 0.82,
+    resizeMode: "cover",
+  },
   cardContainer: {
-    width: screenWidth * 0.92, // Card stretches to near the end of the screen horizontally
-    height: screenHeight * 0.82, // Card stretches from just below the navbar to just above the bottom navbar
-    backgroundColor: '#000000', // Assuming the card has a white background
-    borderRadius: 10, // Giving the card some round corners
-    justifyContent: 'flex-end',
-    alignItems: 'center', // This will center the cards horizontally
-    paddingBottom: screenHeight * 0.02, // Margin from the bottom
+    paddingTop: screenHeight * 0.03,
+    width: screenWidth * 0.92,
+    height: screenHeight * 0.82,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: screenHeight * 0.02,
   },
   card1: {
     position: 'absolute',
     width: '95%', // Adjust as per your requirement
-    height: '8%', // Adjust as per your requirement
+    height: '10%', // Adjust as per your requirement
     backgroundColor: 'red',
     opacity: 0.5,
     borderRadius: 10,
@@ -815,7 +820,8 @@ const swipingStyles = StyleSheet.create({
     backgroundColor: '#898989',
     opacity: 0.5,
     borderRadius: 10,
-    bottom: '8%', // Position from the bottom of the cardContainer. Adjust this to position card2 above card1
+    // marginBotton: 20,
+    bottom: '10%', // Position from the bottom of the cardContainer. Adjust this to position card2 above card1
     alignSelf: 'center' // This will center the card horizontally
   },
 });

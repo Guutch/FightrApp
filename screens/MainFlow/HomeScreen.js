@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import Navbar from '../../components/Navbar';
 import boxingIcon from '../../assets/boxing-glove-icon2.png';
 import { welcomeStyles } from '../../components/styles2';
 
-const HomeScreen = ({ navigation }) => {
 
+const HomeScreen = ({ navigation }) => {
+  
+  
   return (
     <View style={welcomeStyles.container}>
       <Navbar navigation={navigation} backgroundColor="#FFFFFF" textColor="#000000" homeStyle={true} />
 
       <Image source={boxingIcon} style={welcomeStyles.boxingIcon} />
       
-      <Text style={welcomeStyles.welcomeText}>A little waiver before getting started...</Text>
+      <Text style={welcomeStyles.welcomeText}>A little Home Screen before getting started...</Text>
 
       <View style={welcomeStyles.waiverBox}>
         <ScrollView contentContainerStyle={welcomeStyles.waiverContent}>

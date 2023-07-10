@@ -8,6 +8,9 @@ import MainFlow from './MainFlow';
 import LoginScreen from './screens/LoginScreen';
 import EmailLogin from './screens/EmalLogIn';
 import SettingsScreen from './screens/MainFlow/SettingsScreen';
+import EditProfileScreen from './screens/MainFlow/EditProfile';
+import ViewProfileScreen from './screens/MainFlow/ViewProfile';
+import PreferenceSel from './screens/MainFlow/PreferenceSel';
 import FightingScreen from './screens/Signup/FightingScreen';
 
 const Stack = createNativeStackNavigator();
@@ -29,6 +32,8 @@ const MyStack = () => {
             <Stack.Screen name="MainFlow" component={MainFlow} />
             <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
             <Stack.Screen name="FightingScreen" component={FightingScreen} />
+            <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
+            <Stack.Screen name="ViewProfileScreen" component={ViewProfileScreen} />
           </>
         ) : (
           // User is not logged in already
@@ -37,6 +42,9 @@ const MyStack = () => {
             <Stack.Screen name="EmailLogin" component={EmailLogin} />
             <Stack.Screen name="MainFlow" component={MainFlow} />
             <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+            <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
+            <Stack.Screen name="ViewProfileScreen" component={ViewProfileScreen} />
+            <Stack.Screen name="PreferenceSel" component={PreferenceSel} />
             <Stack.Screen name="SignUpFlow" component={SignUpFlow} />
             <Stack.Screen name="FightingScreen" component={FightingScreen} />
           </>

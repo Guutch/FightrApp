@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Preference = require('../models/preference');
 const User = require('../models/user');
+const Media = require('../models/media');
 
 // Location radius preference endpoint - Done
 router.put('/:userId/radius', async (req, res) => {
@@ -138,15 +139,15 @@ router.put('/:userId/level', async (req, res) => {
 // Get Age prefereence endpoint
 router.get('/:id/preferences', async (req, res) => {
   try {
-      const { id } = req.params;
-      const preference = await Preference.findOne({ user_id: id });
-      if (preference) {
-          res.status(200).json(preference);
-      } else {
-          res.status(404).json({ error: 'Preference not found' });
-      }
+    const { id } = req.params;
+    const preference = await Preference.findOne({ user_id: id });
+    if (preference) {
+      res.status(200).json(preference);
+    } else {
+      res.status(404).json({ error: 'Preference not found' });
+    }
   } catch (error) {
-      res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
@@ -155,13 +156,66 @@ router.get('/:id/metrics', async (req, res) => {
   const { id } = req.params;
 
   try {
-      const user = await User.findById({_id: id}).select('heightUnit weightUnit');
-      console.log(user)
-      res.send(user);
+    const user = await User.findById({ _id: id }).select('heightUnit weightUnit');
+    console.log(user)
+    res.send(user);
   } catch (error) {
-      res.status(500).send({ error: 'Server error' });
+    res.status(500).send({ error: 'Server error' });
   }
 });
 
+// Update preferences range - values in body are undefined?
+router.put('/:userId/prefUpdateFromSettings', async (req, res) => {
+  const { userId } = req.params;
+  const dataToUpdate = req.body; // This is now the dataToUpdate object
+
+  console.log(dataToUpdate)
+
+  try {
+    await Preference.updateOne({ user_id: userId }, {
+      fightingStyle: dataToUpdate.fightingStylePreference,
+      fightingLevel: dataToUpdate.fightingLevelPreference,
+      age_range: dataToUpdate.ageRange,
+      location_range: dataToUpdate.distance
+    });
+
+    await User.updateOne({ _id: userId }, {
+      weightUnit: dataToUpdate.weightUnit,
+      heightUnit: dataToUpdate.heightUnit
+    });
+
+    res.status(200).send('preferences updated successfully');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error updating preferences');
+  }
+});
+
+// UpdatingTysionsMedia - Only added position 1 to Tyson
+// router.put('/:userId/quick', async (req, res) => {
+//   const { userId } = req.params;
+//   const { position } = req.body;
+
+//   try {
+//     // Find the user's media document
+//     const media = await Media.findOne({ user_id: userId });
+
+//     if (!media) {
+//       // If the media document does not exist, return an appropriate response
+//       return res.status(404).send('Media document not found');
+//     }
+
+//     // Add the "position" attribute to the media document and set its value to 1
+//     media.position = position;
+    
+//     // Save the updated media document
+//     await media.save();
+
+//     res.status(200).send('Media updated successfully');
+//   } catch (error) {
+//     console.error('Error updating media:', error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 module.exports = router;

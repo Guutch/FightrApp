@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
-const Media = require('../models/media'); 
-const Preference = require('../models/preference'); 
+const Media = require('../models/media');
+const Preference = require('../models/preference');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-const { S3Client, GetObjectCommand  } = require('@aws-sdk/client-s3');
+const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
 // const Media = require('../models/Media');
 
 const bcrypt = require('bcrypt');
@@ -23,7 +23,7 @@ const upload = multer({
   storage: multerS3({
     s3: s3,
     bucket: process.env.AWS_BUCKET_NAME,
-    acl: 'public-read', // This will make the files publicly accessible
+    // acl: 'public-read', // This will make the files publicly accessible
     key: function (request, file, cb) {
       console.log(file);
       cb(null, Date.now().toString() + "-" + file.originalname);
@@ -148,11 +148,12 @@ router.post('/register', upload, async (req, res) => {
 
     // Create new Media instances for each uploaded file
     const media = await Promise.all(
-      req.files.map(file =>
+      req.files.map((file, index) =>
         new Media({
           user_id: savedUser._id,
           url: file.location,
-          mediaType: 'image'
+          mediaType: 'image',
+          position: file.position || index + 1  // use file.position or index + 1 as a fallback
         }).save()
       )
     );
@@ -168,7 +169,7 @@ router.post('/register', upload, async (req, res) => {
 // Add more routes (e.g., login) here
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  
+
   try {
     const user = await User.findOne({ email });
 
@@ -316,5 +317,51 @@ router.put('/:userId/email', async (req, res) => {
 });
 
 // Need update user's location and photos 
+
+
+// Get user's weight 
+router.get('/:id/getWeight', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById({ _id: id }).select('weight');
+    // const user = await User.findById({ _id: id }).select('weight');
+    // console.log(user)
+    console.log(user.weight);
+    res.send(user.weight);
+  } catch (error) {
+    res.status(500).send({ error: 'Server error' });
+  }
+});
+
+// Get user's fight level 
+router.get('/:id/getFightLevel', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById({ _id: id }).select('fightingLevel');
+    // const user = await User.findById({ _id: id }).select('weight');
+    // console.log(user)
+    // console.log(user.fightingLevel);
+    res.send(user.fightingLevel);
+  } catch (error) {
+    res.status(500).send({ error: 'Server error' });
+  }
+});
+
+// Get user's fields for Edit Profile Screen (already have API for metrics(preferences.js) and weight(above))
+// Need to add bio (after done with Tyson Fury)
+// This returns user's ID. I don't need this
+router.get('/:id/getEditProfileData', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById({ _id: id }).select('firstName lastName fightingStyle fightingLevel location height weight');
+    console.log(user)
+    res.send(user);
+  } catch (error) {
+    res.status(500).send({ error: 'Server error' });
+  }
+});
 
 module.exports = router;

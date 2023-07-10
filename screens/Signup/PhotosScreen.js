@@ -50,6 +50,7 @@ const Photos = ({ navigation, route }) => {
       .then(async (response) => {
         // console.log('Selected photo path:', response.path);
 
+        // Already 'been selected' code
         if (Platform.OS === 'android') {
           for (const image of images) {
             if (image && image.data === response.data) {
@@ -65,12 +66,12 @@ const Photos = ({ navigation, route }) => {
         }
 
         const newImages = [...images];
-        newImages[index] = { path: response.path, data: response.data, name: response.path.split("/").pop(), type: 'image/jpeg' };
+        newImages[index] = { path: response.path, data: response.data, name: response.path.split("/").pop(), type: 'image/jpeg', position: index + 1 };
         setImages(newImages);
-        
 
 
-        setImagePaths((prevPaths) => [...prevPaths, response.path]);
+
+        // setImagePaths((prevPaths) => [...prevPaths, response.path]);
       })
       .catch((error) => {
         console.log('ImagePicker Error: ', error);
@@ -97,7 +98,7 @@ const Photos = ({ navigation, route }) => {
       images, // Pass the images array instead of imagePaths
     });
   };
-  
+
 
   return (
     <View style={photosScreen.photoscontainer}>
@@ -144,7 +145,7 @@ const Photos = ({ navigation, route }) => {
       {/* <NextButton onPress={handleNextPress} /> */}
     </View>
   );
-  
+
 };
 
 export default Photos;

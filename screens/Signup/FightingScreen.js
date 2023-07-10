@@ -12,8 +12,6 @@ const CheckBox = ({ isChecked, onToggle }) => (
   />
 );
 
-
-
 const martialArts = [
   'Boxing', 'Brazilian Jiu-Jitsu', 'Muay Thai', 'Wrestling', 'Kickboxing', 'Jiu-Jitsu', 'Judo', 'Karate', 'Kung Fu', 'Taekwondo'
 ];
@@ -23,9 +21,10 @@ const FightingScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (route.params.userPreferences) {
-        setCheckedMartialArts(route.params.userPreferences);
+      setCheckedMartialArts(route.params.userPreferences);
     }
-}, []);
+    console.log(checkedMartialArts)
+  }, []);
 
   const toggleCheckbox = (martialArt) => {
     if (checkedMartialArts.includes(martialArt)) {
@@ -37,15 +36,15 @@ const FightingScreen = ({ navigation, route }) => {
 
   const handlePress = () => {
     if (route.params.isUpdate) {
-        // Update user preferences code
-        navigation.goBack();
+      // Update user preferences code
+      navigation.goBack();
     } else {
-        navigation.navigate('FightingLevelScreen', {
-            ...route.params, // Pass the data from previous signup steps
-            checkedMartialArts,
-        });
+      navigation.navigate('FightingLevelScreen', {
+        ...route.params, // Pass the data from previous signup steps
+        checkedMartialArts,
+      });
     }
-};
+  };
 
   const renderItem = (item, index) => (
     <View
@@ -66,6 +65,8 @@ const FightingScreen = ({ navigation, route }) => {
   return (
     <View style={fightingStyleScreen.container}>
       <Navbar
+        backgroundColor="#000000"
+        textColor="#FFFFFF"
         navigation={navigation}
         showBackButton={true}
         showNextButton={true}

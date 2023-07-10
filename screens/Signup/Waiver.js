@@ -13,7 +13,9 @@ const WaiverScreen = ({ navigation }) => {
       <Image source={boxingIcon} style={welcomeStyles.boxingIcon} />
       
       <Text style={welcomeStyles.welcomeText}>A little waiver before getting started...</Text>
-
+      <TouchableOpacity style={welcomeStyles.agreeButton} onPress={() => {navigation.navigate('AvoidContact')}}>
+        <Text style={welcomeStyles.agreeButtonText}>I Agree</Text>
+      </TouchableOpacity>
       <View style={welcomeStyles.waiverBox}>
         <ScrollView contentContainerStyle={welcomeStyles.waiverContent}>
           <Text>

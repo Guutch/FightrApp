@@ -39,6 +39,7 @@ const SignUpLocation = ({ navigation, route }) => {
                 type: 'Point',
                 coordinates: [position.coords.latitude, position.coords.longitude],
               },
+              bio: ""
             };
             
             console.log(route.params.password)

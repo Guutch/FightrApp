@@ -8,19 +8,23 @@ import ProfileScreen from './screens/MainFlow/ProfileScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SettingsScreen from './screens/MainFlow/SettingsScreen';
 import { Image } from 'react-native';
-import { fetchImage } from './api'
+import { fetchImage } from './api';
+import { useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
 const MainFlow = () => {
+  const userId = useSelector(state => state.user);  // Gets the userId from the Redux state
+  console.log('User ID is:', userId.userId);
   const [imageUrl, setImageUrl] = useState(null);
 
+  // Get's users photo for the navbar
   useEffect(() => {
     const fetchAndSetImage = async () => {
       try {
-        const data = await fetchImage('6488bb6a88352f4d19c12f9e'); // Replace with your user ID
+        const data = await fetchImage(userId.userId);
         if (data) {
-          console.log('Got data', data)
+          console.log('Got data', data);
           setImageUrl(data.imageUrl);
         } else {
           throw new Error("No data returned from fetchImage");
@@ -30,8 +34,10 @@ const MainFlow = () => {
       }
     };
 
-    fetchAndSetImage();
-  }, []);
+    if (userId) {
+      fetchAndSetImage();
+    }
+  }, [userId]);
 
   return (
     <Tab.Navigator

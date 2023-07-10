@@ -87,7 +87,7 @@ function filterByStyle(user, allUsers, userPreferences) {
 
 function filterByLevel(user, allUsers, userPreferences) {
   return allUsers.filter(otherUser => {
-    console.log(otherUser)
+    // console.log(otherUser)
     // Check if the user's preferred fighting level matches with the other user's fighting level
     return userPreferences.fightingLevel.includes(otherUser.fightingLevel);
   });
@@ -128,8 +128,21 @@ const locationMatches = filterByLocation(user, allUsers, userPreferences);
   // Filter based on fighting level
   const levelMatches = filterByLevel(user, styleMatches, userPreferences);
       
+  const filteredMatches = levelMatches.map(match => {
+    return {
+      firstName: match.firstName,
+      birthday: match.birthday,
+      weight: match.weight,
+      fightingStyle: match.fightingStyle,
+      location: match.location,
+      userId: match._id
+    };
+  });
+
+  console.log(filteredMatches)
+
   // Return the matches
-  res.send(levelMatches);
+  res.send(filteredMatches);
 });
 
 module.exports = router;

@@ -12,7 +12,7 @@ const MessagingScreen = ({ navigation }) => {
 
       <Image source={boxingIcon} style={welcomeStyles.boxingIcon} />
       
-      <Text style={welcomeStyles.welcomeText}>A little waiver before getting started...</Text>
+      <Text style={welcomeStyles.welcomeText}>A little Messaging screen before getting started...</Text>
 
       <View style={welcomeStyles.waiverBox}>
         <ScrollView contentContainerStyle={welcomeStyles.waiverContent}>
