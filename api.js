@@ -174,7 +174,7 @@ export const fetchEditProfileData = async (userId) => {
       axios.get(`${API_URL}/users/${userId}/getEditProfileData`),
     ]);
 
-    console.log(editProfileResponse.data)
+    // console.log(editProfileResponse.data)
 
     // Merging all responses
     const data = {
@@ -183,13 +183,13 @@ export const fetchEditProfileData = async (userId) => {
       ...editProfileResponse.data
     };
 
-    console.log(data);
+    // console.log(data);
 
     return data;
   } catch (error) {
     console.error(error);
-    console.error(error);
-    console.error(error);
+    // console.error(error);
+    // console.error(error);
     return null;
   }
 };

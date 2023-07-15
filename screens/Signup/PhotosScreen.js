@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
 import { Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-crop-picker';
 import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
-
+import ProgressBar from '../../components/ProgressBar';
 import { photosScreen, firstNameScreen } from '../../components/styles2';
 import Navbar from '../../components/Navbar';
 import NextButton from '../../components/NextButton';
@@ -104,26 +104,43 @@ const Photos = ({ navigation, route }) => {
     <View style={photosScreen.photoscontainer}>
       {/* <Navbar navigation={navigation} backNavigation={handleBackPress} /> */}
       <Navbar
+        backgroundColor="#000000"
+        textColor="#FFFFFF"
         navigation={navigation}
         showBackButton={true}
         showNextButton={true}
         onNext={handlePress}
       />
+      <ProgressBar progress={6 / 8} />
       <View style={photosScreen.headerContainer}>
         <Text style={firstNameScreen.questionText}>
           Add some photos{'\n'}Upload at least one photo
         </Text>
       </View>
-      <View style={photosScreen.photosrectanglesContainer}>
-        {images.map((image, index) => (
+      <View style={{width: 371, height: 261, borderRadius: 20, alignSelf: 'center', backgroundColor: '#D9D9D9'}}>
+        {images[0] && (
+          <Image source={{ uri: images[0].path }} style={{width: 371, height: 361, borderRadius: 20, alignSelf: 'center'}} />
+        )}
+        <View style={{position: 'absolute', bottom: 10, left: 10, backgroundColor: 'rgba(255, 255, 255, 0.8)', borderRadius: 10, padding: 5}}>
+          <Text style={{color: 'black'}}>Profile Picture</Text>
+        </View>
+        <View style={photosScreen.icon}>
+                <Icon name="plus" size={35} color="#000" />
+              </View>
+      </View>
+      <FlatList
+      style={{marginTop: 20}}
+        data={images.slice(1)}
+        horizontal
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => (
           <TouchableOpacity
-            key={index}
-            style={image ? photosScreen.selectedPhotoContainer : photosScreen.photosrectangle}
-            onPress={() => (image ? null : selectPhoto(index))}
+            style={item ? photosScreen.selectedPhotoContainer : photosScreen.photosrectangle}
+            onPress={() => (item ? null : selectPhoto(index + 1))}
           >
-            {image ? (
+            {item ? (
               <Image
-                source={{ uri: image.path }}
+                source={{ uri: item.path }}
                 style={photosScreen.photosrectangle}
               />
             ) : (
@@ -131,20 +148,22 @@ const Photos = ({ navigation, route }) => {
                 <Icon name="plus" size={35} color="#000" />
               </View>
             )}
-            {image && (
+            {item && (
               <TouchableOpacity
-                onPress={() => removePhoto(index)}
+                onPress={() => removePhoto(index + 1)}
                 style={photosScreen.deleteIcon}
               >
                 <Icon name="times-circle" size={35} color="#000" />
               </TouchableOpacity>
             )}
           </TouchableOpacity>
-        ))}
-      </View>
+        )}
+      />
       {/* <NextButton onPress={handleNextPress} /> */}
     </View>
   );
+  
+  
 
 };
 

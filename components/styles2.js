@@ -213,6 +213,11 @@ const lastNameScreen = StyleSheet.create({
     fontSize: screenWidth * 0.04,
     color: 'white',
   },
+  rectangleText: {
+  //  align: 'center', 
+  fontSize: screenWidth * 0.04,
+  color: 'white',
+}
 });
 
 

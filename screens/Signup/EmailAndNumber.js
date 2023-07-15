@@ -1,16 +1,37 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StatusBar } from 'react-native';
+import { View, Text, TextInput, StatusBar, Alert } from 'react-native';
 import { firstNameScreen, lastNameScreen } from '../../components/styles2';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Navbar from '../../components/Navbar';
 import NextButton from '../../components/NextButton';
+import ProgressBar from '../../components/ProgressBar';
 
 const EmailAndNumber = ({ navigation, route }) => {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
 
+  const validateEmail = (email) => {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
+  const validatePhoneNumber = (phoneNumber) => {
+    const re = /^[0-9\b]+$/;
+    return re.test(phoneNumber);
+  };
+
   const handlePress = () => {
+    // if (!email || !validateEmail(email)) {
+    //   Alert.alert('Validation error', 'Please enter a valid email address.');
+    //   return;
+    // }
+
+    // if (!phoneNumber || !validatePhoneNumber(phoneNumber)) {
+    //   Alert.alert('Validation error', 'Please enter a valid phone number.');
+    //   return;
+    // }
+
     navigation.navigate('SignUpPassword', { ...route.params, email, phoneNumber });
   };
 
@@ -18,11 +39,14 @@ const EmailAndNumber = ({ navigation, route }) => {
     <View style={firstNameScreen.container}>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
       <Navbar
+        backgroundColor="#000000"
+        textColor="#FFFFFF"
         navigation={navigation}
         showBackButton={true}
         showNextButton={true}
         onNext={handlePress}
       />
+      <ProgressBar progress={2/8} />
       <Text style={firstNameScreen.questionText}>What's your email address?</Text>
       <TextInput
         style={firstNameScreen.rectangle}

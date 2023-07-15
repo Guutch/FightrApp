@@ -1,15 +1,25 @@
 // FirstName.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, StatusBar } from 'react-native';
+import { View, Text, TextInput, StatusBar, Alert } from 'react-native';
 import { firstNameScreen, lastNameScreen } from '../../components/styles2';
 
 import Navbar from '../../components/Navbar';
+import ProgressBar from '../../components/ProgressBar';
 
 const FirstName = ({ navigation }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
   const handlePress = () => {
+    // if (!firstName || firstName.trim() === '') {
+    //   Alert.alert('Validation error', 'First name cannot be empty.');
+    //   return;
+    // }
+    // if (!lastName || lastName.trim() === '') {
+    //   Alert.alert('Validation error', 'Last name cannot be empty.');
+    //   return;
+    // }
+
     navigation.navigate('EmailAndNumber', { firstName, lastName });
   };
 
@@ -17,11 +27,14 @@ const FirstName = ({ navigation }) => {
     <View style={firstNameScreen.container}>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
       <Navbar
+        backgroundColor="#000000"
+        textColor="#FFFFFF"
         navigation={navigation}
         showBackButton={true}
         showNextButton={true}
         onNext={handlePress}
       />
+      <ProgressBar progress={1 / 8} />
 
       <Text style={firstNameScreen.questionText}>What's your first name?</Text>
       <TextInput

@@ -10,6 +10,7 @@ import EmailLogin from './screens/EmalLogIn';
 import SettingsScreen from './screens/MainFlow/SettingsScreen';
 import EditProfileScreen from './screens/MainFlow/EditProfile';
 import ViewProfileScreen from './screens/MainFlow/ViewProfile';
+import MyProfileScreen from './screens/MainFlow/MyProfileScreen';
 import PreferenceSel from './screens/MainFlow/PreferenceSel';
 import FightingScreen from './screens/Signup/FightingScreen';
 
@@ -34,6 +35,7 @@ const MyStack = () => {
             <Stack.Screen name="FightingScreen" component={FightingScreen} />
             <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
             <Stack.Screen name="ViewProfileScreen" component={ViewProfileScreen} />
+            <Stack.Screen name="MyProfileScreen" component={MyProfileScreen} />
           </>
         ) : (
           // User is not logged in already
@@ -44,6 +46,7 @@ const MyStack = () => {
             <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
             <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
             <Stack.Screen name="ViewProfileScreen" component={ViewProfileScreen} />
+            <Stack.Screen name="MyProfileScreen" component={MyProfileScreen} />
             <Stack.Screen name="PreferenceSel" component={PreferenceSel} />
             <Stack.Screen name="SignUpFlow" component={SignUpFlow} />
             <Stack.Screen name="FightingScreen" component={FightingScreen} />

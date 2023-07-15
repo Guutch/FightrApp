@@ -49,7 +49,7 @@ const userId = useSelector(state => state.user);  // Gets the userId from the Re
       </View>
       <View style={{ paddingTop: 100, paddingLeft: 20 }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('ViewProfileScreen')}
+          onPress={() => navigation.navigate('MyProfileScreen')}
           style={{
             backgroundColor: 'black',
             width: '80%',

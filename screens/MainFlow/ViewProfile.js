@@ -39,7 +39,9 @@ const ViewProfileScreen = ({ navigation, route }) => {
       const targetUserId = passedUser ? passedUser.userId : userId.userId;
       const data = await fetchEditProfileData(targetUserId);
       const imageData = await fetchImages(targetUserId);
-      
+      console.log("imageData")
+      console.log(imageData)
+      console.log("imageData")
       // sort image data by position before setting state
       if (imageData) {
         const sortedImageData = imageData.sort((a, b) => a.position - b.position);
