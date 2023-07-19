@@ -16,9 +16,30 @@ export const createUser = async (userData) => {
   data.append('birthday', userData.birthday);
   data.append('height', userData.height);
   data.append('weight', userData.weight);
-  data.append('heightUnit', userData.heightUnit);
-  data.append('weightUnit', userData.weightUnit);
-  data.append('fightingStyle', userData.fightingStyle);
+
+  if (userData.sex === "Male") {
+    data.append('sex', 1);
+  } else {
+    data.append('sex', 2);
+  }
+
+  if (userData.heightUnit === "cm") {
+    data.append('heightUnit', 1);
+  } else {
+    data.append('heightUnit', 2);
+  }
+
+  if (userData.weightUnit === "kg") {
+    data.append('weightUnit', 1);
+  } else {
+    data.append('weightUnit', 2);
+  }
+
+  // data.append('sex', userData.sex);
+  // data.append('heightUnit', userData.heightUnit);
+  // data.append('weightUnit', userData.weightUnit);
+
+  data.append('fightingStyle', JSON.stringify(userData.fightingStyle));
   data.append('fightingLevel', userData.fightingLevel);
   data.append('password', userData.password);
 
@@ -76,6 +97,26 @@ export const createUser = async (userData) => {
     throw error;
   }
 };
+
+export const handleTnCs = async (userId) => {
+  try {
+    const response = await axios.put(`${API_URL}/users/${userId}/tncs`);
+
+    return response.data;
+  } catch (error) {  // <-- Add 'error' here
+    console.error('[api.js] Error agreeing to Ts & Cs:', error);
+  }
+}
+
+export const handleWaiver = async (userId) => {
+  try {
+    const response = await axios.put(`${API_URL}/users/${userId}/waiver`);
+    console.log(response.data)
+    return response.data;
+  } catch (error) {  // <-- Add 'error' here
+    console.error('[api.js] Error agreeing to waiver', error);
+  }
+}
 
 export const loginUser = async (email, password) => {
   try {
@@ -194,6 +235,7 @@ export const fetchEditProfileData = async (userId) => {
   }
 };
 
+// Finds all users + their images with respect to user's preferences
 export const fetchUsersAndImages = async (userId) => {
   try {
     const response = await axios.get(`${API_URL}/matches/${userId}`); // replace with your API endpoint to fetch users

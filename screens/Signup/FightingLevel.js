@@ -76,7 +76,7 @@ const FightingLevelScreen = ({ navigation, route }) => {
       />
       <ProgressBar progress={8 / 8} />
       <ScrollView contentContainerStyle={fightingStyleScreen.list}>
-        <Text style={firstNameScreen.questionText}>
+        <Text style={fightingStyleScreen.questionText}>
           How good is your fight game? This will help us match you with others!
         </Text>
         {Object.keys(levels).map(renderItem)}

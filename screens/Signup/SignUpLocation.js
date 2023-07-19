@@ -19,7 +19,11 @@ const SignUpLocation = ({ navigation, route }) => {
           async (position) => {
             // console.log('Data from previous steps, photos, martial arts, and fighting level:', route.params);
             Alert.alert('Location granted', `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
-  
+
+            let parts = route.params.birthday.split('/');
+let mydate = new Date(parts[2], parts[1] - 1, parts[0]);
+
+
             // Call the createUser function with the user data and location
             const userData = {
               firstName: route.params.firstName,
@@ -28,29 +32,28 @@ const SignUpLocation = ({ navigation, route }) => {
               phoneNumber: route.params.phoneNumber,
               height: route.params.height,
               weight: route.params.weight,
+              sex: route.params.sex,
               heightUnit: route.params.heightUnit,
               weightUnit: route.params.weightUnit,
-              birthday: route.params.birthday,
+              birthday: mydate.toISOString(),
               photos: route.params.images,
-              fightingStyle: route.params.checkedMartialArts.join(', '), 
+              fightingStyle: route.params.checkedMartialArts,
               fightingLevel: route.params.checkedLevel,
               password: route.params.password,
               location: {
                 type: 'Point',
                 coordinates: [position.coords.latitude, position.coords.longitude],
-              },
-              bio: ""
+              }
             };
-            
+
             console.log(route.params.password)
             const returnedUserData = await createUser(userData);
-  
-      // Use dispatch to fire the userLoggedIn action with the returned user data
-      dispatch(userLoggedIn(returnedUserData.user));
 
-      // Navigate to another screen if needed
-      navigation.navigate('Welcome');
-            await createUser(userData);
+            // Use dispatch to fire the userLoggedIn action with the returned user data
+            dispatch(userLoggedIn(returnedUserData.user));
+
+            // Navigate to another screen if needed
+            navigation.navigate('Welcome');
           },
           (error) => {
             console.log(error);
@@ -65,14 +68,34 @@ const SignUpLocation = ({ navigation, route }) => {
     }
   }, [route.params, navigation]);
 
+  const handlePress = () => {
+    // console.log("route.params.firstName", route.params.firstName)
+    // console.log("route.params.lastName", route.params.lastName)
+    // console.log("route.params.email", route.params.email)
+    // console.log("route.params.phoneNumber", route.params.phoneNumber)
+    // console.log("route.params.height", route.params.height)
+    // console.log("route.params.weight", route.params.weight)
+    // console.log("route.params.sex", route.params.sex)
+    // console.log("route.params.heightUnit", route.params.heightUnit)
+    // console.log("route.params.weightUnit", route.params.weightUnit)
+    // console.log("route.params.birthday", route.params.birthday)
+    // console.log(route.params.images) 
+    console.log("route.params.checkedMartialArts", route.params.checkedMartialArts)
+    // console.log("route.params.checkedLevel", route.params.checkedLevel)
+    // console.log("route.params.password", route.params.password)
+    navigation.navigate('Welcome');
+  }
+
   return (
     <View style={signUpLocation.container}>
       <Navbar navigation={navigation} />
       <Navbar
+        backgroundColor="#000000"
+        textColor="#FFFFFF"
         navigation={navigation}
         showBackButton={true}
         showNextButton={false}
-        // onNext={handlePress}
+      // onNext={handlePress}
       />
       <View style={signUpLocation.iconContainer}>
         <Icon name="map-marker" size={150} color="#FFFFFF" />
@@ -85,7 +108,8 @@ const SignUpLocation = ({ navigation, route }) => {
       </View>
       <TouchableOpacity
         style={signUpLocation.enableLocationButton}
-        onPress={requestLocationPermission}
+        // onPress={handlePress}
+      onPress={requestLocationPermission}
       >
         <Text style={signUpLocation.enableLocationButtonText}>
           Enable Location

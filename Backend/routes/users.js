@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/user');
 const Media = require('../models/media');
 const Preference = require('../models/preference');
+const Profile = require('../models/profile');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
@@ -31,39 +32,81 @@ const upload = multer({
   })
 }).array('photos', 5); // This allows up to 5 photos to be uploaded at once
 
-const determineWeightRange = (weight, weightUnit) => {
-  // Convert weight to lbs if necessary
-  if (weightUnit !== 'lbs') {
-    weight = weight * 2.20462; // convert kg to lbs
-  }
-
-  // Define the UFC divisions
-  const divisions = {
-    strawweight: [0, 115],
-    flyweight: [115, 125],
-    bantamweight: [125, 135],
-    featherweight: [135, 145],
-    lightweight: [145, 155],
-    welterweight: [155, 170],
-    middleweight: [170, 185],
-    lightHeavyweight: [185, 205],
-    heavyweight: [205, Infinity],
-  };
-
-  // Identify the user's division and weight range
-  for (let [division, range] of Object.entries(divisions)) {
-    if (weight > range[0] && weight <= range[1]) {
-      // Special cases for strawweight and heavyweight divisions
-      if (division === 'strawweight') return [0, 125];
-      if (division === 'heavyweight') return [185, 999];
-
-      // General case for other divisions
-      let previousDivisionMax = Object.values(divisions)[Object.keys(divisions).indexOf(division) - 1][1];
-      let nextDivisionMax = Object.values(divisions)[Object.keys(divisions).indexOf(division) + 1][1];
-      return [previousDivisionMax, nextDivisionMax];
-    }
+// Written to populate user's preference doc (weight_range)
+const getDefaultWeightRange = (weightClass, userSex) => {
+  let upperLimit = userSex === 2 ? 4 : 9; // for female 4, for male 9
+  
+  if (weightClass === 1) {
+    return [weightClass, weightClass + 1];
+  } else if (weightClass === upperLimit) {
+    return [weightClass - 1, weightClass];
+  } else {
+    return [weightClass - 1, weightClass, weightClass + 1];
   }
 };
+
+// Written to populate Profile doc (weightClass)
+const getWeightClass = (weight, weightUnit, sex) => {
+  // Convert weight to lbs if it's in kg
+  if (weightUnit === 1) {
+    weight = weight * 2.20462; // 1 kg is approximately 2.20462 lbs
+  }
+
+  let weightClass = 0;
+
+  if (sex === 2) { // if sex is female
+    if (weight <= 115) weightClass = 1;
+    else if (weight <= 125) weightClass = 2;
+    else if (weight <= 135) weightClass = 3;
+    else if (weight <= 145) weightClass = 4;
+  } else { // if sex is male
+    if (weight <= 115) weightClass = 1;
+    else if (weight <= 125) weightClass = 2;
+    else if (weight <= 135) weightClass = 3;
+    else if (weight <= 145) weightClass = 4;
+    else if (weight <= 155) weightClass = 5;
+    else if (weight <= 170) weightClass = 6;
+    else if (weight <= 185) weightClass = 7;
+    else if (weight <= 205) weightClass = 8;
+    else if (weight <= 265) weightClass = 9;
+  }
+
+  return weightClass;
+};
+
+// const determineWeightRange = (weight, weightUnit) => {
+//   // Convert weight to lbs if necessary
+//   if (weightUnit !== 'lbs') {
+//     weight = weight * 2.20462; // convert kg to lbs
+//   }
+
+//   // Define the UFC divisions
+//   const divisions = {
+//     strawweight: [0, 115],
+//     flyweight: [115, 125],
+//     bantamweight: [125, 135],
+//     featherweight: [135, 145],
+//     lightweight: [145, 155],
+//     welterweight: [155, 170],
+//     middleweight: [170, 185],
+//     lightHeavyweight: [185, 205],
+//     heavyweight: [205, Infinity],
+//   };
+
+//   // Identify the user's division and weight range
+//   for (let [division, range] of Object.entries(divisions)) {
+//     if (weight > range[0] && weight <= range[1]) {
+//       // Special cases for strawweight and heavyweight divisions
+//       if (division === 'strawweight') return [0, 125];
+//       if (division === 'heavyweight') return [185, 999];
+
+//       // General case for other divisions
+//       let previousDivisionMax = Object.values(divisions)[Object.keys(divisions).indexOf(division) - 1][1];
+//       let nextDivisionMax = Object.values(divisions)[Object.keys(divisions).indexOf(division) + 1][1];
+//       return [previousDivisionMax, nextDivisionMax];
+//     }
+//   }
+// };
 
 // Get user image - needs updating to handle multiple
 router.get('/:id/image', async (req, res) => {
@@ -106,15 +149,21 @@ router.post('/register', upload, async (req, res) => {
       email: req.body.email,
       password: hashedPassword,
       phoneNumber: req.body.phoneNumber,
+      sex: req.body.sex,
+    });
+
+    const userProfile = new Profile({
+      user_id: user._id,
       height: req.body.height,
       weight: req.body.weight,
       heightUnit: req.body.heightUnit,
       weightUnit: req.body.weightUnit,
-      fightingStyle: req.body.fightingStyle,
+      fightingStyle: JSON.parse(req.body.fightingStyle),
       fightingLevel: req.body.fightingLevel,
       location: req.body.location,
-      bio: req.body.bio,
-    });
+      weightClass: getWeightClass(req.body.weight, req.body.weightUnit, user.sex),
+      // bio: req.body.bio,
+    })
 
     // Calculate age based on the birthday using moment
     const moment = require('moment');
@@ -123,9 +172,10 @@ router.post('/register', upload, async (req, res) => {
     // Define default preferences
     let ageRange = [Math.max(age - 5, 18), Math.min(age + 5, 99)];
     let locationRange = 10; // default to 10 miles
-    let weightRange = determineWeightRange(user.weight, user.weightUnit);
-    let fightingStyle = user.fightingStyle;
-    let fightingLevel = user.fightingLevel;
+    let weightRange = getDefaultWeightRange(userProfile.weightClass, user.sex);;
+    // let weightRange = determineWeightRange(user.weight, user.weightUnit);
+    let fightingStyle = userProfile.fightingStyle;
+    let fightingLevel = userProfile.fightingLevel;
 
     // Create new Preference instance
     const preferences = new Preference({
@@ -142,6 +192,12 @@ router.post('/register', upload, async (req, res) => {
 
     // Attach the preferences ID to the user
     user.preferences = preferences._id;
+
+    // Attach the profile ID to the user
+    user.profile = userProfile._id;
+
+    // Save the profile ID to the database
+    await userProfile.save();
 
     // Save the user to the database
     const savedUser = await user.save();
@@ -208,6 +264,32 @@ router.put('/:userId/bio', async (req, res) => {
     res.status(200).send('Bio updated successfully');
   } catch (error) {
     res.status(500).send('Error updating bio');
+  }
+});
+
+// Update user's TnCs
+router.put('/:userId/tncs', async (req, res) => {
+  const { userId } = req.params;
+  
+
+  try {
+    await User.updateOne({ _id: userId }, { hasAgreedToTnC: true });
+    res.status(200).send('hasAgreedToTnC updated successfully');
+  } catch (error) {
+    res.status(500).send('Error updating tncs');
+  }
+});
+
+// Update user's waiver agreement
+router.put('/:userId/waiver', async (req, res) => {
+  const { userId } = req.params;
+  // console.log(userId)
+
+  try {
+    await User.updateOne({ _id: userId }, { hasAgreedToWaiver: true });
+    res.status(200).send('hasAgreedToWaiver updated successfully');
+  } catch (error) {
+    res.status(500).send('Error updating hasAgreedToWaiver');
   }
 });
 

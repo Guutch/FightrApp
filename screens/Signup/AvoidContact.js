@@ -10,7 +10,11 @@ const Welcome = ({ navigation }) => {
   const userId = useSelector((state) => state.user.userId); // replace 'state.user.userId' with the correct path to the user ID in your Redux state
   return (
     <View style={welcomeStyles.container}>
-<Navbar showBackButton={false} showNextButton={false} />
+ <Navbar backgroundColor="#000000"
+        textColor="#FFFFFF"
+        showBackButton={false}
+        showNextButton={false}
+        />
 
       <Image source={boxingIcon} style={welcomeStyles.boxingIcon} />
       <Text style={welcomeStyles.welcomeText}>Want to avoid somebody on Fytr?</Text>

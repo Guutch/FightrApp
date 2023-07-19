@@ -97,7 +97,7 @@ const FightingScreen = ({ navigation, route }) => {
       />
       <ProgressBar progress={7/8} />
       <ScrollView contentContainerStyle={fightingStyleScreen.list}>
-        <Text style={firstNameScreen.questionText}>
+        <Text style={fightingStyleScreen.questionText}>
           What fighting styles are you interested in? Tick at least one.
         </Text>
         {Object.keys(martialArts).map(renderItem)}

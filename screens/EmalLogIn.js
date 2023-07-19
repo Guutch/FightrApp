@@ -67,8 +67,9 @@ const EmailLogin = ({ navigation }) => {
       </TouchableOpacity>
 
       <TouchableOpacity style={emailLogin.signInButton} onPress={handleSignIn}>
-        <Text style={emailLogin.signInButtonText}>Sign in</Text>
-      </TouchableOpacity>
+    <Text style={emailLogin.signInButtonText}>Sign in</Text>
+</TouchableOpacity>
+
 
       <View style={emailLogin.signUpContainer}>
         <Text>

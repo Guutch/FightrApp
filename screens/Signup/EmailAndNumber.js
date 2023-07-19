@@ -22,15 +22,15 @@ const EmailAndNumber = ({ navigation, route }) => {
   };
 
   const handlePress = () => {
-    // if (!email || !validateEmail(email)) {
-    //   Alert.alert('Validation error', 'Please enter a valid email address.');
-    //   return;
-    // }
+    if (!email || !validateEmail(email)) {
+      Alert.alert('Validation error', 'Please enter a valid email address.');
+      return;
+    }
 
-    // if (!phoneNumber || !validatePhoneNumber(phoneNumber)) {
-    //   Alert.alert('Validation error', 'Please enter a valid phone number.');
-    //   return;
-    // }
+    if (!phoneNumber || !validatePhoneNumber(phoneNumber)) {
+      Alert.alert('Validation error', 'Please enter a valid phone number.');
+      return;
+    }
 
     navigation.navigate('SignUpPassword', { ...route.params, email, phoneNumber });
   };

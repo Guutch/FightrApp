@@ -149,18 +149,19 @@ const emailLogin = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   signInButton: {
-    ...commonStyles.buttonStyle,
     backgroundColor: 'blue',
-    paddingHorizontal: 30,
-    paddingVertical: 5,
     borderRadius: 20,
-    right: screenWidth * 0.1,
+    alignSelf: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    left: screenWidth * 0.278,
     top: screenHeight * 0.56,
   },
   signInButtonText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 16,
+    textAlign: 'center',
   },
 });
 
@@ -214,10 +215,10 @@ const lastNameScreen = StyleSheet.create({
     color: 'white',
   },
   rectangleText: {
-  //  align: 'center', 
-  fontSize: screenWidth * 0.04,
-  color: 'white',
-}
+    //  align: 'center', 
+    fontSize: screenWidth * 0.04,
+    color: 'white',
+  }
 });
 
 
@@ -231,7 +232,8 @@ const birthdayScreen = StyleSheet.create({
     paddingTop: screenHeight * 0.1,
   },
   birthdayTouchable: {
-    top: screenHeight * 0.127,
+    // backgroundColor: 'blue',
+    // top: screenHeight * 0.427,
   },
   birthdaydateText: {
     fontFamily: 'Inter',
@@ -241,7 +243,28 @@ const birthdayScreen = StyleSheet.create({
     letterSpacing: 0,
     textAlign: 'center',
     color: 'black',
+    top: screenHeight * 0.105,
   },
+  sexPicker: {
+    color: "green"
+    // width: 100,
+    //   height: screenHeight * 0.1,
+    // top: 0,
+    // right: 0
+  },
+  // rectangle: {
+  //   backgroundColor: 'black',
+  //   width: screenWidth * 0.8,
+  //   height: screenHeight * 0.1,
+  //   borderRadius: 40,
+  //   position: 'absolute',
+  //   left: screenWidth * 0.1,
+  //   top: screenHeight * 0.427,
+  //   paddingLeft: screenWidth * 0.04,
+  //   fontSize: screenWidth * 0.04,
+  //   color: 'white',
+  // },
+
   birthdaybutton: {
     ...commonStyles.buttonStyle,
     backgroundColor: '#000000',
@@ -270,14 +293,24 @@ const photosScreen = StyleSheet.create({
     paddingHorizontal: screenWidth * 0.05,
   },
   headerContainer: {
-    height: screenHeight * 0.25,
+    height: screenHeight * 0.11,
   },
   photosrectanglesContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     marginTop: screenHeight * 0.08,
-
+    backgroundColor: "blue"
+  },
+  questionText: {
+    fontSize: screenWidth * 0.06,
+    fontWeight: '700',
+    lineHeight: screenHeight * 0.038,
+    color: 'black',
+    position: 'absolute',
+    paddingTop: screenHeight * 0.01,
+    // left: screenWidth * 0.02,
+    // top: screenHeight * 0.15,
   },
   photosfightrText: {
     fontSize: screenWidth * 0.1,
@@ -301,7 +334,7 @@ const photosScreen = StyleSheet.create({
   photosrectangle: {
     backgroundColor: '#D9D9D9',
     borderRadius: 10,
-    width: (screenWidth * 0.9) / 3 - screenWidth * 0.03, // Updated width property
+    width: (screenWidth * 0.8) / 2 - screenWidth * 0.04, // Updated width property
     height: screenHeight * 0.15,
     marginBottom: screenHeight * 0.025,
     marginRight: screenWidth * 0.015, // Updated marginRight property
@@ -319,6 +352,13 @@ const photosScreen = StyleSheet.create({
     fontSize: screenHeight * 0.02,
     fontWeight: '700',
     color: 'white',
+  },
+  flatListStyle: {
+    marginTop: 10,
+    // backgroundColor: "red",
+    paddingTop: 10,
+    // height: screenHeight * 0.15,
+    // flexGrow: 0
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -347,6 +387,7 @@ const photosScreen = StyleSheet.create({
     color: 'white',
   },
   deleteIcon: {
+    zIndex: 100,
     position: 'absolute',
     bottom: 0,
     right: 0,
@@ -431,11 +472,14 @@ const fightingStyleScreen = StyleSheet.create({
     color: 'black',
     position: 'absolute',
     left: screenWidth * 0.037,
-    top: screenHeight * 0.193,
+    // top: screenHeight * 0.193,
+    paddingTop: screenHeight * 0.02,
   },
   list: {
-    paddingTop: screenHeight * 0.27,
-    paddingHorizontal: screenWidth * 0.1,
+    flex: 1,
+    alignItems: "center",
+    paddingTop: screenHeight * 0.07,
+    // paddingHorizontal: screenWidth * 0.1,
   },
   rectangle: {
     backgroundColor: 'black',
@@ -583,13 +627,70 @@ const signUpLocation = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+const waiverStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'flex-start', // Align items from the start
+  },
+  boxingIcon: {
+    position: 'absolute',
+    top: screenHeight * 0.12,  // responsive top position
+    // left: screenWidth * 0.435,  // responsive left position
+    height: screenHeight * 0.06,  // responsive height
+    width: screenWidth * 0.12,  // responsive width
+  },
+  welcomeText: {
+    marginTop: screenHeight * 0.185,
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#000',
+  },
+  waiverBox: {
+    width: 349,
+    height: 415,
+    marginTop: 10, // Adjust as needed
+    marginBottom: 10, // Adjust as needed
+    borderWidth: 1,
+    borderColor: 'black',
+    backgroundColor: 'grey',
+    padding: 10, // Add some padding
+  },
+  agreeButton: {
+    marginBottom: screenHeight * 0.02,
+    height: screenHeight * 0.08,  // responsive height
+    width: screenWidth * 0.67,  // responsive width
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
+  },
+  termsAndConditions: {
+    marginBottom: screenHeight * 0.01,
+    width: screenWidth * 0.7,
+    fontSize: 13,
+    fontWeight: '700',
+    textAlign: 'center',
+    color: '#000',
+  },
+agreeButtonText: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#FFF',
+  },
+  // Rest of your styles
+});
+
 const welcomeStyles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   boxingIcon: {
     position: 'absolute',
@@ -603,6 +704,13 @@ const welcomeStyles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     color: '#000',
+  },
+  waiverBox: {
+    width: 349,
+    height: 415,
+    position: 'absolute',
+    top: 294,
+    left: 23,
   },
   subText: {
     width: screenWidth * 0.7,
@@ -654,7 +762,7 @@ const welcomeStyles = StyleSheet.create({
     // lineHeight: screenHeight * 0.025, // adjust this as needed
     color: '#000000',
   },
-  
+
   termsAndConditions: {
     marginBottom: screenHeight * 0.01,
     width: screenWidth * 0.7,
@@ -679,6 +787,12 @@ const welcomeStyles = StyleSheet.create({
   },
   ruleContent: {
     width: '85%', // adjust this as needed
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#000',
+  },
+  underline: {
+    textDecorationLine: 'underline',
   },
 });
 
@@ -709,7 +823,7 @@ const settingsStyles = StyleSheet.create({
   },
   preferenceText: {
     color: 'white'
-  }, 
+  },
   sliderContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -843,6 +957,7 @@ export {
   fightingLevelScreen,
   signUpLocation,
   welcomeStyles,
+  waiverStyles,
   settingsStyles,
   swipingStyles,
   navbarStyles

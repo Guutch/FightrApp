@@ -47,25 +47,25 @@ const BirthdayScreen = ({ navigation, route }) => {
   // };
 
   const handlePress = () => {
-    // const now = new Date();
-    // const eighteenYearsAgo = new Date(now.setFullYear(now.getFullYear() - 18));
+    const now = new Date();
+    const eighteenYearsAgo = new Date(now.setFullYear(now.getFullYear() - 18));
 
-    // if (!date || date > eighteenYearsAgo) {
-    //   Alert.alert('Validation error', 'You must be at least 18 years old.');
-    //   return;
-    // }
+    if (!date || date > eighteenYearsAgo) {
+      Alert.alert('Validation error', 'You must be at least 18 years old.');
+      return;
+    }
 
-    // if (!sex) {
-    //   Alert.alert('Validation error', 'Please select your biological sex.');
-    //   return;
-    // }
+    if (!sex) {
+      Alert.alert('Validation error', 'Please select your biological sex.');
+      return;
+    }
 
     navigation.navigate('Photos', { ...route.params, birthday: formatDate(date), sex });
   };
 
   return (
-    <View style={birthdayScreen.birthdaycontainer}>
-      
+    <View style={firstNameScreen.container}>
+
       <Navbar
         backgroundColor="#000000"
         textColor="#FFFFFF"
@@ -92,23 +92,21 @@ const BirthdayScreen = ({ navigation, route }) => {
       {/* Top of view */}
       <View style={lastNameScreen.rectangle}>
     <TouchableOpacity 
-      onPress={toggleSexPicker}
-      style={{ flex: 1, justifyContent: 'center' }} // this line is added to center the text vertically and fill the entire View
+      style={{ flex: 1, justifyContent: 'center' }} 
     >
-      <Text style={lastNameScreen.rectangleText}>{sex || 'Select Sex'}</Text>
-    </TouchableOpacity>
-    {showSexPicker && (
       <Picker
+      style={birthdayScreen.sexPicker}
+      color="blue"
         selectedValue={sex}
-        style={{ height: 50, width: 150 }}
+        style={{ height: 50, width: '100%' }}
         onValueChange={(itemValue, itemIndex) => setSex(itemValue)}
       >
-        <Picker.Item label="Select Sex" value={null} />
-        <Picker.Item label="Male" value="1" />
-        <Picker.Item label="Female" value="2" />
+        <Picker.Item label="Select Sex" color="blue" value={null} />
+        <Picker.Item label="Male" color="blue" value="Male" />
+        <Picker.Item label="Female" color="blue" value="Female" />
       </Picker>
-    )}
-  </View>
+    </TouchableOpacity>
+</View>
       {/* Bottom of view */}
     </View>
   );
