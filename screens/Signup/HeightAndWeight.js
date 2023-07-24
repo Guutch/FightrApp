@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StatusBar, Dimensions, Alert } from 'react-native';
 import { firstNameScreen, lastNameScreen, photosScreen, heightWeightScreen } from '../../components/styles2';
 import Navbar from '../../components/Navbar';
-import NextButton from '../../components/NextButton';
+import InfoComponent from '../../components/InfoComponent';
 import ProgressBar from '../../components/ProgressBar';
 
 const HeightAndWeight = ({ navigation, route }) => {
@@ -156,6 +156,8 @@ const HeightAndWeight = ({ navigation, route }) => {
         <Text style={heightWeightScreen.separator}>/</Text>
         <Text style={[heightWeightScreen.unitText, weightUnit === 'lbs' && heightWeightScreen.activeUnit]}>lbs</Text>
       </TouchableOpacity>
+      <InfoComponent infoText="Your height cannot be more than 300cm/10ft. Inches cannot exceed 13. Your weight cannot be more than 600kg/1323lbs." />
+
     </View>
   );
 };

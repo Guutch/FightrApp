@@ -71,7 +71,7 @@ const EmailLogin = ({ navigation }) => {
 </TouchableOpacity>
 
 
-      <View style={emailLogin.signUpContainer}>
+<View style={{...emailLogin.signUpContainer, position: 'absolute', bottom: 20, width: '100%'}}>
         <Text>
           New Here?{' '}
           <Text style={emailLogin.signUpText} onPress={() => navigation.navigate('SignUpFlow')}>

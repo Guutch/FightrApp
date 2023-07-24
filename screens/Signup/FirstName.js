@@ -5,6 +5,7 @@ import { firstNameScreen, lastNameScreen } from '../../components/styles2';
 
 import Navbar from '../../components/Navbar';
 import ProgressBar from '../../components/ProgressBar';
+import InfoComponent from '../../components/InfoComponent';
 
 const FirstName = ({ navigation }) => {
   const [firstName, setFirstName] = useState('');
@@ -58,6 +59,7 @@ const FirstName = ({ navigation }) => {
         placeholder="Last Name"
         placeholderTextColor="white"
       />
+      <InfoComponent infoText="Both fields need to be completed. We don't accept numbers." />
     </View>
   );
 };

@@ -15,6 +15,7 @@ const matchesRoute = require('./routes/matches');
 const preferencesRoute = require('./routes/preferences');
 const swipesRoute = require('./routes/swipes');
 const connectionsRoute = require('./routes/connections');
+const profilesRoute = require('./routes/profiles');
 
 // Set up the routes for the "/users" path
 app.use('/users', usersRoute);
@@ -28,6 +29,8 @@ app.use('/preferences', preferencesRoute)
 app.use('/swipes', swipesRoute)
 
 app.use('/connections', connectionsRoute)
+
+app.use('/profiles', profilesRoute)
 
 // app.put('/preferences/:userId/radius', (req, res) => {
 //     res.send(`UserId is ${req.params.userId}`);

@@ -8,6 +8,8 @@ import ProgressBar from '../../components/ProgressBar';
 import { photosScreen, firstNameScreen } from '../../components/styles2';
 import Navbar from '../../components/Navbar';
 import * as Animatable from 'react-native-animatable';
+import InfoComponent from '../../components/InfoComponent';
+
 
 
 const Photos = ({ navigation, route }) => {
@@ -225,6 +227,7 @@ const Photos = ({ navigation, route }) => {
         />
       </View>
 
+      <InfoComponent infoText="Do not upload any rude or nude photos. Also, don't upload a photo that can cause a feud." />
 
     </View>
   );

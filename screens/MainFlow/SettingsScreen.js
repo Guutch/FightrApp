@@ -221,15 +221,15 @@ const SettingsScreen = ({ navigation }) => {
         showBackButton={true}
         navigation={navigation}
         title="Settings"
-        dataToUpdate={{
-          userId: userId.userId,
-          fightingStylePreference,
-          fightingLevelPreference,
-          weightUnit,
-          heightUnit,
-          ageRange,
-          distance,
-        }}
+        // dataToUpdate={{
+        //   userId: userId.userId,
+        //   fightingStylePreference,
+        //   fightingLevelPreference,
+        //   weightUnit,
+        //   heightUnit,
+        //   ageRange,
+        //   distance,
+        // }}
       />
       <ScrollView contentContainerStyle={settingsStyles.container}>
 

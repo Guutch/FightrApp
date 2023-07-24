@@ -152,17 +152,17 @@ router.get('/:id/preferences', async (req, res) => {
 });
 
 // Get user's metric preferences
-router.get('/:id/metrics', async (req, res) => {
-  const { id } = req.params;
+// router.get('/:id/metrics', async (req, res) => {
+//   const { id } = req.params;
 
-  try {
-    const user = await User.findById({ _id: id }).select('heightUnit weightUnit');
-    console.log(user)
-    res.send(user);
-  } catch (error) {
-    res.status(500).send({ error: 'Server error' });
-  }
-});
+//   try {
+//     const user = await User.findById({ _id: id }).select('heightUnit weightUnit');
+//     console.log(user)
+//     res.send(user);
+//   } catch (error) {
+//     res.status(500).send({ error: 'Server error' });
+//   }
+// });
 
 // Update preferences range - values in body are undefined?
 router.put('/:userId/prefUpdateFromSettings', async (req, res) => {

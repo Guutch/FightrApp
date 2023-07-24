@@ -402,34 +402,34 @@ router.put('/:userId/email', async (req, res) => {
 
 
 // Get user's weight 
-router.get('/:id/getWeight', async (req, res) => {
-  const { id } = req.params;
+// router.get('/:id/getWeight', async (req, res) => {
+//   const { id } = req.params;
 
-  try {
-    const user = await User.findById({ _id: id }).select('weight');
-    // const user = await User.findById({ _id: id }).select('weight');
-    // console.log(user)
-    console.log(user.weight);
-    res.send(user.weight);
-  } catch (error) {
-    res.status(500).send({ error: 'Server error' });
-  }
-});
+//   try {
+//     const user = await User.findById({ _id: id }).select('weight');
+//     // const user = await User.findById({ _id: id }).select('weight');
+//     // console.log(user)
+//     console.log(user.weight);
+//     res.send(user.weight);
+//   } catch (error) {
+//     res.status(500).send({ error: 'Server error' });
+//   }
+// });
 
-// Get user's fight level 
-router.get('/:id/getFightLevel', async (req, res) => {
-  const { id } = req.params;
+// // Get user's fight level 
+// router.get('/:id/getFightLevel', async (req, res) => {
+//   const { id } = req.params;
 
-  try {
-    const user = await User.findById({ _id: id }).select('fightingLevel');
-    // const user = await User.findById({ _id: id }).select('weight');
-    // console.log(user)
-    // console.log(user.fightingLevel);
-    res.send(user.fightingLevel);
-  } catch (error) {
-    res.status(500).send({ error: 'Server error' });
-  }
-});
+//   try {
+//     const user = await User.findById({ _id: id }).select('fightingLevel');
+//     // const user = await User.findById({ _id: id }).select('weight');
+//     // console.log(user)
+//     // console.log(user.fightingLevel);
+//     res.send(user.fightingLevel);
+//   } catch (error) {
+//     res.status(500).send({ error: 'Server error' });
+//   }
+// });
 
 // Get user's fields for Edit Profile Screen (already have API for metrics(preferences.js) and weight(above))
 // Need to add bio (after done with Tyson Fury)

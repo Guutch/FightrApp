@@ -4,7 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { firstNameScreen, birthdayScreen, lastNameScreen, navbarStyles } from '../../components/styles2';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Navbar from '../../components/Navbar';
-import NextButton from '../../components/NextButton';
+import InfoComponent from '../../components/InfoComponent';
 import ProgressBar from '../../components/ProgressBar';
 import { Picker } from '@react-native-picker/picker';
 
@@ -108,6 +108,7 @@ const BirthdayScreen = ({ navigation, route }) => {
     </TouchableOpacity>
 </View>
       {/* Bottom of view */}
+      <InfoComponent infoText="You have to be at least 18 years old to use Fytr!" />
     </View>
   );
 };

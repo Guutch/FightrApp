@@ -476,11 +476,10 @@ const fightingStyleScreen = StyleSheet.create({
     paddingTop: screenHeight * 0.02,
   },
   list: {
-    flex: 1,
     alignItems: "center",
     paddingTop: screenHeight * 0.07,
-    // paddingHorizontal: screenWidth * 0.1,
   },
+
   rectangle: {
     backgroundColor: 'black',
     width: screenWidth * 0.8,
@@ -676,7 +675,7 @@ const waiverStyles = StyleSheet.create({
     textAlign: 'center',
     color: '#000',
   },
-agreeButtonText: {
+  agreeButtonText: {
     fontSize: 24,
     fontWeight: '700',
     color: '#FFF',
@@ -926,22 +925,99 @@ const swipingStyles = StyleSheet.create({
     position: 'absolute',
     width: '95%', // Adjust as per your requirement
     height: '10%', // Adjust as per your requirement
-    backgroundColor: 'red',
-    opacity: 0.5,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // 50% opaque black
     borderRadius: 10,
     bottom: 0, // Makes the card hug the bottom of the cardContainer
-    alignSelf: 'center' // This will center the card horizontally
+    alignSelf: 'center', // This will center the card horizontally
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // 50% opaque black
   },
   card2: {
     position: 'absolute',
     width: '90%', // Adjust as per your requirement
-    height: '20%', // Adjust as per your requirement
-    backgroundColor: '#898989',
-    opacity: 0.5,
+    height: '23%', // Adjust as per your requirement
+    backgroundColor: 'rgba(137, 137, 137, 0.5)', // 50% opaque gray
     borderRadius: 10,
     // marginBotton: 20,
     bottom: '10%', // Position from the bottom of the cardContainer. Adjust this to position card2 above card1
-    alignSelf: 'center' // This will center the card horizontally
+    alignSelf: 'center', // This will center the card horizontally
+  },
+
+  userInfoText: {
+    fontSize: 38,
+    color: '#000000',
+    fontWeight: '700',
+  },
+  weightTextContainer: {
+    backgroundColor: '#fff', // white background
+    borderRadius: 15, // rounded corners
+    paddingHorizontal: 5, // padding on the sides
+    paddingVertical: 2, // padding on the top and bottom
+    alignSelf: 'flex-start', // make the container only as wide as the text
+  },
+  weightText: {
+    fontSize: 18,
+    color: '#000', // black
+    fontWeight: 'bold', // bold text
+    // remove padding and background color from here
+  },
+  fightingStylesContainer: {
+    flexDirection: 'row', // display styles in a row
+    flexWrap: 'wrap', // allow wrapping to the next line
+  },
+  fightingStyleText: {
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 5,
+    paddingVertical: 2,
+    marginRight: 5,
+    marginTop: 5,
+    color: '#fff', // white
+    backgroundColor: '#000', // black background
+    borderRadius: 15, // rounded corners
+    fontWeight: 'bold', // bold text
+    fontSize: 18,
+  },
+  
+  xxxText: {
+    color: '#000', // black
+    fontSize: 16,
+    paddingLeft: 10,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    flex: 1,
+  },
+  icon: {
+    color: '#000',
+  },
+  missedMatchAlert: {
+    position: 'absolute',
+    borderRadius: 15, // rounded corners
+    width: '102.8%',
+    height: '40%',
+    backgroundColor: '#FF4D00',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  missedMatchAlertTitle: {
+    fontFamily: 'Inter',
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 24,
+    color: '#fff',
+    textAlign: 'center',
+    
+  },
+  missedMatchAlertSubtitle: {
+    fontFamily: 'Inter',
+    fontSize: 14,
+    fontWeight: '700',
+    lineHeight: 17,
+    color: '#fff',
+    textAlign: 'center',
   },
 });
 

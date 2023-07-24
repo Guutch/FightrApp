@@ -172,30 +172,32 @@ export const fetchUserPreferences = async (userId) => {
   try {
     const [preferenceResponse, metricsResponse, weightResponse, fightLevelResponse] = await Promise.all([
       axios.get(`${API_URL}/preferences/${userId}/preferences`),
-      axios.get(`${API_URL}/preferences/${userId}/metrics`),
-      axios.get(`${API_URL}/users/${userId}/getWeight`),
-      axios.get(`${API_URL}/users/${userId}/getFightLevel`)
+      axios.get(`${API_URL}/profiles/${userId}/metrics`),
+      axios.get(`${API_URL}/profiles/${userId}/getWeight`),
+      axios.get(`${API_URL}/profiles/${userId}/getFightLevel`)
     ]);
 
-    let weight = weightResponse.data;
-    const weightUnit = metricsResponse.data.weightUnit;
+    // let weight = weightResponse.data;
+    // const weightUnit = metricsResponse.data.weightUnit;
 
     // Convert the weight to lbs if it's currently in kgs
-    if (weightUnit === 'kg') {
-      weight *= 2.20462; // Conversion factor from kg to lbs
-    }
+    // if (weightUnit === 'kg') {
+    //   weight *= 2.20462; // Conversion factor from kg to lbs
+    // }
 
     // Merging all responses
     const data = {
       ...preferenceResponse.data,
       ...metricsResponse.data,
-      weight: weight, // Now in lbs, regardless of the original unit
+      // weight: weight, // ???
       // weightUnit: 'lbs', // The weight unit is now always lbs
       usersFightLevel: fightLevelResponse.data
     };
 
+    console.log("Here")
+
     console.log("response.data");
-    console.log(fightLevelResponse.data);
+    console.log(data);
 
 
 
@@ -240,22 +242,37 @@ export const fetchUsersAndImages = async (userId) => {
   try {
     const response = await axios.get(`${API_URL}/matches/${userId}`); // replace with your API endpoint to fetch users
     const users = response.data; // Use .data to get response body with axios
-    console.log("HI")
-    console.log(users[0].userId)
-    console.log("HI")
+    // console.log("HI")
+    // console.log(users[0].userId)
+    // console.log("HI")
+
+    const swipeData = await axios.get(`${API_URL}/swipes/${userId}/getAll`);
+    const swipes = swipeData.data
+    console.log("Swipe Data")
+    console.log(swipes)
+    console.log("Swipe Data")
+    const filteredUsers = users.filter(user => swipeData[user.userId] !== 'left');
+
+    filteredUsers.forEach(user => {
+      if (swipes[user.userId] === 'right') {
+        user.swiped = true;
+      } else {
+        user.swiped = null;
+      }
+      console.log("test ->", user.userId)
+      console.log(user.swiped)
+    });
+
     // Only select relevant information
-    for (let user of users) {
+    for (let user of filteredUsers) {
       // console.log(user.userId)
       const images = await fetchImages(user.userId);
-      console.log(images)
+      // console.log(images)
       user.images = images;
       // console.log(user.images)
     }
-    console.log("END OF FOR LOOL")
-    console.log(users[0].images);
-    console.log("END OF FOR LOOL")
-    // console.log(users.images)
-    return users;
+
+    return filteredUsers;
   } catch (error) {
     console.error("Error fetching users and images: ", error);
   }

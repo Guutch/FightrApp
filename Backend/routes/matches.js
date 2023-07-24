@@ -7,26 +7,6 @@ const User = require('../models/user');
 const Profile = require('../models/profile'); 
 
 // Helper function to calculate distance between two coordinates
-// function calculateDistance(coord1, coord2) {
-//   const RADIUS_OF_EARTH_IN_MILES = 3958.8; // approximate radius of Earth in miles
-
-//   let lat1 = coord1.coordinates[0], lon1 = coord1.coordinates[1];
-//   let lat2 = coord2.coordinates[0], lon2 = coord2.coordinates[1];
-  
-//   // Convert degrees to radians
-//   lat1 = lat1 * Math.PI / 180;
-//   lon1 = lon1 * Math.PI / 180;
-//   lat2 = lat2 * Math.PI / 180;
-//   lon2 = lon2 * Math.PI / 180;
-
-//   // Use the Haversine formula to calculate the distance
-//   let dlon = lon2 - lon1;
-//   let dlat = lat2 - lat1;
-//   let a = Math.sin(dlat/2)**2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon/2)**2;
-//   let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-//   return RADIUS_OF_EARTH_IN_MILES * c;
-// }
 
 function calculateDistance(coord1, coord2, distanceUnit) {
   const RADIUS_OF_EARTH_IN_MILES = 3958.8; // approximate radius of Earth in miles
@@ -209,13 +189,19 @@ let userDistanceUnit = userProfile.distanceUnit;
         
   // Filter based on age
   const ageMatches = filterByAge(user, locationMatches, userPreferences);
+  console.log("ageMatches")
+  console.log(ageMatches)
         
   // Filter based on weight
   const weightMatches = filterByWeight(user, ageMatches, userPreferences);
-        
+  console.log("weightMatches")
+  console.log(weightMatches)      
+
   // Filter based on fighting style
   const styleMatches = filterByStyle(user, weightMatches, userPreferences);
-        
+  console.log("styleMatches")
+  console.log(styleMatches)    
+  
   // Filter based on fighting level
   const levelMatches = filterByLevel(user, styleMatches, userPreferences);
 
@@ -227,8 +213,9 @@ let userDistanceUnit = userProfile.distanceUnit;
     return {
       firstName: match.firstName,
       birthday: match.birthday,
-      weight: match.profile.weight,
-      weightUnit: match.profile.weightUnit,
+      // weight: match.profile.weight,
+      // weightUnit: match.profile.weightUnit,
+      weightClass: match.profile.weightClass,
       fightingStyle: match.profile.fightingStyle,
       fightingLevel: match.profile.fightingLevel,
       location: match.profile.location,
@@ -236,7 +223,6 @@ let userDistanceUnit = userProfile.distanceUnit;
     };
   });
 
-  console.log("We made it!")
   console.log(filteredMatches)
 
   // Return the matches

@@ -96,7 +96,7 @@ const FightingScreen = ({ navigation, route }) => {
         onNext={handlePress}
       />
       <ProgressBar progress={7/8} />
-      <ScrollView contentContainerStyle={fightingStyleScreen.list}>
+      <ScrollView style={{flex: 1}} contentContainerStyle={fightingStyleScreen.list} >
         <Text style={fightingStyleScreen.questionText}>
           What fighting styles are you interested in? Tick at least one.
         </Text>
@@ -105,6 +105,8 @@ const FightingScreen = ({ navigation, route }) => {
       {/* <NextButton onPress={handleNextPress} /> */}
     </View>
   );
+  
+  
 };
 
 export default FightingScreen;

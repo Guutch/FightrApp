@@ -4,7 +4,7 @@ import { firstNameScreen, lastNameScreen } from '../../components/styles2';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Navbar from '../../components/Navbar';
-import NextButton from '../../components/NextButton';
+import InfoComponent from '../../components/InfoComponent';
 import ProgressBar from '../../components/ProgressBar';
 
 const EmailAndNumber = ({ navigation, route }) => {
@@ -46,7 +46,7 @@ const EmailAndNumber = ({ navigation, route }) => {
         showNextButton={true}
         onNext={handlePress}
       />
-      <ProgressBar progress={2/8} />
+      <ProgressBar progress={2 / 8} />
       <Text style={firstNameScreen.questionText}>What's your email address?</Text>
       <TextInput
         style={firstNameScreen.rectangle}
@@ -66,7 +66,8 @@ const EmailAndNumber = ({ navigation, route }) => {
         placeholderTextColor="white"
         keyboardType="phone-pad"
       />
-      {/* <NextButton onPress={handlePress} /> */}
+      <InfoComponent infoText="Please enter a valid email address and phone number." />
+
     </View>
   );
 };

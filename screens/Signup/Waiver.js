@@ -15,7 +15,7 @@ const WaiverScreen = ({ navigation }) => {
     console.log('User ID:', userId); 
     try {
       await handleWaiver(userId);
-      // navigation.navigate('MainFlow');
+      navigation.navigate('MainFlow');
     } catch (error) {  // the error is now defined as 'error'
       console.warn(error);
     }

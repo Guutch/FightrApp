@@ -49,15 +49,27 @@ router.post('/newSwipe', async (req, res) => {
   });
 
 
-// GET all swipes
-router.get('/getAll', async (req, res) => {
+// Get swipe information of the user
+router.get('/:userId/getAll', async (req, res) => {
   try {
-    const swipes = await Swipe.find({});
-    res.send(swipes);
+    const userId = req.params.userId;
+
+  // Fetch all swipes where the given user was swiped
+  const swipes = await Swipe.find({ swiped_id: userId });
+
+  // Transform the swipes into a more convenient format
+  const swipeData = swipes.reduce((acc, swipe) => {
+    acc[swipe.swiper_id] = swipe.direction;
+    return acc;
+  }, {});
+  res.status(201).send(swipeData);
   } catch (error) {
     res.status(500).send();
   }
 });
+
+
+
 
 // And so on... for other swipe related routes
 

@@ -4,7 +4,7 @@ import { firstNameScreen, lastNameScreen } from '../../components/styles2';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Navbar from '../../components/Navbar';
-import NextButton from '../../components/NextButton';
+import InfoComponent from '../../components/InfoComponent';
 import ProgressBar from '../../components/ProgressBar';
 
 const SignUpPassword = ({ navigation, route }) => {
@@ -78,7 +78,8 @@ const SignUpPassword = ({ navigation, route }) => {
   secureTextEntry={true}
   autoCapitalize="none"
 />
-      {/* <NextButton onPress={handlePress} /> */}
+<InfoComponent infoText="Your password has to be at least 8 characters long, have one lower case letter, an upper case letter, and a special character" />
+
     </View>
   );
 };
