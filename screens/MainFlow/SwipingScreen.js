@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Text, StyleSheet, View, PanResponder, Animated, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Navbar from '../../components/Navbar';
-import { swipingStyles, settingsStyles } from '../../components/styles2';
+import { swipingStyles } from '../../components/styles2';
 import UserProfileCard from '../../components/UserProfileCard';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { fetchUsersAndImages } from '../../api';
@@ -85,8 +85,6 @@ const SwipingScreen = ({ navigation }) => {
 
       setUsers(foundUsers);
       setIsLoading(false);
-      // console.log("Gere")
-      // console.log(foundUsers[0])
     };
     fetchData();
   }, []);
@@ -94,7 +92,12 @@ const SwipingScreen = ({ navigation }) => {
   // Handle card swipe to left or right
   const handleSwipe = (direction) => {
     if (direction === 'right' || direction === 'left') {
-      setUsers(prevUsers => prevUsers.slice(1));
+      setUsers(prevUsers => {
+        // Reset position for the next card
+        pan.setValue({ x: 0, y: 0 });
+  
+        return prevUsers.slice(1);
+      });
       setCurrentImageIndex(0); // reset image index for next user
       if (direction === 'left') {
         console.log(users[0])
@@ -103,9 +106,8 @@ const SwipingScreen = ({ navigation }) => {
         }
       }
     }
-    // This is where the card goes back to the center
-    Animated.spring(pan, { toValue: { x: 0, y: 0 }, useNativeDriver: false }).start();
   };
+  
 
   const handleImageTap = () => {
     setCurrentImageIndex(prevIndex => (prevIndex + 1) % users[0].images.length);
@@ -140,19 +142,35 @@ const SwipingScreen = ({ navigation }) => {
     },
   });
   return (
-    <View>
+    <View style={swipingStyles.firstContainer}>
       <Navbar
         backgroundColor="#FFFFFF"
         textColor="#000000"
         homeStyle={true}
         navigation={navigation}  // Here we pass navigation as a prop to Navbar
       />
-      <View style={settingsStyles.container}>
+      <View style={swipingStyles.container}>
         {isLoading ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
           users.length > 0 &&
           users[0].images.length > 0 && (
+            <> 
+            
+            <UserProfileCard
+              user={users[1]}
+              navigation={navigation}
+              viewOnly={true}
+              // handlers={panResponder.panHandlers}
+              // pan={pan}
+              currentImageIndex={0}
+              // handleImagePress={handleImageTap}
+              style={getFightingStyles(users[1].fightingStyle)}
+              level={getFightingLevel(users[1].fightingLevel)}
+              weightClass={getWeightClass(users[1].weightClass)}
+              showMissedMatchAlert={showMissedMatchAlert}
+              // handleSwipe={handleSwipe}
+            />
             <UserProfileCard
               user={users[0]}
               navigation={navigation}
@@ -167,8 +185,8 @@ const SwipingScreen = ({ navigation }) => {
               showMissedMatchAlert={showMissedMatchAlert}
               handleSwipe={handleSwipe}
             />
-
-
+            </>
+            
           )
         )}
       </View>

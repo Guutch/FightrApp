@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { View, Image, Text, TouchableOpacity, Animated } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { swipingStyles, settingsStyles } from './styles2';
+import { swipingStyles } from './styles2';
 import MissedMatchAlert from './MissedMatchAlert';
+import ProgressBar from './ProgressBar';
 
 const UserProfileCard = ({ user, navigation, viewOnly, pan, handlers, currentImageIndex, handleImagePress, style, level, weightClass, handleSwipe, showMissedMatchAlert }) => {
-  // const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [alertVisible, setAlertVisible] = useState(false);
 
-  // const handleImagePress = () => {
-  //     setCurrentImageIndex((currentImageIndex + 1) % user.images.length);
-  // }
+  useEffect(() => {
+    let timer;
+    if (showMissedMatchAlert) {
+      setAlertVisible(true);
+      timer = setTimeout(() => {
+        setAlertVisible(false);
+      }, 3000); // 30 seconds
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [showMissedMatchAlert]);
 
   const rotate = pan?.x?.interpolate({
     inputRange: [-200, 0, 200],
@@ -52,6 +62,7 @@ const UserProfileCard = ({ user, navigation, viewOnly, pan, handlers, currentIma
 
   return (
     <CardContainer style={[swipingStyles.cardContainer, animatedStyle]} {...(viewOnly ? {} : handlers)}>
+
       <Image
         source={{ uri: user.images[currentImageIndex].url }}
         style={swipingStyles.cardImage}
@@ -60,7 +71,8 @@ const UserProfileCard = ({ user, navigation, viewOnly, pan, handlers, currentIma
       {/* User's Details Cards */}
       <View style={swipingStyles.card2}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 5, paddingTop: 0 }}>
-          {showMissedMatchAlert && <MissedMatchAlert />}
+          {alertVisible && <MissedMatchAlert />}
+          {/* {showMissedMatchAlert && <MissedMatchAlert />} */}
           <View>
             <Text style={swipingStyles.userInfoText}>{`${user.firstName} ${(new Date().getFullYear() - new Date(user.birthday).getFullYear())}`}</Text>
             <View style={swipingStyles.weightTextContainer}>

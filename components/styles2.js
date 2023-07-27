@@ -902,10 +902,22 @@ const settingsStyles = StyleSheet.create({
 });
 
 const swipingStyles = StyleSheet.create({
+  firstContainer: {
+    position: 'relative',
+      height: '100%',
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingTop: screenHeight * 0.1,
+      // backgroundColor: '#000' // black background
+  },  
   container: {
-    paddingTop: screenHeight * 0.11, // This is for the top navbar
-    alignItems: 'center',
+    position: 'relative',
     justifyContent: 'center',
+        alignItems: 'center',
+    paddingTop: screenHeight * 0.1, // this adds padding on top equal to navbar height
+    padding: 20, // this can be adjusted as needed
+    // backgroundColor: '#000' // black background
   },
   cardImage: {
     width: screenWidth * 0.92,
@@ -913,8 +925,9 @@ const swipingStyles = StyleSheet.create({
     resizeMode: "cover",
   },
   cardContainer: {
+    position: 'absolute',
     paddingTop: screenHeight * 0.03,
-    width: screenWidth * 0.92,
+    // width: screenWidth * 0.92,
     height: screenHeight * 0.82,
     borderRadius: 10,
     justifyContent: 'center',
@@ -1019,6 +1032,29 @@ const swipingStyles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
   },
+  progressBarContainer: {
+    width: screenWidth * 0.95,
+    height: 4,
+    backgroundColor: '#D9D9D9',
+    borderRadius: 2,
+    alignSelf: 'center',
+    position: 'absolute', // This will allow the progress bar to overlay the image
+    top: 0, // This will position the progress bar at the top of the container
+  },
+  
+  progressBar: {
+    height: '100%',
+    backgroundColor: 'black',
+  },
+});
+
+const progressBarStyles = StyleSheet.create({
+  behindBar: {
+
+  },
+  blackBar: {
+
+  }
 });
 
 export {

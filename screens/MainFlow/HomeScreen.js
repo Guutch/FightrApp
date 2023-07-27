@@ -11,27 +11,31 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={welcomeStyles.container}>
       <Navbar navigation={navigation} backgroundColor="#FFFFFF" textColor="#000000" homeStyle={true} />
-
-      <Image source={boxingIcon} style={welcomeStyles.boxingIcon} />
-      
-      <Text style={welcomeStyles.welcomeText}>A little Home Screen before getting started...</Text>
-
-      <View style={welcomeStyles.waiverBox}>
-        <ScrollView contentContainerStyle={welcomeStyles.waiverContent}>
-          <Text>
-            {/* The waiver text goes here */}
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu laoreet metus. Nulla sit amet semper arcu...
-          </Text>
-        </ScrollView>
+  
+      <View style={{
+        position: 'relative',
+        height: '100%',
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#000' // black background
+      }}>
+        <View style={{
+          position: 'absolute',
+          height: 200,
+          width: 200,
+          backgroundColor: 'red' // red rectangle
+        }} />
+        <View style={{
+          position: 'absolute',
+          height: 150,
+          width: 150,
+          backgroundColor: 'blue' // blue rectangle
+        }} />
       </View>
-
-      <Text style={welcomeStyles.termsAndConditions}>You can learn more about how Fytr processes your contacts here.</Text>
-
-      <TouchableOpacity style={welcomeStyles.agreeButton} onPress={() => {navigation.navigate('AvoidContact')}}>
-        <Text style={welcomeStyles.agreeButtonText}>I Agree</Text>
-      </TouchableOpacity>
     </View>
   );
+  
 };
 
 export default HomeScreen;
