@@ -1,12 +1,15 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, Image, Text, TouchableOpacity, Animated } from 'react-native';
+import { View, Image, Text, TouchableOpacity, Animated, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { swipingStyles } from './styles2';
 import MissedMatchAlert from './MissedMatchAlert';
 import ProgressBar from './ProgressBar';
 
-const UserProfileCard = ({ user, navigation, viewOnly, pan, handlers, currentImageIndex, handleImagePress, style, level, weightClass, handleSwipe, showMissedMatchAlert }) => {
+const UserProfileCard = ({ 
+  user, navigation, viewOnly, pan, handlers, currentImageIndex, handleImagePress,
+  style, level, weightClass, handleSwipe, showMissedMatchAlert, matchMade
+  }) => {
   const [alertVisible, setAlertVisible] = useState(false);
 
   useEffect(() => {
@@ -27,9 +30,10 @@ const UserProfileCard = ({ user, navigation, viewOnly, pan, handlers, currentIma
     outputRange: ["-15deg", "0deg", "15deg"],
   });
 
-  const animatedStyle = viewOnly ? {} : {
+  const animatedStyle = (matchMade || viewOnly) ? {} : {
     transform: [{ translateX: pan.x }, { translateY: pan.y }, { rotate }],
   };
+  
 
   const swipeRight = () => {
     Animated.timing(pan, {
@@ -45,6 +49,21 @@ const UserProfileCard = ({ user, navigation, viewOnly, pan, handlers, currentIma
     });
   };
 
+  const swipeRightAfterMatch = () => {
+    Animated.timing(pan, {
+      toValue: { x: 500, y: -125 }, // change 500 to the value you want
+      duration: 150, // change 500 to the duration you want
+      useNativeDriver: false,
+    }).start(() => {
+      // reset the position of the card after the animation is done
+      // Animated.spring(pan, { toValue: { x: 0, y: 0 }, useNativeDriver: false }).start();
+  
+      // handle the rest of the swipe
+      handleSwipe("afterMatch");
+    });
+  };
+  
+
   const swipeLeft = () => {
     Animated.timing(pan, {
       toValue: { x: -500, y: -125 }, // change 500 to the value you want
@@ -58,8 +77,43 @@ const UserProfileCard = ({ user, navigation, viewOnly, pan, handlers, currentIma
     });
   };
 
-  const CardContainer = viewOnly ? View : Animated.View;
+  const CardContainer = Animated.View;
 
+  if (matchMade) {
+    // Display the match screen
+    return (
+      <CardContainer style={[swipingStyles.cardContainer, { transform: [{ translateX: pan.x }, { translateY: pan.y }, { rotate }] }]}>
+  <Image
+    source={{ uri: user.images[currentImageIndex].url }}
+    style={swipingStyles.cardImage}
+  />
+
+<View style={{ position: 'absolute', top: '50%', alignSelf: 'center', alignItems: 'center' }}>
+  <Text style={swipingStyles.gameOnText}>Game on!</Text>
+  <Text style={swipingStyles.matchText}>You've got a match</Text>
+</View>
+
+
+  <TouchableOpacity style={swipingStyles.previewProfileButton}>
+  <Text style={swipingStyles.previewProfileText}>Preview Profile</Text>
+</TouchableOpacity>
+  <TouchableOpacity style={swipingStyles.sendMessageContainer}>
+  <Text style={swipingStyles.previewProfileText}>Send them a message</Text>
+</TouchableOpacity>
+
+  <Text style={swipingStyles.keepSwipingText}>Keep Swiping?</Text>
+
+  <View style={{ position: 'absolute', bottom: 10, right: 10 }}>
+    <TouchableOpacity onPress={swipeRightAfterMatch}>
+      <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: '#8AFF9D', justifyContent: 'center', alignItems: 'center' }}>
+        <Icon name="arrow-right" size={30} color="#8AFF9D" />
+      </View>
+    </TouchableOpacity>
+  </View>
+</CardContainer>
+
+    );
+  } else {
   return (
     <CardContainer style={[swipingStyles.cardContainer, animatedStyle]} {...(viewOnly ? {} : handlers)}>
 
@@ -123,7 +177,7 @@ const UserProfileCard = ({ user, navigation, viewOnly, pan, handlers, currentIma
     </CardContainer>
   );
 
-
+};
 };
 
 export default UserProfileCard;

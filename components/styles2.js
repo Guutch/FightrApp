@@ -1042,6 +1042,92 @@ const swipingStyles = StyleSheet.create({
     top: 0, // This will position the progress bar at the top of the container
   },
   
+  gameOnText: {
+    color: '#fff',
+    fontFamily: 'Inter',
+    fontSize: 40,
+    fontWeight: '700',
+    lineHeight: 40,
+    textAlign: 'center',
+  },
+  matchText: {
+    color: '#fff',
+    fontFamily: 'Inter',
+    fontSize: 40,
+    fontWeight: '400', // make this less than the fontWeight in gameOnText to make the text thinner
+    lineHeight: 40,
+    textAlign: 'center',
+  },
+  keepSwipingText: {
+    fontFamily: 'Inter',
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 24,
+    textAlign: 'center',
+    color: '#8AFF9D', // the same color as the green arrow
+    position: 'absolute',
+    bottom: screenHeight * 0.03, // adjust this as needed
+    alignSelf: 'center',
+  },
+  
+  previewProfileButton: {
+    width: '90%',
+    height: 45,
+    backgroundColor: '#FAF4F4',
+    borderRadius: 40,
+    marginTop: 10,
+    justifyContent: 'center',  // center items vertically
+    alignItems: 'flex-start',  // align items to the left
+    paddingLeft: 10, // padding on the left
+    position: 'absolute',
+    height: screenHeight * 0.032,
+    top: screenHeight * 0.64, // adjust this as needed
+  left: screenWidth * 0.031, // adjust this as needed
+  // marginVertical: 50,
+  },
+  
+  sendMessageContainer: {
+    width: '90%',
+    height: 45,
+    backgroundColor: '#FAF4F4',
+    borderRadius: 40,
+    marginTop: 10,
+    justifyContent: 'center',  // center items vertically
+    alignItems: 'flex-start',  // align items to the left
+    paddingLeft: 10, // padding on the left
+    position: 'absolute',
+    height: screenHeight * 0.032,
+    top: screenHeight * 0.68, // adjust this as needed
+  left: screenWidth * 0.031, // adjust this as needed
+  },
+  
+  
+  sendMessageInput: {
+    flex: 1,
+    color: '#000', // change this to the color you want
+  },
+  
+  sendButton: {
+    marginLeft: 10,
+  },
+  previewProfileText: {
+    fontFamily: 'Inter',
+    fontWeight: '700',
+    fontSize: 15,
+    lineHeight: 18,
+    color: '#000'  // black color
+  },
+  sendButtonText: {
+    fontFamily: 'Inter',
+    fontSize: 16, // adjust this as needed
+    fontWeight: '700',
+    lineHeight: 24,
+    color: '#fff', // change this to the color you want
+  },
+  
+  
+  
+  
   progressBar: {
     height: '100%',
     backgroundColor: 'black',
