@@ -24,9 +24,16 @@ const Navbar = ({
               style={[navbarStyles.fightrText, navbarStyles.backButton, { color: textColor }]}>
               {title}
             </Text>
-            <TouchableOpacity style={navbarStyles.nextButton} onPress={() => navigation.navigate('SettingsScreen')}>
-              <Icon name="cog" size={navbarStyles.iconSize.width} color={textColor} />
-            </TouchableOpacity>
+            <View style={navbarStyles.iconContainer}>
+  <TouchableOpacity style={[navbarStyles.homeNextButton, { marginRight: 15 }]} onPress={() => navigation.navigate('SomeScreen')}>
+    <Icon name="bell" size={navbarStyles.iconSize.width} color={textColor} />
+  </TouchableOpacity>
+  <TouchableOpacity style={navbarStyles.homeNextButton} onPress={() => navigation.navigate('SettingsScreen')}>
+    <Icon name="cog" size={navbarStyles.iconSize.width} color={textColor} />
+  </TouchableOpacity>
+</View>
+
+            
           </>
         ) : (
           <>

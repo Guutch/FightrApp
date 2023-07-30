@@ -37,7 +37,7 @@ const UserProfileCard = ({
 
   const swipeRight = () => {
     Animated.timing(pan, {
-      toValue: { x: 500, y: -125 }, // change 500 to the value you want
+      toValue: { x: 800, y: -125 }, // change 500 to the value you want
       duration: 150, // change 500 to the duration you want
       useNativeDriver: false,
     }).start(() => {
@@ -51,7 +51,7 @@ const UserProfileCard = ({
 
   const swipeRightAfterMatch = () => {
     Animated.timing(pan, {
-      toValue: { x: 500, y: -125 }, // change 500 to the value you want
+      toValue: { x: 800, y: -125 }, // change 500 to the value you want
       duration: 150, // change 500 to the duration you want
       useNativeDriver: false,
     }).start(() => {
@@ -66,7 +66,7 @@ const UserProfileCard = ({
 
   const swipeLeft = () => {
     Animated.timing(pan, {
-      toValue: { x: -500, y: -125 }, // change 500 to the value you want
+      toValue: { x: -800, y: -125 }, // change 500 to the value you want
       duration: 250, // change 500 to the duration you want
       useNativeDriver: false,
     }).start(() => {

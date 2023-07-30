@@ -3,6 +3,7 @@ import { Text, StyleSheet, View, PanResponder, Animated, Image, TouchableOpacity
 import Navbar from '../../components/Navbar';
 import { swipingStyles } from '../../components/styles2';
 import UserProfileCard from '../../components/UserProfileCard';
+import NoUsersCard from '../../components/NoUsersCard';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { fetchUsersAndImages } from '../../api';
 import { useSelector } from 'react-redux';
@@ -103,36 +104,27 @@ const SwipingScreen = ({ navigation }) => {
         // Set matchMade to true
         setMatchMade(true);
   
-        // Delay the removal of the current user from the users array
-        // setTimeout(() => {
-        //   setUsers(prevUsers => prevUsers.slice(1));
-        //   setCurrentImageIndex(0); // reset image index for next user
-  
-        //   // Set matchMade back to false after removing the user
-        //   setMatchMade(false);
-        // }, 5000); // delay in milliseconds
-  
         return;
       } else if (direction === 'afterMatch') {
-      // If afterMatch is triggered, animate the card back to the center
-      Animated.spring(pan, { toValue: { x: 0, y: 0 }, useNativeDriver: false }).start();
-
-      // Set matchMade to false
-      setMatchMade(false);
-    }
+        // If afterMatch is triggered, animate the card back to the center
+        Animated.spring(pan, { toValue: { x: 0, y: 0 }, useNativeDriver: false }).start();
   
-      // If a match is not made, remove the current user from the users array immediately
-      setUsers(prevUsers => prevUsers.slice(1));
-      setCurrentImageIndex(0); // reset image index for next user
-  
-      if (direction === 'left') {
-        console.log(users[0])
+        // Set matchMade to false
+        setMatchMade(false);
+      } else if (direction === 'left') {
         if (users[0].swiped === true) {
           setShowMissedMatchAlert(true);
         }
       }
+      // If a match is not made, remove the current user from the users array immediately
+      setUsers(prevUsers => prevUsers.slice(1));
+      setCurrentImageIndex(0); // reset image index for next user
+  
+      // Reset the position of the card after the swipe
+      pan.setValue({ x: 0, y: 0 });
     }
   };
+  
   
 
 
@@ -181,24 +173,23 @@ const SwipingScreen = ({ navigation }) => {
         {isLoading ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
-          users.length > 0 &&
-          users[0].images.length > 0 && (
-            <>
-
-              <UserProfileCard
-                user={users[1]}
-                navigation={navigation}
-                viewOnly={true}
-                // handlers={panResponder.panHandlers}
-                // pan={pan}
-                currentImageIndex={0}
-                // handleImagePress={handleImageTap}
-                style={getFightingStyles(users[1].fightingStyle)}
-                level={getFightingLevel(users[1].fightingLevel)}
-                weightClass={getWeightClass(users[1].weightClass)}
-                showMissedMatchAlert={showMissedMatchAlert}
-              // handleSwipe={handleSwipe}
-              />
+          <>
+            {users.length <= 1 && <NoUsersCard />}
+            {users.length > 1 && users[0].images.length > 0 && (
+              <>
+                <UserProfileCard
+                  user={users[1]}
+                  navigation={navigation}
+                  viewOnly={true}
+                  currentImageIndex={0}
+                  style={getFightingStyles(users[1]?.fightingStyle)}
+                  level={getFightingLevel(users[1]?.fightingLevel)}
+                  weightClass={getWeightClass(users[1]?.weightClass)}
+                  showMissedMatchAlert={showMissedMatchAlert}
+                />
+              </>
+            )}
+            {users.length > 0 && users[0].images.length > 0 && (
               <UserProfileCard
                 user={users[0]}
                 navigation={navigation}
@@ -208,21 +199,20 @@ const SwipingScreen = ({ navigation }) => {
                 pan={pan}
                 currentImageIndex={currentImageIndex}
                 handleImagePress={handleImageTap}
-                style={getFightingStyles(users[0].fightingStyle)}
-                level={getFightingLevel(users[0].fightingLevel)}
-                weightClass={getWeightClass(users[0].weightClass)}
+                style={getFightingStyles(users[0]?.fightingStyle)}
+                level={getFightingLevel(users[0]?.fightingLevel)}
+                weightClass={getWeightClass(users[0]?.weightClass)}
                 showMissedMatchAlert={showMissedMatchAlert}
                 handleSwipe={handleSwipe}
               />
-
-
-            </>
-
-          )
+            )}
+          </>
         )}
       </View>
     </View>
   );
+  
+  
 
 };
 

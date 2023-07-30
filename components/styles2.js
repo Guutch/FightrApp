@@ -125,6 +125,18 @@ const navbarStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  iconContainer: {
+    flexDirection: 'row',
+    position: 'absolute',
+    right: screenWidth * 0.05,
+  },
+
+  homeNextButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    // marginRight: 10, // add space to the right of the icon
+  },
+
   iconSize: {
     width: screenWidth * 0.08, // Adjust this value to change the size of the icons
   },
@@ -1134,6 +1146,22 @@ const swipingStyles = StyleSheet.create({
   },
 });
 
+const noUsersStyles = StyleSheet.create({
+  noUsersText: {
+    color: '#fff',
+    fontFamily: 'Inter',
+    fontSize: 36,
+    fontWeight: '800',
+    lineHeight: 44,
+    textAlign: 'center',
+    // position: 'absolute',
+    top: '75%',
+  },
+  worldIcon: {
+    position: 'absolute',
+    top: '80%',
+  },
+});
 const progressBarStyles = StyleSheet.create({
   behindBar: {
 
@@ -1158,5 +1186,6 @@ export {
   waiverStyles,
   settingsStyles,
   swipingStyles,
-  navbarStyles
+  navbarStyles,
+  noUsersStyles
 };
