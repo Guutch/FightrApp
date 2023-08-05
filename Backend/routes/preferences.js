@@ -169,20 +169,20 @@ router.put('/:userId/prefUpdateFromSettings', async (req, res) => {
   const { userId } = req.params;
   const dataToUpdate = req.body; // This is now the dataToUpdate object
 
-  console.log(dataToUpdate)
+  console.log(userId)
 
   try {
     await Preference.updateOne({ user_id: userId }, {
-      fightingStyle: dataToUpdate.fightingStylePreference,
-      fightingLevel: dataToUpdate.fightingLevelPreference,
+    //   // fightingStyle: dataToUpdate.fightingStylePreference,
+    //   // fightingLevel: dataToUpdate.fightingLevelPreference,
       age_range: dataToUpdate.ageRange,
       location_range: dataToUpdate.distance
     });
 
-    await User.updateOne({ _id: userId }, {
-      weightUnit: dataToUpdate.weightUnit,
-      heightUnit: dataToUpdate.heightUnit
-    });
+    // await User.updateOne({ _id: userId }, {
+    //   weightUnit: dataToUpdate.weightUnit,
+    //   heightUnit: dataToUpdate.heightUnit
+    // });
 
     res.status(200).send('preferences updated successfully');
   } catch (error) {

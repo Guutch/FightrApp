@@ -1,6 +1,6 @@
 // api.js
 import axios from 'axios';
-import { userLoggedIn } from 'redux/actions'; // import the action
+// import { userLoggedIn } from 'redux/actions'; // Not used?
 
 const API_URL = 'http://10.0.2.2:3000';
 
@@ -159,6 +159,7 @@ export const fetchImages = async (userId) => {
 // Definitely used in settings screen
 export const changeUserPreferences = async (userId, data) => {
   try {
+    console.log(data)
     const response = await axios.put(`${API_URL}/preferences/${userId}/prefUpdateFromSettings`, data);
     console.log(response.data)
   } catch (error) {
@@ -247,36 +248,58 @@ export const fetchUsersAndImages = async (userId) => {
     // console.log("HI")
 
     const swipeData = await axios.get(`${API_URL}/swipes/${userId}/getAll`);
-    const swipes = swipeData.data
-    console.log("Swipe Data")
-    console.log(swipes)
-    console.log("Swipe Data")
-    const filteredUsers = users.filter(user => swipeData[user.userId] !== 'left');
+const swipes = swipeData.data;
 
-    filteredUsers.forEach(user => {
-      if (swipes[user.userId] === 'right') {
-        user.swiped = true;
-      } else {
-        user.swiped = null;
-      }
-      console.log("test ->", user.userId)
-      console.log(user.swiped)
-    });
+// Filter out users who were ever swiped by the current user
+const unswipedUsers = users.filter(user => !swipes[user.userId]);
 
+// Filter out users who were swiped left by the current user
+const usersToDisplay = unswipedUsers.filter(user => swipes[user.userId] !== 'left');
+
+usersToDisplay.forEach(user => {
+  if (swipes[user.userId] === 'right') {
+    user.swiped = true;
+  } else {
+    user.swiped = null;
+  }
+});
+
+    
     // Only select relevant information
-    for (let user of filteredUsers) {
-      // console.log(user.userId)
+    for (let user of usersToDisplay) {
       const images = await fetchImages(user.userId);
-      // console.log(images)
       user.images = images;
-      // console.log(user.images)
     }
+    
+    return usersToDisplay;
+    
 
-    return filteredUsers;
   } catch (error) {
     console.error("Error fetching users and images: ", error);
   }
 };
+
+// Used SwipingScreen
+export const handleNewSwipe = async (swipeData) => {
+  try {
+    const response = await axios.post(`${API_URL}/swipes/newSwipe`, swipeData);
+    console.log(response.data)
+    return response.data;
+  } catch (error) {  // <-- Add 'error' here
+    console.error('[api.js] Error agreeing to waiver', error);
+  }
+}
+
+// Used SwipingScreen
+export const handleNewMatch = async (matchData) => {
+  try {
+    const response = await axios.post(`${API_URL}/swipes/newMatch`, matchData);
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    console.error('[api.js] Error creating match', error);
+  }
+}
 
 
 

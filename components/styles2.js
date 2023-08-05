@@ -1044,15 +1044,15 @@ const swipingStyles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
   },
-  progressBarContainer: {
-    width: screenWidth * 0.95,
-    height: 4,
-    backgroundColor: '#D9D9D9',
-    borderRadius: 2,
-    alignSelf: 'center',
-    position: 'absolute', // This will allow the progress bar to overlay the image
-    top: 0, // This will position the progress bar at the top of the container
-  },
+  // progressBarContainer: {
+  //   width: screenWidth * 0.95,
+  //   height: 4,
+  //   backgroundColor: '#D9D9D9',
+  //   borderRadius: 2,
+  //   alignSelf: 'center',
+  //   position: 'absolute', // This will allow the progress bar to overlay the image
+  //   top: 0, // This will position the progress bar at the top of the container
+  // },
   
   gameOnText: {
     color: '#fff',
@@ -1136,39 +1136,96 @@ const swipingStyles = StyleSheet.create({
     lineHeight: 24,
     color: '#fff', // change this to the color you want
   },
-  
-  
-  
-  
-  progressBar: {
-    height: '100%',
-    backgroundColor: 'black',
-  },
 });
 
 const noUsersStyles = StyleSheet.create({
+  cardContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: "#0f0f0f",
+  },
+  cardImage: {
+    ...swipingStyles.cardImage,
+    justifyContent: 'space-around', // Change this to space-around
+    alignItems: 'center',
+    paddingVertical: 100, // Add some padding
+    backgroundColor: 'red',
+    // marginBottom: 40,
+  },
   noUsersText: {
-    color: '#fff',
     fontFamily: 'Inter',
     fontSize: 36,
     fontWeight: '800',
     lineHeight: 44,
+    color: '#fff',
     textAlign: 'center',
-    // position: 'absolute',
-    top: '75%',
   },
   worldIcon: {
-    position: 'absolute',
-    top: '80%',
+    textAlign: 'center',
+  },
+  preferencesText: {
+    fontFamily: 'Inter',
+    fontSize: 24,
+    fontWeight: '400',
+    lineHeight: 29,
+    color: '#fff',
+    textAlign: 'center',
+  },
+  rectangle: {
+    width: screenWidth * 0.8,
+    height: 45,
+    backgroundColor: '#000',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 40,
+  },
+  sectionRectangle: {
+    width: '100%',
+    height: 45,
+    backgroundColor: '#000000',
+    borderRadius: 40,
+    marginTop: 10,
+    justifyContent: 'center',  // center items vertically
+    alignItems: 'flex-start',  // align items to the left
+    paddingLeft: 10  // padding on the left
+  },
+  insideRectangleText: {
+    color: '#ffffff',  // white color
+    fontFamily: 'Inter',
+    fontSize: screenWidth * 0.06,
+    fontWeight: '700',
+    lineHeight: screenHeight * 0.036,
   },
 });
+
+
+
 const progressBarStyles = StyleSheet.create({
-  behindBar: {
-
+  progressBarContainer: {
+    width: screenWidth * 0.95,
+    height: 4,
+    backgroundColor: '#D9D9D9',
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginTop: screenHeight * 0.11,
   },
-  blackBar: {
-
-  }
+  progressBarContainerInsideCard: {
+    position: 'absolute',
+    top: 0,
+    width: screenWidth * 0.9,
+    height: 4,
+    backgroundColor: '#D9D9D9',
+    borderRadius: 2,
+    alignSelf: 'center',
+    marginTop: 10,
+    zIndex: 2,
+  },
+  progressBar: {
+    height: '100%',
+    backgroundColor: 'black',
+  },
+  
 });
 
 export {
@@ -1187,5 +1244,6 @@ export {
   settingsStyles,
   swipingStyles,
   navbarStyles,
-  noUsersStyles
+  noUsersStyles,
+  progressBarStyles
 };

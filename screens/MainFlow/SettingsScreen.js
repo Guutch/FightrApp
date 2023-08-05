@@ -64,9 +64,10 @@ const MetricsSection = ({ title, option1, option2, selected, onSelect }) => {
 const SettingsScreen = ({ navigation }) => {
   const [distance, setDistance] = useState(10);
   const [ageRange, setAgeRange] = useState([18, 30]);
-  const [heightUnit, setHeightUnit] = useState('cm');
-  const [weightUnit, setWeightUnit] = useState('kg');
-  const [distanceUnit, setDistanceUnit] = useState('');
+  const [heightUnit, setHeightUnit] = useState(null);
+const [weightUnit, setWeightUnit] = useState(null);
+const [distanceUnit, setDistanceUnit] = useState(null);
+
   const [fightingStylePreference, setFightingStylePreference] = useState('');  // Add this line
   const [fightingLevelPreference, setFightingLevelPreference] = useState('');  // Add this line
   const [usersFightLevel, setusersFightLevel] = useState('');  // Add this line
@@ -84,36 +85,23 @@ const SettingsScreen = ({ navigation }) => {
     setAgeRange(values);
   };
 
-  // List of all weight classes in lbs
-  const weightClasses = [
-    { name: "Strawweight", range: [0, 115] },
-    { name: "Flyweight", range: [116, 125] },
-    { name: "Bantamweight", range: [126, 135] },
-    { name: "Featherweight", range: [136, 145] },
-    { name: "Lightweight", range: [146, 155] },
-    { name: "Welterweight", range: [156, 170] },
-    { name: "Middleweight", range: [171, 185] },
-    { name: "Light Heavyweight", range: [186, 205] },
-    { name: "Heavyweight", range: [206, 999] },
-  ];
-
   // Populate Weight Class SettingSection
-  const getWeightClassPreferences = (weightRange) => {
-    // Deconstruct weightRange into its lower and upper bounds
-    const [lowerBound, upperBound] = weightRange;
+  // const getWeightClassPreferences = (weightRange) => {
+  //   // Deconstruct weightRange into its lower and upper bounds
+  //   const [lowerBound, upperBound] = weightRange;
 
-    // Filter weightClasses array to only include classes within the user's weight range
-    const eligibleWeightClasses = weightClasses.filter(({ range }) => {
-      const [classLowerBound, classUpperBound] = range;
-      // modify the condition to include classes where the lower bound is equal or larger than the lower bound of the weight range
-      // and the upper bound of the class is less or equal to the upper bound of the weight range + 1.
-      // This is to accommodate for the situation where the upper bound of the weight range might be at a lower end of a weight class.
-      return (classLowerBound >= lowerBound && classUpperBound <= upperBound + 1);
-    });
+  //   // Filter weightClasses array to only include classes within the user's weight range
+  //   const eligibleWeightClasses = weightClasses.filter(({ range }) => {
+  //     const [classLowerBound, classUpperBound] = range;
+  //     // modify the condition to include classes where the lower bound is equal or larger than the lower bound of the weight range
+  //     // and the upper bound of the class is less or equal to the upper bound of the weight range + 1.
+  //     // This is to accommodate for the situation where the upper bound of the weight range might be at a lower end of a weight class.
+  //     return (classLowerBound >= lowerBound && classUpperBound <= upperBound + 1);
+  //   });
 
-    // Return only the names of the eligible weight classes
-    return eligibleWeightClasses.map(({ name }) => name);
-  }
+  //   // Return only the names of the eligible weight classes
+  //   return eligibleWeightClasses.map(({ name }) => name);
+  // }
 
   // Need to use this when selecting weight preference. Need to look at changing to enum instead for time being
   // Will need brain power
@@ -156,16 +144,79 @@ const SettingsScreen = ({ navigation }) => {
     }
   }
 
+  const fightingStyles = {
+    1: 'Boxing',
+    2: 'Brazilian Jiu-Jitsu',
+    3: 'Muay Thai',
+    4: 'Wrestling',
+    5: 'Kickboxing',
+    6: 'Jiu-Jitsu',
+    7: 'Judo',
+    8: 'Karate',
+    9: 'Kung Fu',
+    10: 'Taekwondo',
+  };
+
+  const getFightingStyleName = (styleNumber) => {
+    return fightingStyles[styleNumber];
+  };
+
+  const fightingLevels = {
+    1: 'Professional',
+    2: 'Amateur Competitor',
+    3: 'Advanced',
+    4: 'Intermediate',
+    5: 'Beginner',
+    6: 'Novice',
+  };
+
+  const getFightingLevelName = (levelNumber) => {
+    return fightingLevels[levelNumber];
+  };
+
+  const weightClasses = {
+    1: 'Heavyweight',
+    2: 'Light Heavyweight',
+    3: 'Middleweight',
+    4: 'Welterweight',
+    5: 'Lightweight',
+    6: 'Featherweight',
+    7: 'Bantamweight',
+    8: 'Flyweight',
+    9: 'Strawweight',
+  };
+
+  const getWeightClassName = (classNumber) => {
+    return weightClasses[classNumber];
+  };
+
+  const heightUnitMapping = {
+    1: 'cm',
+    2: 'ft'
+  };
+  
+  const weightUnitMapping = {
+    1: 'kg',
+    2: 'lbs'
+  };
+  
+  const distanceUnitMapping = {
+    1: 'mi',
+    2: 'km'
+  };
+
   // Sets the variables from data fetched fro the backend
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchUserPreferences(userId.userId);  // replace with the user's id
       // const metricData = await ;
+      // console.log("heightUnit", data.heightUnit)
+      // console.log("weightUnit", data.weightUnit)
 
-
-
-      console.log("data")
-      console.log(data)
+      // console.log("TEST")
+      // console.log("data")
+      // console.log(data)
+      
       if (data && data.age_range) {
         setAgeRange(data.age_range);
       }
@@ -173,40 +224,32 @@ const SettingsScreen = ({ navigation }) => {
         setDistance(data.location_range);
       }
       if (data && data.fightingStyle) {
-        setFightingStylePreference(data.fightingStyle.join(', '));
+        const styleNames = data.fightingStyle.map(getFightingStyleName);
+        setFightingStylePreference(styleNames.join(', '));
       }
       if (data && data.fightingLevel) {
-        setFightingLevelPreference(data.fightingLevel.join(', '));
+        const levelNames = data.fightingLevel.map(getFightingLevelName);
+        setFightingLevelPreference(levelNames.join(', '));
       }
       if (data && data.usersFightLevel) {
         setusersFightLevel(data.usersFightLevel);
       }
       // Need to calculate the user's weight class pref from weight_range
       if (data && data.weight_range) {
-        const weightClassNames = getWeightClassPreferences(data.weight_range);
+        const weightClassNames = data.weight_range.map(getWeightClassName);
         setWeightRange(weightClassNames.join(', '));
-        const availableClasses = getUserWeightClasses(data.weight);
-        // console.log("availableClasses");
-        console.log(weightRange);
-        setavailableClasses(availableClasses)
-      }
-      // Previous solution
-      // if (data && data.weight) {
-      //   const userWeight = data.weight;
-      //   console.log(userWeight)
-      //   const weightClassNames = getUserWeightClasses(userWeight);
-      //   setweightPreference(weightClassNames.join(', '));
-      // }
-
-
-
-      if (data && data.heightUnit) {
-        setHeightUnit(data.heightUnit);
-      }
-      if (data && data.weightUnit) {
-        setWeightUnit(data.weightUnit);
       }
 
+      if (data && data.heightUnit !== undefined) {
+        setHeightUnit(heightUnitMapping[data.heightUnit]);
+      }
+      if (data && data.weightUnit !== undefined) {
+        setWeightUnit(weightUnitMapping[data.weightUnit]);
+      }
+      if (data && data.distanceUnit !== undefined) {
+        setDistanceUnit(distanceUnitMapping[data.distanceUnit]);
+      }
+      
     };
 
     fetchData();
@@ -221,15 +264,15 @@ const SettingsScreen = ({ navigation }) => {
         showBackButton={true}
         navigation={navigation}
         title="Settings"
-        // dataToUpdate={{
-        //   userId: userId.userId,
+        dataToUpdate={{
+          userId: userId.userId,
         //   fightingStylePreference,
         //   fightingLevelPreference,
         //   weightUnit,
         //   heightUnit,
-        //   ageRange,
-        //   distance,
-        // }}
+          ageRange,
+          distance,
+        }}
       />
       <ScrollView contentContainerStyle={settingsStyles.container}>
 
@@ -316,8 +359,10 @@ const SettingsScreen = ({ navigation }) => {
 
         {/* Weight and Height is connected, just need to do Distance */}
         <MetricsSection title="Height" option1="cm" option2="ft" selected={heightUnit} onSelect={setHeightUnit} />
-        <MetricsSection title="Weight" option1="kg" option2="lbs" selected={weightUnit} onSelect={setWeightUnit} />
-        <MetricsSection title="Distance" option1="mi" option2="km" selected={distanceUnit} onSelect={setDistanceUnit} />
+<MetricsSection title="Weight" option1="kg" option2="lbs" selected={weightUnit} onSelect={setWeightUnit} />
+<MetricsSection title="Distance" option1="mi" option2="km" selected={distanceUnit} onSelect={setDistanceUnit} />
+
+
 
         <DividerTitle title="Blocks" />
         {/* Gap between divider title and rectangle... investigate styling */}

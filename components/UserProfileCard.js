@@ -7,10 +7,12 @@ import MissedMatchAlert from './MissedMatchAlert';
 import ProgressBar from './ProgressBar';
 
 const UserProfileCard = ({ 
-  user, navigation, viewOnly, pan, handlers, currentImageIndex, handleImagePress,
+  user, navigation, viewOnly, pan, handlers, currentImageIndex, setCurrentImageIndex, handleImagePress,
   style, level, weightClass, handleSwipe, showMissedMatchAlert, matchMade
   }) => {
   const [alertVisible, setAlertVisible] = useState(false);
+  const totalImages = user.images.length;
+const progress = (currentImageIndex + 1) / totalImages;
 
   useEffect(() => {
     let timer;
@@ -67,7 +69,7 @@ const UserProfileCard = ({
   const swipeLeft = () => {
     Animated.timing(pan, {
       toValue: { x: -800, y: -125 }, // change 500 to the value you want
-      duration: 250, // change 500 to the duration you want
+      duration: 150, // change 500 to the duration you want
       useNativeDriver: false,
     }).start(() => {
       // reset the position of the card after the animation is done
@@ -77,16 +79,30 @@ const UserProfileCard = ({
     });
   };
 
+const handleImageTap = () => {
+    setCurrentImageIndex((prevIndex) => {
+      const nextIndex = prevIndex + 1;
+      // If nextIndex is out of bounds, reset it to 0
+      if (nextIndex >= user.images.length) {
+        return 0;
+      }
+      return nextIndex;
+    });
+  };
+
   const CardContainer = Animated.View;
 
   if (matchMade) {
     // Display the match screen
     return (
       <CardContainer style={[swipingStyles.cardContainer, { transform: [{ translateX: pan.x }, { translateY: pan.y }, { rotate }] }]}>
+  <TouchableOpacity activeOpacity={1} onPress={handleImageTap}>
+    
   <Image
     source={{ uri: user.images[currentImageIndex].url }}
     style={swipingStyles.cardImage}
   />
+</TouchableOpacity>
 
 <View style={{ position: 'absolute', top: '50%', alignSelf: 'center', alignItems: 'center' }}>
   <Text style={swipingStyles.gameOnText}>Game on!</Text>
@@ -116,6 +132,8 @@ const UserProfileCard = ({
   } else {
   return (
     <CardContainer style={[swipingStyles.cardContainer, animatedStyle]} {...(viewOnly ? {} : handlers)}>
+
+<ProgressBar progress={progress} isInsideCard={true} />
 
       <Image
         source={{ uri: user.images[currentImageIndex].url }}

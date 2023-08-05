@@ -5,7 +5,7 @@ const Match = require('../models/match');
 
 // CREATE a new swipe
 // Not properly functional for a left swipe 
-// Does not send notification on successful match
+// Does not send notification on successful match (Kinda does - swipingscreen)
 router.post('/newSwipe', async (req, res) => {
     const { swiper_id, swiped_id, direction } = req.body;
   
@@ -54,20 +54,54 @@ router.get('/:userId/getAll', async (req, res) => {
   try {
     const userId = req.params.userId;
 
-  // Fetch all swipes where the given user was swiped
-  const swipes = await Swipe.find({ swiped_id: userId });
+    // Fetch all swipes where the given user was the swiper
+    const swiperSwipes = await Swipe.find({ swiper_id: userId });
 
-  // Transform the swipes into a more convenient format
-  const swipeData = swipes.reduce((acc, swipe) => {
-    acc[swipe.swiper_id] = swipe.direction;
-    return acc;
-  }, {});
-  res.status(201).send(swipeData);
+    // Fetch all swipes where the given user was swiped
+    const swipedSwipes = await Swipe.find({ swiped_id: userId });
+
+    // Combine the two sets of swipes
+    const allSwipes = [...swiperSwipes, ...swipedSwipes];
+
+    // Transform the swipes into a more convenient format
+    const swipeData = allSwipes.reduce((acc, swipe) => {
+      const otherUserId = swipe.swiper_id.toString() === userId ? swipe.swiped_id : swipe.swiper_id;
+      acc[otherUserId] = swipe.direction;
+      return acc;
+    }, {});
+
+    res.status(201).send(swipeData);
   } catch (error) {
     res.status(500).send();
   }
 });
 
+
+router.post('/newMatch', async (req, res) => {
+  const { user1_id, user2_id } = req.body;
+
+  // Delete the existing right swipe
+  await Swipe.findOneAndDelete({
+    swiper_id: user2_id,
+    swiped_id: user1_id,
+    direction: 'right',
+  });
+
+  // Create a new match document
+  const match = new Match({
+    user1_id,
+    user2_id,
+    matchedAt: Date.now(),
+  });
+
+  try {
+    // Save the match
+    await match.save();
+    res.status(201).send(match);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
 
 
 

@@ -43,6 +43,11 @@ function toRadians(degree) {
   return degree * (Math.PI / 180);
 }
 
+function filterByMatches(allUsers, matchedUserIds) {
+  return allUsers.filter(user => !matchedUserIds.includes(user._id.toString()));
+}
+
+
 // Helper function to filter users based on location
 function filterByLocation(userProfile, allUsersWithProfiles, userPreferences, userDistanceUnit) {
   return allUsersWithProfiles.filter(otherUser => {
@@ -82,10 +87,6 @@ function getAge(birthday) {
   return age;
 }
 
-function convertKgToLbs(weightInKg) {
-  return weightInKg * 2.20462;
-}
-
 function filterByWeight(user, allUsersWithProfiles, userPreferences) {
   return allUsersWithProfiles.filter(otherUser => {
     let otherUserWeightClass = otherUser.profile.weightClass;
@@ -105,37 +106,7 @@ function filterByLevel(user, allUsersWithProfiles, userPreferences) {
   });
 }
 
-
-// Helper function to filter users based on weight
-// function filterByWeight(user, allUsers, userPreferences) {
-//   return allUsers.filter(otherUser => {
-//     let otherUserWeight = otherUser.weight;
-    
-//     // Check if the weight of other user is in kg, convert it to lbs
-//     if (otherUser.weightUnit === "kg") {
-//       otherUserWeight = convertKgToLbs(otherUserWeight);
-//     }
-
-//     // Check if the weight of other user is within the user's weight range
-//     return otherUserWeight >= userPreferences.weight_range[0] && otherUserWeight <= userPreferences.weight_range[1];
-//   });
-// }
-
-// function filterByStyle(user, allUsers, userPreferences) {
-//   return allUsers.filter(otherUser => {
-//     // Check if at least one of the user's preferred fighting styles matches with the other user's fighting styles
-//     return otherUser.fightingStyle.some(style => userPreferences.fightingStyle.includes(style));
-//   });
-// }
-
-// function filterByLevel(user, allUsers, userPreferences) {
-//   return allUsers.filter(otherUser => {
-//     // console.log(otherUser)
-//     // Check if the user's preferred fighting level matches with the other user's fighting level
-//     return userPreferences.fightingLevel.includes(otherUser.fightingLevel);
-//   });
-// }
-
+// Matching Algo
 router.get('/:userId', async (req, res) => {
   // Get the user
   const user = await User.findById(req.params.userId);
@@ -152,14 +123,31 @@ router.get('/:userId', async (req, res) => {
     return res.status(404).send('No preferences set for user with id ' + req.params.userId);
   }
 
-  // Fetch all other users
-  const allUsers = await User.find({ _id: { $ne: user._id } }).select('-password');
+// Fetch all other users
+let allUsers = await User.find({ _id: { $ne: user._id } }).select('-password');
 
-  // get array of all user ids
-  const userIds = allUsers.map(user => user._id);
+// Fetch all matches where the user is involved
+const matches = await Match.find({
+  $or: [{ user1_id: user._id }, { user2_id: user._id }]
+});
 
-  // fetch all profiles belonging to any of the users in allUsers
-  const allProfiles = await Profile.find({ user_id: { $in: userIds } });
+// Get the ids of the matched users
+const matchedUserIds = matches.map(match => 
+  match.user1_id.toString() === user._id.toString() ? match.user2_id.toString() : match.user1_id.toString()
+);
+
+// Filter out the matched users from allUsers
+allUsers = filterByMatches(allUsers, matchedUserIds);
+
+
+console.log("Filtered Users:", allUsers);
+
+// get array of all user ids
+const userIds = allUsers.map(user => user._id);
+
+// fetch all profiles belonging to any of the users in allUsers
+const allProfiles = await Profile.find({ user_id: { $in: userIds } });
+
 
   // convert to a map for easier lookup
   const profileMap = new Map(allProfiles.map(profile => [profile.user_id.toString(), profile]));
@@ -183,30 +171,32 @@ let userDistanceUnit = userProfile.distanceUnit;
   console.log(user)
   console.log(allUsersWithProfiles)
 
+
+
   // Filter based on location
   const locationMatches = filterByLocation(userProfile, allUsersWithProfiles, userPreferences, userDistanceUnit);
 
         
   // Filter based on age
   const ageMatches = filterByAge(user, locationMatches, userPreferences);
-  console.log("ageMatches")
-  console.log(ageMatches)
+  // console.log("ageMatches")
+  // console.log(ageMatches)
         
   // Filter based on weight
   const weightMatches = filterByWeight(user, ageMatches, userPreferences);
-  console.log("weightMatches")
-  console.log(weightMatches)      
+  // console.log("weightMatches")
+  // console.log(weightMatches)      
 
   // Filter based on fighting style
   const styleMatches = filterByStyle(user, weightMatches, userPreferences);
-  console.log("styleMatches")
-  console.log(styleMatches)    
+  // console.log("styleMatches")
+  // console.log(styleMatches)    
   
   // Filter based on fighting level
   const levelMatches = filterByLevel(user, styleMatches, userPreferences);
 
-  console.log("levelMatches")    
-  console.log(levelMatches)
+  // console.log("levelMatches")    
+  // console.log(levelMatches)
   
 
   const filteredMatches = levelMatches.map(match => {
