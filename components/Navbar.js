@@ -15,6 +15,7 @@ const Navbar = ({
     textColor,
     title = "Fytr",
     dataToUpdate,
+    handleBackPressPrefSel,
   }) => {
     return (
       <View style={[navbarStyles.banner, { backgroundColor }]}>
@@ -38,10 +39,13 @@ const Navbar = ({
         ) : (
           <>
             {showBackButton && !dataToUpdate && (
-              <TouchableOpacity style={navbarStyles.backButton} onPress={() => navigation.goBack()}>
-                <Icon name="arrow-left" size={navbarStyles.iconSize.width} color={textColor} />
-              </TouchableOpacity>
-            )}
+      <TouchableOpacity
+        style={navbarStyles.backButton}
+        onPress={handleBackPressPrefSel || (() => navigation.goBack())} // Use the custom handler if provided, otherwise use the default behavior
+      >
+        <Icon name="arrow-left" size={navbarStyles.iconSize.width} color={textColor} />
+      </TouchableOpacity>
+    )}
             {showBackButton && dataToUpdate && (
               <TouchableOpacity
                 style={navbarStyles.backButton}

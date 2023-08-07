@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Preference = require('../models/preference');
 const User = require('../models/user');
-const Media = require('../models/media');
+const Profile = require('../models/profile');
 
 // Location radius preference endpoint - Done
 router.put('/:userId/radius', async (req, res) => {
@@ -169,20 +169,23 @@ router.put('/:userId/prefUpdateFromSettings', async (req, res) => {
   const { userId } = req.params;
   const dataToUpdate = req.body; // This is now the dataToUpdate object
 
-  console.log(userId)
+  // console.log(dataToUpdate.fightingStylePreference)
+  // console.log(dataToUpdate.fightingLevelPreference)
 
   try {
     await Preference.updateOne({ user_id: userId }, {
-    //   // fightingStyle: dataToUpdate.fightingStylePreference,
-    //   // fightingLevel: dataToUpdate.fightingLevelPreference,
+      fightingStyle: dataToUpdate.fightingStylePreference,
+      fightingLevel: dataToUpdate.fightingLevelPreference,
+      weight_range: dataToUpdate.weightRange,
       age_range: dataToUpdate.ageRange,
       location_range: dataToUpdate.distance
     });
 
-    // await User.updateOne({ _id: userId }, {
-    //   weightUnit: dataToUpdate.weightUnit,
-    //   heightUnit: dataToUpdate.heightUnit
-    // });
+    await Profile.updateOne({ user_id: userId }, {
+      weightUnit: dataToUpdate.weightUnit,
+      heightUnit: dataToUpdate.heightUnit,
+      distanceUnit: dataToUpdate.distanceUnit
+    });
 
     res.status(200).send('preferences updated successfully');
   } catch (error) {

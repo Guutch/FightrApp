@@ -486,10 +486,18 @@ const fightingStyleScreen = StyleSheet.create({
     left: screenWidth * 0.037,
     // top: screenHeight * 0.193,
     paddingTop: screenHeight * 0.02,
+    // paddingTop: screenHeight * 0.02,
   },
+  
   list: {
     alignItems: "center",
     paddingTop: screenHeight * 0.07,
+  },
+  listPrefSel: {
+    alignItems: "center",
+    paddingTop: screenHeight * 0.07,
+    marginTop: screenHeight * 0.11,
+    paddingBottom: screenHeight * 0.11
   },
 
   rectangle: {

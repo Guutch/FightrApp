@@ -160,6 +160,7 @@ export const fetchImages = async (userId) => {
 export const changeUserPreferences = async (userId, data) => {
   try {
     console.log(data)
+    console.log("data")
     const response = await axios.put(`${API_URL}/preferences/${userId}/prefUpdateFromSettings`, data);
     console.log(response.data)
   } catch (error) {
@@ -190,6 +191,7 @@ export const fetchUserPreferences = async (userId) => {
     const data = {
       ...preferenceResponse.data,
       ...metricsResponse.data,
+      ...weightResponse.data,
       // weight: weight, // ???
       // weightUnit: 'lbs', // The weight unit is now always lbs
       usersFightLevel: fightLevelResponse.data

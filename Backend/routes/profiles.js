@@ -22,9 +22,9 @@ router.get('/:id/getWeight', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const user = await Profile.findOne({ user_id: id }).select('weight');
+    const user = await Profile.findOne({ user_id: id }).select('weightClass');
     // console.log(user)
-    console.log(user.weight);
+    // console.log(user.weight);
     res.send(user);
   } catch (error) {
     res.status(500).send({ error: 'Server error' });

@@ -8,14 +8,15 @@ import { fetchUserPreferences } from '../../api';  // update the path according 
 import { useSelector } from 'react-redux';
 
 // Need to fix this so that I can get the preferences to show
-const SettingSection = ({ title, onPress, titleInsideRectangle = false, preference }) => {
+const SettingSection = ({ title, onPress, titleInsideRectangle = false, preference, settingButton = false }) => {
   return (
     <View style={settingsStyles.sectionContainer}>
-      {titleInsideRectangle ? null : <Text style={settingsStyles.sectionTitle}>{title}</Text>}
+      {!titleInsideRectangle && !settingButton ? <Text style={settingsStyles.sectionTitle}>{title}</Text> : null}
+
       <TouchableOpacity
         style={[
           settingsStyles.sectionRectangle,
-          titleInsideRectangle ? { justifyContent: 'center', alignItems: 'center' } : null
+          // titleInsideRectangle ? { justifyContent: 'center', alignItems: 'center' } : null
         ]}
         onPress={onPress}
       >
@@ -65,8 +66,9 @@ const SettingsScreen = ({ navigation }) => {
   const [distance, setDistance] = useState(10);
   const [ageRange, setAgeRange] = useState([18, 30]);
   const [heightUnit, setHeightUnit] = useState(null);
-const [weightUnit, setWeightUnit] = useState(null);
-const [distanceUnit, setDistanceUnit] = useState(null);
+  const [weightUnit, setWeightUnit] = useState(null);
+  const [distanceUnit, setDistanceUnit] = useState(null);
+  const [weightClass, setWeightClass] = useState(null);
 
   const [fightingStylePreference, setFightingStylePreference] = useState('');  // Add this line
   const [fightingLevelPreference, setFightingLevelPreference] = useState('');  // Add this line
@@ -79,7 +81,10 @@ const [distanceUnit, setDistanceUnit] = useState(null);
   // const [heightUnit, setHeightUnit] = useState('');
   // const [weightUnit, setWeightUnit] = useState('');
 
-  const distanceChange = (values) => setDistance(values[0]);
+  const distanceChange = (values) => {
+    const value = values[0];
+    setDistance(distanceUnit === 'km' ? Math.floor(value / 1.609) : value);
+  };
 
   const ageRangeChange = (values) => {
     setAgeRange(values);
@@ -130,19 +135,32 @@ const [distanceUnit, setDistanceUnit] = useState(null);
   }
 
   // Fight Level function
-  const generateLevels = (currentLevel) => {
-    const allLevels = ['Professional', 'Amateur Competitor', 'Advanced', 'Intermediate', 'Beginner', 'Novice'];
-    const levelIndex = allLevels.indexOf(currentLevel);
+  const generateLevels = (currentValue, type) => {
+    console.log('Current Value:', currentValue); // Debugging
+    console.log('Type:', type); // Debugging
+
+    const mapping = type === 'fightingLevel' ? fightingLevels : weightClasses;
+    console.log('Mapping:', mapping); // Debugging
+
+    const allPreferences = Object.values(mapping);
+    const currentPreference = mapping[currentValue];
+    console.log('Current Preference:', currentPreference); // Debugging
+
+    const currentIndex = allPreferences.indexOf(currentPreference);
+    console.log('Current Index:', currentIndex); // Debugging
 
     // Check for edge cases
-    if (levelIndex === 0) {  // If user is a 'Professional'
-      return allLevels.slice(0, 2);
-    } else if (levelIndex === allLevels.length - 1) {  // If user is a 'Novice'
-      return allLevels.slice(-2);
+    if (currentIndex === 0) {  // If user is at the top of the range
+      return allPreferences.slice(0, 2);
+    } else if (currentIndex === allPreferences.length - 1) {  // If user is at the bottom of the range
+      return allPreferences.slice(-2);
     } else {  // All other cases
-      return allLevels.slice(levelIndex - 1, levelIndex + 2);
+      return allPreferences.slice(currentIndex - 1, currentIndex + 2);
     }
-  }
+  };
+
+
+
 
   const fightingStyles = {
     1: 'Boxing',
@@ -194,29 +212,74 @@ const [distanceUnit, setDistanceUnit] = useState(null);
     1: 'cm',
     2: 'ft'
   };
-  
+
   const weightUnitMapping = {
     1: 'kg',
     2: 'lbs'
   };
-  
+
   const distanceUnitMapping = {
     1: 'mi',
     2: 'km'
   };
 
+  const getDistanceUnitNumber = (unit) => {
+    return Object.keys(distanceUnitMapping).find(key => distanceUnitMapping[key] === unit);
+  };
+
+  const getHeightUnitNumber = (unit) => {
+    return Object.keys(heightUnitMapping).find(key => heightUnitMapping[key] === unit);
+  };
+
+  const getWeightUnitNumber = (unit) => {
+    return Object.keys(weightUnitMapping).find(key => weightUnitMapping[key] === unit);
+  };
+
+  const convertToUnit = (value) => {
+    return distanceUnit === 'km' ? Math.floor(value * 1.609) : value;
+  };
+
+  const updateFightingStylePreference = (newPreference) => {
+    setFightingStylePreference(newPreference);
+  };
+
+  const updateFightingLevelPreference = (newPreference) => {
+    setFightingLevelPreference(newPreference);
+  };
+
+  const updateWeightClassPreference = (newPreference) => {
+    setWeightRange(newPreference);
+  };
+
+  const convertPreferencesToNumbers = (selectedPreferences, mapping) => {
+    // Handle the case where there's only one value
+    const selectedPreferencesArray = selectedPreferences.includes(',') ? selectedPreferences.split(', ') : [selectedPreferences];
+
+    const reverseMapping = Object.keys(mapping).reduce((acc, key) => {
+      acc[mapping[key]] = parseInt(key, 10);
+      return acc;
+    }, {});
+
+    const numbers = selectedPreferencesArray.map(preference => reverseMapping[preference]);
+    return numbers.sort((a, b) => a - b);
+  };
+
+  // Define the callback function
+  // const updatePreferences = (newPreferences) => {
+  //   // Update the state with the new preferences
+  //   setFightingStylePreference(newPreferences.fightingStyle);
+  //   setFightingLevelPreference(newPreferences.fightingLevel);
+  //   setWeightRange(newPreferences.weightRange);
+
+  //   console.log(newPreferences)
+  // };
+
+
   // Sets the variables from data fetched fro the backend
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchUserPreferences(userId.userId);  // replace with the user's id
-      // const metricData = await ;
-      // console.log("heightUnit", data.heightUnit)
-      // console.log("weightUnit", data.weightUnit)
-
-      // console.log("TEST")
-      // console.log("data")
-      // console.log(data)
-      
+      console.log("BIG BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOSH")
       if (data && data.age_range) {
         setAgeRange(data.age_range);
       }
@@ -230,9 +293,13 @@ const [distanceUnit, setDistanceUnit] = useState(null);
       if (data && data.fightingLevel) {
         const levelNames = data.fightingLevel.map(getFightingLevelName);
         setFightingLevelPreference(levelNames.join(', '));
+        // console.log("LMAO I am here ALSOOOOO")
+        // console.log(levelNames)
       }
       if (data && data.usersFightLevel) {
-        setusersFightLevel(data.usersFightLevel);
+        // console.log("LMAO I am here")
+        // console.log(data.usersFightLevel.fightingLevel)
+        setusersFightLevel(data.usersFightLevel.fightingLevel);
       }
       // Need to calculate the user's weight class pref from weight_range
       if (data && data.weight_range) {
@@ -243,13 +310,17 @@ const [distanceUnit, setDistanceUnit] = useState(null);
       if (data && data.heightUnit !== undefined) {
         setHeightUnit(heightUnitMapping[data.heightUnit]);
       }
+      if (data && data.weightClass !== undefined) {
+        setWeightClass(data.weightClass);
+        console.log(data.weightClass)
+      }
       if (data && data.weightUnit !== undefined) {
         setWeightUnit(weightUnitMapping[data.weightUnit]);
       }
       if (data && data.distanceUnit !== undefined) {
         setDistanceUnit(distanceUnitMapping[data.distanceUnit]);
       }
-      
+
     };
 
     fetchData();
@@ -266,10 +337,12 @@ const [distanceUnit, setDistanceUnit] = useState(null);
         title="Settings"
         dataToUpdate={{
           userId: userId.userId,
-        //   fightingStylePreference,
-        //   fightingLevelPreference,
-        //   weightUnit,
-        //   heightUnit,
+          fightingStylePreference: convertPreferencesToNumbers(fightingStylePreference, fightingStyles),
+          fightingLevelPreference: convertPreferencesToNumbers(fightingLevelPreference, fightingLevels),
+          weightRange: convertPreferencesToNumbers(weightRange, weightClasses),
+          distanceUnit: getDistanceUnitNumber(distanceUnit),
+          heightUnit: getHeightUnitNumber(heightUnit),
+          weightUnit: getWeightUnitNumber(weightUnit),
           ageRange,
           distance,
         }}
@@ -287,25 +360,31 @@ const [distanceUnit, setDistanceUnit] = useState(null);
           onPress={() => navigation.navigate('PreferenceSel', {
             preferences: ['Boxing', 'Brazilian Jiu-Jitsu', 'Muay Thai', 'Wrestling', 'Kickboxing', 'Jiu-Jitsu', 'Judo', 'Karate', 'Kung Fu', 'Taekwondo'],
             title: 'What fighting styles do you want to match with',
-            currentPref: fightingStylePreference
+            type: 'fightingStyle', // Pass the type
+            currentPref: fightingStylePreference,
+            updateFightingStylePreference: updateFightingStylePreference // Pass the function
           })}
           preference={fightingStylePreference}
         />
-        {/* Need to connect this to FightingLevel
-    Need changes to also be saved too */}
         <SettingSection
           title="Fighting Level Preference(s)"
           onPress={() => navigation.navigate('PreferenceSel', {
-            preferences: generateLevels(usersFightLevel),
+            preferences: generateLevels(usersFightLevel, 'fightingLevel'),
             title: 'What fighting levels do you want to match with',
-            currentPref: fightingLevelPreference
+            type: 'fightingLevel', // Pass the type
+            currentPref: fightingLevelPreference,
+            updateFightingLevelPreference: updateFightingLevelPreference
           })}
           preference={fightingLevelPreference}
         />
+
         <SettingSection title="Weight Class Preference(s)" onPress={() => navigation.navigate('PreferenceSel', {
-          preferences: availableClasses,
-          title: 'What weight classes do you want to match with',         
-          currentPref: weightRange
+          preferences: generateLevels(weightClass, 'weightClass'),
+          title: 'What weight classes do you want to match with',
+          // updatePreferences,
+          type: 'weightClass', // Pass the type
+          currentPref: weightRange,
+          updateWeightClassPreference: updateWeightClassPreference,
         })} preference={weightRange} />
 
         {/* Age slider */}
@@ -334,22 +413,25 @@ const [distanceUnit, setDistanceUnit] = useState(null);
         {/* Distance Slider & Title */}
         <View style={settingsStyles.sectionContainer}>
           <View style={settingsStyles.titleAndValueContainer}><Text style={settingsStyles.sectionTitle}>Distance</Text>
-            <Text style={settingsStyles.sliderValue}>{`${distance} miles`}</Text>
+            <Text style={settingsStyles.sliderValue}>{`${convertToUnit(distance)} ${distanceUnit}`}</Text>
+
+
           </View>
           {/* Slider Code */}
           <View style={settingsStyles.sliderContainer}>
             <MultiSlider
-              values={[distance]}
+              values={[convertToUnit(distance)]}
               sliderLength={280}
               onValuesChange={distanceChange}
               min={1}
-              max={50}
+              max={convertToUnit(50)}
               step={1}
               containerStyle={settingsStyles.slider}
-              selectedStyle={{ backgroundColor: 'black' }} // Add this line
+              selectedStyle={{ backgroundColor: 'black' }}
               trackStyle={settingsStyles.sliderTrack}
               markerStyle={settingsStyles.sliderMarker}
             />
+
           </View>
         </View>
 
@@ -359,31 +441,29 @@ const [distanceUnit, setDistanceUnit] = useState(null);
 
         {/* Weight and Height is connected, just need to do Distance */}
         <MetricsSection title="Height" option1="cm" option2="ft" selected={heightUnit} onSelect={setHeightUnit} />
-<MetricsSection title="Weight" option1="kg" option2="lbs" selected={weightUnit} onSelect={setWeightUnit} />
-<MetricsSection title="Distance" option1="mi" option2="km" selected={distanceUnit} onSelect={setDistanceUnit} />
+        <MetricsSection title="Weight" option1="kg" option2="lbs" selected={weightUnit} onSelect={setWeightUnit} />
+        <MetricsSection title="Distance" option1="mi" option2="km" selected={distanceUnit} onSelect={setDistanceUnit} />
 
 
 
         <DividerTitle title="Blocks" />
         {/* Gap between divider title and rectangle... investigate styling */}
-        <SettingSection onPress={() => navigation.navigate('BlockContactsScreen')} preference={"Block Contacts"} />
-        <SettingSection title="Blocked Users" onPress={() => navigation.navigate('BlockedUsersScreen')} titleInsideRectangle={true} />
+        <SettingSection onPress={() => navigation.navigate('BlockContactsScreen')} preference={"Block Contacts"} settingButton={true} />
+        <SettingSection title="Blocked Users" onPress={() => navigation.navigate('BlockedUsersScreen')} settingButton={true} preference={"Blocked Users"} />
 
         <DividerTitle title="Notifications" />
-        <SettingSection title="Notification Settings" onPress={() => navigation.navigate('SomeScreen')} titleInsideRectangle={true} />
-
+        <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Notification Settings"} />
         <DividerTitle title="Personal Details" />
-        <SettingSection onPress={() => navigation.navigate('SomeScreen')} preference={"Change Password"} />
-        <SettingSection title="Change Email" onPress={() => navigation.navigate('SomeScreen')} titleInsideRectangle={true} />
-        <SettingSection title="Change Phone Number" onPress={() => navigation.navigate('SomeScreen')} titleInsideRectangle={true} />
-        <SettingSection title="Manage Payment Account(s)" onPress={() => navigation.navigate('SomeScreen')} titleInsideRectangle={true} />
-
+        <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Change Password"} />
+        <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Change Email"} />
+        <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Change Phone Number"} />
+        <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Manage Payment Account(s)"} />
         <DividerTitle title="Legal, Privacy & Support" />
-        <SettingSection title="Privacy Policy" onPress={() => navigation.navigate('SomeScreen')} titleInsideRectangle={true} />
-        <SettingSection title="Privacy Preferences" onPress={() => navigation.navigate('SomeScreen')} titleInsideRectangle={true} />
-        <SettingSection title="Cookie Policy" onPress={() => navigation.navigate('SomeScreen')} titleInsideRectangle={true} />
-        <SettingSection title="Terms & Conditions" onPress={() => navigation.navigate('SomeScreen')} titleInsideRectangle={true} />
-        <SettingSection title="Help & Support" onPress={() => navigation.navigate('SomeScreen')} titleInsideRectangle={true} />
+        <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Privacy Policy"} />
+        <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Privacy Preferences"} />
+        <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Cookie Policy"} />
+        <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Terms & Conditions"} />
+        <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Help & Support"} />
 
 
 
