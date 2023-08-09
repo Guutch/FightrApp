@@ -172,11 +172,13 @@ export const changeUserPreferences = async (userId, data) => {
 // Definitely used in settings screen
 export const fetchUserPreferences = async (userId) => {
   try {
-    const [preferenceResponse, metricsResponse, weightResponse, fightLevelResponse] = await Promise.all([
+    const [preferenceResponse, metricsResponse, weightResponse, fightLevelResponse, weightResponseActual, heightResponseActual] = await Promise.all([
       axios.get(`${API_URL}/preferences/${userId}/preferences`),
       axios.get(`${API_URL}/profiles/${userId}/metrics`),
-      axios.get(`${API_URL}/profiles/${userId}/getWeight`),
-      axios.get(`${API_URL}/profiles/${userId}/getFightLevel`)
+      axios.get(`${API_URL}/profiles/${userId}/getWeight`),      
+      axios.get(`${API_URL}/profiles/${userId}/getFightLevel`),
+      axios.get(`${API_URL}/profiles/${userId}/getActualWeight`),
+      axios.get(`${API_URL}/profiles/${userId}/getActualHeight`),
     ]);
 
     // let weight = weightResponse.data;
@@ -187,14 +189,20 @@ export const fetchUserPreferences = async (userId) => {
     //   weight *= 2.20462; // Conversion factor from kg to lbs
     // }
 
+    console.log(weightResponseActual.data.weight)
+    console.log(heightResponseActual.data)
+
     // Merging all responses
     const data = {
       ...preferenceResponse.data,
       ...metricsResponse.data,
       ...weightResponse.data,
-      // weight: weight, // ???
+      // actualWeight: weightResponseActual.data.weight,
+      // ...heightResponseActual.data,
+      actualWeight: weightResponseActual.data.weight, 
+      actualHeight: heightResponseActual.data.height,
       // weightUnit: 'lbs', // The weight unit is now always lbs
-      usersFightLevel: fightLevelResponse.data
+      usersFightLevel: fightLevelResponse.data.fightingLevel
     };
 
     console.log("Here")

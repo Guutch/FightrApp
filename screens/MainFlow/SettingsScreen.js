@@ -1,5 +1,5 @@
 // screens/MainFlow/SettingsScreen.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Navbar from '../../components/Navbar';
@@ -69,17 +69,17 @@ const SettingsScreen = ({ navigation }) => {
   const [weightUnit, setWeightUnit] = useState(null);
   const [distanceUnit, setDistanceUnit] = useState(null);
   const [weightClass, setWeightClass] = useState(null);
-
+  const [originalHeightUnit, setOriginalHeightUnit] = useState(null);
+  const [originalWeightUnit, setOriginalWeightUnit] = useState(null);
   const [fightingStylePreference, setFightingStylePreference] = useState('');  // Add this line
   const [fightingLevelPreference, setFightingLevelPreference] = useState('');  // Add this line
   const [usersFightLevel, setusersFightLevel] = useState('');  // Add this line
   const [availableClasses, setavailableClasses] = useState('');
   const [weightRange, setWeightRange] = useState("");
+  const [height, setHeight] = useState(null);
+const [weight, setWeight] = useState(null);
   const userId = useSelector(state => state.user);  // Gets the userId from the Redux state
-  // console.log('Settings - User ID is:', userId.userId);
-  // const [metricData, setMetricData] = useState({ heightUnit: '', weightUnit: '' });
-  // const [heightUnit, setHeightUnit] = useState('');
-  // const [weightUnit, setWeightUnit] = useState('');
+  
 
   const distanceChange = (values) => {
     const value = values[0];
@@ -89,24 +89,6 @@ const SettingsScreen = ({ navigation }) => {
   const ageRangeChange = (values) => {
     setAgeRange(values);
   };
-
-  // Populate Weight Class SettingSection
-  // const getWeightClassPreferences = (weightRange) => {
-  //   // Deconstruct weightRange into its lower and upper bounds
-  //   const [lowerBound, upperBound] = weightRange;
-
-  //   // Filter weightClasses array to only include classes within the user's weight range
-  //   const eligibleWeightClasses = weightClasses.filter(({ range }) => {
-  //     const [classLowerBound, classUpperBound] = range;
-  //     // modify the condition to include classes where the lower bound is equal or larger than the lower bound of the weight range
-  //     // and the upper bound of the class is less or equal to the upper bound of the weight range + 1.
-  //     // This is to accommodate for the situation where the upper bound of the weight range might be at a lower end of a weight class.
-  //     return (classLowerBound >= lowerBound && classUpperBound <= upperBound + 1);
-  //   });
-
-  //   // Return only the names of the eligible weight classes
-  //   return eligibleWeightClasses.map(({ name }) => name);
-  // }
 
   // Need to use this when selecting weight preference. Need to look at changing to enum instead for time being
   // Will need brain power
@@ -264,6 +246,38 @@ const SettingsScreen = ({ navigation }) => {
     return numbers.sort((a, b) => a - b);
   };
 
+  // const convertToStandardUnit = (value, originalUnit, currentUnit) => {
+  //   if (originalUnit === 'cm' && currentUnit === 'ft') {
+  //     return value / 30.48; // Convert cm to ft
+  //   } else if (originalUnit === 'ft' && currentUnit === 'cm') {
+  //     return value * 30.48; // Convert ft to cm
+  //   } else if (originalUnit === 'kg' && currentUnit === 'lbs') {
+  //     console.log("TEsT", value * 2.20462)
+  //     console.log("TEsT", value)
+  //     return value * 2.20462; // Convert kg to lbs
+  //   } else if (originalUnit === 'lbs' && currentUnit === 'kg') {
+  //     return value / 2.20462; // Convert lbs to kg
+  //   }
+  //   return value; // Return the value unchanged if no conversion is needed
+  // };
+
+  // const dataToSave = (value, originalUnit, currentUnit) => {
+  //   console.log(value)
+  //   return convertToStandardUnit(value, originalUnit, currentUnit);
+  // };
+  
+//   console.log("Height:", height);
+// console.log("Weight:", weight);
+// console.log("Original Height Unit:", originalHeightUnit);
+// console.log("Original Weight Unit:", originalWeightUnit);
+// console.log("Current Height Unit:", heightUnit);
+// console.log("Current Weight Unit:", weightUnit);
+
+// console.log("Big lol")
+// console.log(dataToSave(height, originalHeightUnit, heightUnit));
+// console.log(dataToSave(weight, originalWeightUnit, weightUnit))
+// console.log("Big lol")
+
   // Define the callback function
   // const updatePreferences = (newPreferences) => {
   //   // Update the state with the new preferences
@@ -279,7 +293,7 @@ const SettingsScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchUserPreferences(userId.userId);  // replace with the user's id
-      console.log("BIG BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOSH")
+      // console.log("BIG BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOSH")
       if (data && data.age_range) {
         setAgeRange(data.age_range);
       }
@@ -299,7 +313,7 @@ const SettingsScreen = ({ navigation }) => {
       if (data && data.usersFightLevel) {
         // console.log("LMAO I am here")
         // console.log(data.usersFightLevel.fightingLevel)
-        setusersFightLevel(data.usersFightLevel.fightingLevel);
+        setusersFightLevel(data.fightingLevel);
       }
       // Need to calculate the user's weight class pref from weight_range
       if (data && data.weight_range) {
@@ -309,10 +323,18 @@ const SettingsScreen = ({ navigation }) => {
 
       if (data && data.heightUnit !== undefined) {
         setHeightUnit(heightUnitMapping[data.heightUnit]);
+        setOriginalHeightUnit(heightUnitMapping[data.heightUnit]);
+        setHeight(data.actualHeight);
       }
       if (data && data.weightClass !== undefined) {
         setWeightClass(data.weightClass);
-        console.log(data.weightClass)
+        setWeight(data.actualWeight);
+        // console.log(data.actualWeight)
+        // console.log(data.actualWeight)
+        // console.log(data.actualWeight)
+        // console.log(data.actualWeight)
+        // console.log(data.actualWeight)
+        setOriginalWeightUnit(weightUnitMapping[data.weightUnit]);
       }
       if (data && data.weightUnit !== undefined) {
         setWeightUnit(weightUnitMapping[data.weightUnit]);
@@ -326,6 +348,8 @@ const SettingsScreen = ({ navigation }) => {
     fetchData();
   }, []);
 
+  // const convertedHeight = useMemo(() => dataToSave(height, originalHeightUnit, heightUnit), [height, originalHeightUnit, heightUnit]);
+  // const convertedWeight = useMemo(() => dataToSave(weight, originalWeightUnit, weightUnit), [weight, originalWeightUnit, weightUnit]);  
 
   return (
     <View>
@@ -337,14 +361,18 @@ const SettingsScreen = ({ navigation }) => {
         title="Settings"
         dataToUpdate={{
           userId: userId.userId,
-          fightingStylePreference: convertPreferencesToNumbers(fightingStylePreference, fightingStyles),
-          fightingLevelPreference: convertPreferencesToNumbers(fightingLevelPreference, fightingLevels),
-          weightRange: convertPreferencesToNumbers(weightRange, weightClasses),
-          distanceUnit: getDistanceUnitNumber(distanceUnit),
-          heightUnit: getHeightUnitNumber(heightUnit),
-          weightUnit: getWeightUnitNumber(weightUnit),
-          ageRange,
-          distance,
+  fightingStylePreference: convertPreferencesToNumbers(fightingStylePreference, fightingStyles),
+  fightingLevelPreference: convertPreferencesToNumbers(fightingLevelPreference, fightingLevels),
+  weightRange: convertPreferencesToNumbers(weightRange, weightClasses),
+  distanceUnit: getDistanceUnitNumber(distanceUnit),
+  originalHeightUnit: getHeightUnitNumber(originalHeightUnit),
+  currentHeightUnit: getHeightUnitNumber(heightUnit),
+  originalWeightUnit: getWeightUnitNumber(originalWeightUnit),
+  currentWeightUnit: getWeightUnitNumber(weightUnit),
+  originalHeight: height,
+  originalWeight: weight,
+  ageRange,
+  distance,
         }}
       />
       <ScrollView contentContainerStyle={settingsStyles.container}>

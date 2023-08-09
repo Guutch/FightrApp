@@ -31,6 +31,32 @@ router.get('/:id/getWeight', async (req, res) => {
   }
 });
 
+router.get('/:id/getActualWeight', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await Profile.findOne({ user_id: id }).select('weight');
+    // console.log(user)
+    // console.log(user.weight);
+    res.send(user);
+  } catch (error) {
+    res.status(500).send({ error: 'Server error' });
+  }
+});
+
+router.get('/:id/getActualHeight', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await Profile.findOne({ user_id: id }).select('height');
+    // console.log(user)
+    // console.log(user.weight);
+    res.send(user);
+  } catch (error) {
+    res.status(500).send({ error: 'Server error' });
+  }
+});
+
 // Get user's fight level 
 router.get('/:id/getFightLevel', async (req, res) => {
   const { id } = req.params;

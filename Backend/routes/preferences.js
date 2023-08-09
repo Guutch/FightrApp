@@ -169,8 +169,44 @@ router.put('/:userId/prefUpdateFromSettings', async (req, res) => {
   const { userId } = req.params;
   const dataToUpdate = req.body; // This is now the dataToUpdate object
 
-  // console.log(dataToUpdate.fightingStylePreference)
-  // console.log(dataToUpdate.fightingLevelPreference)
+  const heightUnitMapping = {
+    1: 'cm',
+    2: 'ft'
+  };
+  
+  const weightUnitMapping = {
+    1: 'kg',
+    2: 'lbs'
+  };
+  
+  const originalHeightUnit = heightUnitMapping[dataToUpdate.originalHeightUnit];
+  const currentHeightUnit = heightUnitMapping[dataToUpdate.currentHeightUnit];
+  const originalWeightUnit = weightUnitMapping[dataToUpdate.originalWeightUnit];
+  const currentWeightUnit = weightUnitMapping[dataToUpdate.currentWeightUnit];
+  
+  if (originalHeightUnit === 'cm' && currentHeightUnit === 'ft') {
+    // Convert cm to inches (1 inch = 2.54 cm)
+    dataToUpdate.convertedHeight = dataToUpdate.originalHeight / 2.54;
+  } else if (originalHeightUnit === 'ft' && currentHeightUnit === 'cm') {
+    // Convert inches to cm
+    dataToUpdate.convertedHeight = dataToUpdate.originalHeight * 2.54;
+  } else {
+    // If the units are the same, no conversion is needed
+    dataToUpdate.convertedHeight = dataToUpdate.originalHeight;
+  }
+  
+  
+  // Convert weight if necessary
+  if (originalWeightUnit === 'kg' && currentWeightUnit === 'lbs') {
+    dataToUpdate.convertedWeight = dataToUpdate.originalWeight * 2.20462;
+  } else if (originalWeightUnit === 'lbs' && currentWeightUnit === 'kg') {
+    dataToUpdate.convertedWeight = dataToUpdate.originalWeight / 2.20462;
+  } else {
+    dataToUpdate.convertedWeight = dataToUpdate.originalWeight;
+  }
+
+  // console.log(currentHeightUnit)
+  // console.log(convertedWeight)
 
   try {
     await Preference.updateOne({ user_id: userId }, {
@@ -182,8 +218,10 @@ router.put('/:userId/prefUpdateFromSettings', async (req, res) => {
     });
 
     await Profile.updateOne({ user_id: userId }, {
-      weightUnit: dataToUpdate.weightUnit,
-      heightUnit: dataToUpdate.heightUnit,
+      weightUnit: dataToUpdate.currentWeightUnit,
+      weight: Math.round(dataToUpdate.convertedWeight), // Save as an integer
+      heightUnit: dataToUpdate.currentHeightUnit,
+      height: Math.round(dataToUpdate.convertedHeight), // Save as an integer
       distanceUnit: dataToUpdate.distanceUnit
     });
 
