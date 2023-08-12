@@ -4,34 +4,36 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-nati
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Navbar from '../../components/Navbar';
 import { settingsStyles, fightingStyleScreen } from '../../components/styles2'
+import SettingSection from '../../components/SettingSection'
 import { fetchUserPreferences } from '../../api';  // update the path according to your project structure
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { updatePreferences } from '../../redux/actions';
 
-// Need to fix this so that I can get the preferences to show
-const SettingSection = ({ title, onPress, titleInsideRectangle = false, preference, settingButton = false }) => {
-  return (
-    <View style={settingsStyles.sectionContainer}>
-      {!titleInsideRectangle && !settingButton ? <Text style={settingsStyles.sectionTitle}>{title}</Text> : null}
+// Need to move this to components folder
+// const SettingSection = ({ title, onPress, titleInsideRectangle = false, preference, settingButton = false }) => {
+//   return (
+//     <View style={settingsStyles.sectionContainer}>
+//       {!titleInsideRectangle && !settingButton ? <Text style={settingsStyles.sectionTitle}>{title}</Text> : null}
 
-      <TouchableOpacity
-        style={[
-          settingsStyles.sectionRectangle,
-          // titleInsideRectangle ? { justifyContent: 'center', alignItems: 'center' } : null
-        ]}
-        onPress={onPress}
-      >
-        {titleInsideRectangle ?
-          <Text style={[settingsStyles.sectionTitle, fightingStyleScreen.rectangleText]}>{title}</Text>
-          : null
-        }
-        {preference ?
-          <Text style={settingsStyles.preferenceText}>{preference}</Text>
-          : <Text style={settingsStyles.preferenceText}>Loading...</Text>
-        }
-      </TouchableOpacity>
-    </View>
-  );
-};
+//       <TouchableOpacity
+//         style={[
+//           settingsStyles.sectionRectangle,
+//           // titleInsideRectangle ? { justifyContent: 'center', alignItems: 'center' } : null
+//         ]}
+//         onPress={onPress}
+//       >
+//         {titleInsideRectangle ?
+//           <Text style={[settingsStyles.sectionTitle, fightingStyleScreen.rectangleText]}>{title}</Text>
+//           : null
+//         }
+//         {preference ?
+//           <Text style={settingsStyles.preferenceText}>{preference}</Text>
+//           : <Text style={settingsStyles.preferenceText}>Loading...</Text>
+//         }
+//       </TouchableOpacity>
+//     </View>
+//   );
+// };
 
 // Need to investigate this. Particularly for the other settings
 const DividerTitle = ({ title }) => {
@@ -77,9 +79,17 @@ const SettingsScreen = ({ navigation }) => {
   const [availableClasses, setavailableClasses] = useState('');
   const [weightRange, setWeightRange] = useState("");
   const [height, setHeight] = useState(null);
-const [weight, setWeight] = useState(null);
+  const [weight, setWeight] = useState(null);
+
+  const dispatch = useDispatch();
+  const preferences = useSelector((state) => state.preferences);
+
   const userId = useSelector(state => state.user);  // Gets the userId from the Redux state
-  
+
+  const handleSavePreferences = (dataToUpdate) => {
+    // Update preferences in the Redux store
+    dispatch(updatePreferences(dataToUpdate));
+  };
 
   const distanceChange = (values) => {
     const value = values[0];
@@ -246,54 +256,10 @@ const [weight, setWeight] = useState(null);
     return numbers.sort((a, b) => a - b);
   };
 
-  // const convertToStandardUnit = (value, originalUnit, currentUnit) => {
-  //   if (originalUnit === 'cm' && currentUnit === 'ft') {
-  //     return value / 30.48; // Convert cm to ft
-  //   } else if (originalUnit === 'ft' && currentUnit === 'cm') {
-  //     return value * 30.48; // Convert ft to cm
-  //   } else if (originalUnit === 'kg' && currentUnit === 'lbs') {
-  //     console.log("TEsT", value * 2.20462)
-  //     console.log("TEsT", value)
-  //     return value * 2.20462; // Convert kg to lbs
-  //   } else if (originalUnit === 'lbs' && currentUnit === 'kg') {
-  //     return value / 2.20462; // Convert lbs to kg
-  //   }
-  //   return value; // Return the value unchanged if no conversion is needed
-  // };
-
-  // const dataToSave = (value, originalUnit, currentUnit) => {
-  //   console.log(value)
-  //   return convertToStandardUnit(value, originalUnit, currentUnit);
-  // };
-  
-//   console.log("Height:", height);
-// console.log("Weight:", weight);
-// console.log("Original Height Unit:", originalHeightUnit);
-// console.log("Original Weight Unit:", originalWeightUnit);
-// console.log("Current Height Unit:", heightUnit);
-// console.log("Current Weight Unit:", weightUnit);
-
-// console.log("Big lol")
-// console.log(dataToSave(height, originalHeightUnit, heightUnit));
-// console.log(dataToSave(weight, originalWeightUnit, weightUnit))
-// console.log("Big lol")
-
-  // Define the callback function
-  // const updatePreferences = (newPreferences) => {
-  //   // Update the state with the new preferences
-  //   setFightingStylePreference(newPreferences.fightingStyle);
-  //   setFightingLevelPreference(newPreferences.fightingLevel);
-  //   setWeightRange(newPreferences.weightRange);
-
-  //   console.log(newPreferences)
-  // };
-
-
   // Sets the variables from data fetched fro the backend
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchUserPreferences(userId.userId);  // replace with the user's id
-      // console.log("BIG BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOSH")
       if (data && data.age_range) {
         setAgeRange(data.age_range);
       }
@@ -307,12 +273,8 @@ const [weight, setWeight] = useState(null);
       if (data && data.fightingLevel) {
         const levelNames = data.fightingLevel.map(getFightingLevelName);
         setFightingLevelPreference(levelNames.join(', '));
-        // console.log("LMAO I am here ALSOOOOO")
-        // console.log(levelNames)
       }
       if (data && data.usersFightLevel) {
-        // console.log("LMAO I am here")
-        // console.log(data.usersFightLevel.fightingLevel)
         setusersFightLevel(data.fightingLevel);
       }
       // Need to calculate the user's weight class pref from weight_range
@@ -329,11 +291,6 @@ const [weight, setWeight] = useState(null);
       if (data && data.weightClass !== undefined) {
         setWeightClass(data.weightClass);
         setWeight(data.actualWeight);
-        // console.log(data.actualWeight)
-        // console.log(data.actualWeight)
-        // console.log(data.actualWeight)
-        // console.log(data.actualWeight)
-        // console.log(data.actualWeight)
         setOriginalWeightUnit(weightUnitMapping[data.weightUnit]);
       }
       if (data && data.weightUnit !== undefined) {
@@ -348,12 +305,10 @@ const [weight, setWeight] = useState(null);
     fetchData();
   }, []);
 
-  // const convertedHeight = useMemo(() => dataToSave(height, originalHeightUnit, heightUnit), [height, originalHeightUnit, heightUnit]);
-  // const convertedWeight = useMemo(() => dataToSave(weight, originalWeightUnit, weightUnit), [weight, originalWeightUnit, weightUnit]);  
-
   return (
     <View>
       <Navbar
+        handleSavePreferences={handleSavePreferences}
         backgroundColor="#000000"
         textColor="#FFFFFF"
         showBackButton={true}
@@ -361,18 +316,18 @@ const [weight, setWeight] = useState(null);
         title="Settings"
         dataToUpdate={{
           userId: userId.userId,
-  fightingStylePreference: convertPreferencesToNumbers(fightingStylePreference, fightingStyles),
-  fightingLevelPreference: convertPreferencesToNumbers(fightingLevelPreference, fightingLevels),
-  weightRange: convertPreferencesToNumbers(weightRange, weightClasses),
-  distanceUnit: getDistanceUnitNumber(distanceUnit),
-  originalHeightUnit: getHeightUnitNumber(originalHeightUnit),
-  currentHeightUnit: getHeightUnitNumber(heightUnit),
-  originalWeightUnit: getWeightUnitNumber(originalWeightUnit),
-  currentWeightUnit: getWeightUnitNumber(weightUnit),
-  originalHeight: height,
-  originalWeight: weight,
-  ageRange,
-  distance,
+          fightingStylePreference: convertPreferencesToNumbers(fightingStylePreference, fightingStyles),
+          fightingLevelPreference: convertPreferencesToNumbers(fightingLevelPreference, fightingLevels),
+          weightRange: convertPreferencesToNumbers(weightRange, weightClasses),
+          distanceUnit: getDistanceUnitNumber(distanceUnit),
+          originalHeightUnit: getHeightUnitNumber(originalHeightUnit),
+          currentHeightUnit: getHeightUnitNumber(heightUnit),
+          originalWeightUnit: getWeightUnitNumber(originalWeightUnit),
+          currentWeightUnit: getWeightUnitNumber(weightUnit),
+          originalHeight: height,
+          originalWeight: weight,
+          ageRange,
+          distance,
         }}
       />
       <ScrollView contentContainerStyle={settingsStyles.container}>
@@ -381,8 +336,6 @@ const [weight, setWeight] = useState(null);
 
         <DividerTitle title="Preferences" />
 
-        {/* Simply just connects to FightingScreen, changes aren't saved
-    and I need to connect changes to the backend etc */}
         <SettingSection
           title="Fighting Style Preference(s)"
           onPress={() => navigation.navigate('PreferenceSel', {
@@ -393,6 +346,7 @@ const [weight, setWeight] = useState(null);
             updateFightingStylePreference: updateFightingStylePreference // Pass the function
           })}
           preference={fightingStylePreference}
+          showChevron={true}
         />
         <SettingSection
           title="Fighting Level Preference(s)"
@@ -404,6 +358,7 @@ const [weight, setWeight] = useState(null);
             updateFightingLevelPreference: updateFightingLevelPreference
           })}
           preference={fightingLevelPreference}
+          showChevron={true}
         />
 
         <SettingSection title="Weight Class Preference(s)" onPress={() => navigation.navigate('PreferenceSel', {
@@ -413,7 +368,10 @@ const [weight, setWeight] = useState(null);
           type: 'weightClass', // Pass the type
           currentPref: weightRange,
           updateWeightClassPreference: updateWeightClassPreference,
-        })} preference={weightRange} />
+        })}
+          preference={weightRange}
+          showChevron={true}
+        />
 
         {/* Age slider */}
         <View style={settingsStyles.sectionContainer}>

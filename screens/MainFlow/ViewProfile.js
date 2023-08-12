@@ -26,6 +26,36 @@ const SettingSection = ({ title, onPress, titleInsideRectangle = false, data }) 
     );
 };
 
+// {
+//   "birthday": "2000-07-23T23:00:00.000Z",
+//   "fightingLevel": 1,
+//   "fightingStyle": [
+//     1
+//   ],
+//   "firstName": "Muhammed",
+//   "images": [
+//     // Image data
+//   ],
+//   "location": {
+//     // Location data
+//   },
+//   "swiped": null,
+//   "userId": "64be991fce3d5eaf1892897a",
+//   "weightClass": 1
+// }
+// What I get:
+// "firstName": "Muhammed"
+// "birthday": "2000-07-23T23:00:00.000Z"
+// "fightingLevel": 1
+// "fightingStyle": [1]
+// images
+// "weightClass": 1
+
+// I am missing:
+// - Bio
+// - Height
+// - Weight
+
 const ViewProfileScreen = ({ navigation, route }) => {
   const [images, setImages] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

@@ -20,11 +20,12 @@ const progress = (currentImageIndex + 1) / totalImages;
       setAlertVisible(true);
       timer = setTimeout(() => {
         setAlertVisible(false);
-      }, 3000); // 30 seconds
+      }, 3000); // milli seconds
     }
     return () => {
       clearTimeout(timer);
     };
+    
   }, [showMissedMatchAlert]);
 
   const rotate = pan?.x?.interpolate({

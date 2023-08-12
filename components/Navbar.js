@@ -16,7 +16,20 @@ const Navbar = ({
     title = "Fytr",
     dataToUpdate,
     handleBackPressPrefSel,
+    handleSavePreferences,
   }) => {
+
+    const handleBackPress = async () => {
+      // Call the handleSavePreferences function to update preferences in the Redux store
+      handleSavePreferences(dataToUpdate);
+  
+      // Update preferences in the backend
+      await changeUserPreferences(dataToUpdate.userId, dataToUpdate);
+  
+      // Navigate back
+      navigation.goBack();
+    };
+
     return (
       <View style={[navbarStyles.banner, { backgroundColor }]}>
         {homeStyle ? (
@@ -48,14 +61,11 @@ const Navbar = ({
     )}
             {showBackButton && dataToUpdate && (
               <TouchableOpacity
-                style={navbarStyles.backButton}
-                onPress={async () => {
-                  await changeUserPreferences(dataToUpdate.userId, dataToUpdate);
-                  navigation.goBack();
-                }}
-              >
-                <Icon name="arrow-left" size={navbarStyles.iconSize.width} color={textColor} />
-              </TouchableOpacity>
+              style={navbarStyles.backButton}
+              onPress={handleBackPress}
+            >
+              <Icon name="arrow-left" size={navbarStyles.iconSize.width} color={textColor} />
+            </TouchableOpacity>
             )}
             <Text style={[navbarStyles.fightrText, { color: textColor }]}>{title}</Text>
             {showNextButton && (

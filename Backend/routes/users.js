@@ -111,12 +111,10 @@ const getWeightClass = (weight, weightUnit, sex) => {
 // Get user image - needs updating to handle multiple
 router.get('/:id/image', async (req, res) => {
   const { id } = req.params;
-  console.log(id)
-  // console.log(req.body.id)
   try {
-    const media = await Media.findOne({ user_id: id }); // Assumes user_id is the field that contains the user ID
+    const media = await Media.findOne({ user_id: id, position: 1 }); // Include position in the query
     if (!media) {
-      return res.status(404).send({ error: 'Media not found for this user' });
+      return res.status(404).send({ error: 'Media not found for this user at position 1' });
     }
     res.send({ imageUrl: media.url }); // Assumes url is the name of the field that contains the image URL
   } catch (error) {
@@ -124,6 +122,25 @@ router.get('/:id/image', async (req, res) => {
     res.status(500).send({ error: 'Server error' });
   }
 });
+
+// Get users name - needs updating to handle multiple
+router.get('/:id/getName', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findOne({ _id: id }); // Query by user_id
+    if (!user) {
+      return res.status(404).send({ error: 'User not found' });
+    }
+    console.log(user)
+    const fullName = `${user.firstName} ${user.lastName}`; // Concatenate first and last name
+    res.send({ fullName }); // Send the full name
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Server error' });
+  }
+});
+
+
 
 router.post('/register', upload, async (req, res) => {
   // Check if the email is already registered
@@ -434,16 +451,16 @@ router.put('/:userId/email', async (req, res) => {
 // Get user's fields for Edit Profile Screen (already have API for metrics(preferences.js) and weight(above))
 // Need to add bio (after done with Tyson Fury)
 // This returns user's ID. I don't need this
-router.get('/:id/getEditProfileData', async (req, res) => {
-  const { id } = req.params;
+// router.get('/:id/getEditProfileData', async (req, res) => {
+//   const { id } = req.params;
 
-  try {
-    const user = await User.findById({ _id: id }).select('firstName lastName fightingStyle fightingLevel location height weight');
-    console.log(user)
-    res.send(user);
-  } catch (error) {
-    res.status(500).send({ error: 'Server error' });
-  }
-});
+//   try {
+//     const user = await User.findById({ _id: id }).select('firstName lastName fightingStyle fightingLevel location height weight');
+//     console.log(user)
+//     res.send(user);
+//   } catch (error) {
+//     res.status(500).send({ error: 'Server error' });
+//   }
+// });
 
 module.exports = router;

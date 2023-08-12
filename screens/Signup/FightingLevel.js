@@ -5,6 +5,7 @@ import { fightingStyleScreen, firstNameScreen, photosScreen } from '../../compon
 import Navbar from '../../components/Navbar';
 import NextButton from '../../components/NextButton';
 import ProgressBar from '../../components/ProgressBar';
+
 const CheckBox = ({ isChecked, onToggle }) => (
   <TouchableOpacity
     style={[fightingStyleScreen.checkBox, isChecked && fightingStyleScreen.checked]}

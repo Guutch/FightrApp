@@ -9,6 +9,7 @@ import { photosScreen, firstNameScreen } from '../../components/styles2';
 import Navbar from '../../components/Navbar';
 import * as Animatable from 'react-native-animatable';
 import InfoComponent from '../../components/InfoComponent';
+import PhotoSelector from '../../components/PhotoSelector';
 
 
 

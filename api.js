@@ -142,6 +142,21 @@ export const fetchImage = async (userId) => {
   }
 };
 
+export const fetchName = async (userId) => {
+  try {
+    
+    const response = await axios.get(`${API_URL}/users/${userId}/getName`); // Note the template string
+    if (response.data) {
+      console.log(response.data)
+      return response.data;
+    } else {
+      throw new Error("No data in response");
+    }
+  } catch (error) {
+    console.error('[api.js] Error fetching name:', error);
+  }
+};
+
 export const fetchImages = async (userId) => {
   try {
     const response = await axios.get(`${API_URL}/medias/${userId}/getAllimages`); // Note the template string
@@ -219,25 +234,30 @@ export const fetchUserPreferences = async (userId) => {
   }
 };
 
-// Definitely used in settings screen
 export const fetchEditProfileData = async (userId) => {
   try {
-    const [metricsResponse, weightResponse, editProfileResponse] = await Promise.all([
-      axios.get(`${API_URL}/preferences/${userId}/metrics`),
-      axios.get(`${API_URL}/users/${userId}/getWeight`),
-      axios.get(`${API_URL}/users/${userId}/getEditProfileData`),
+    const [metricsResponse, weightResponse, fightLevelResponse, fightStyleResponse, weightResponseActual, heightResponseActual] = await Promise.all([
+      axios.get(`${API_URL}/profiles/${userId}/metrics`),
+      axios.get(`${API_URL}/profiles/${userId}/getWeight`),      
+      axios.get(`${API_URL}/profiles/${userId}/getFightLevel`),
+      axios.get(`${API_URL}/profiles/${userId}/getFightStyle`),
+      axios.get(`${API_URL}/profiles/${userId}/getActualWeight`),
+      axios.get(`${API_URL}/profiles/${userId}/getActualHeight`),
     ]);
 
-    // console.log(editProfileResponse.data)
+    // // console.log(editProfileResponse.data)
 
-    // Merging all responses
+    // // Merging all responses
     const data = {
       ...metricsResponse.data,
       ...weightResponse.data,
-      ...editProfileResponse.data
+      actualWeight: weightResponseActual.data.weight, 
+      actualHeight: heightResponseActual.data.height,
+      usersFightLevel: fightLevelResponse.data.fightingLevel,
+      usersFightStyles: fightStyleResponse.data.fightingStyle
     };
 
-    // console.log(data);
+    // // console.log(data);
 
     return data;
   } catch (error) {

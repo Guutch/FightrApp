@@ -72,4 +72,19 @@ router.get('/:id/getFightLevel', async (req, res) => {
   }
 });
 
+// Get user's fight styles 
+router.get('/:id/getFightStyle', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await Profile.findOne({ user_id: id }).select('fightingStyle');
+    // const user = await User.findById({ _id: id }).select('weight');
+    console.log(user)
+    // console.log(user.fightingLevel);
+    res.send(user);
+  } catch (error) {
+    res.status(500).send({ error: 'Server error' });
+  }
+});
+
   module.exports = router;

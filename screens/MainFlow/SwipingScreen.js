@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 
 const SwipingScreen = ({ navigation }) => {
   const userId = useSelector(state => state.user);
+  const preferences = useSelector((state) => state.preferences);
   const [users, setUsers] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);  // Add this line
   const [isLoading, setIsLoading] = useState(true);
@@ -76,21 +77,22 @@ const SwipingScreen = ({ navigation }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const foundUsers = await fetchUsersAndImages(userId.userId);
+      console.log(userId)
+      const foundUsers = await fetchUsersAndImages(userId.userId); // Pass userId directly
 
       // Sort each user's images array by the 'position' attribute
-      foundUsers.forEach(user => {
+      foundUsers.forEach((user) => {
         user.images.sort((a, b) => a.position - b.position);
         console.log(`User ${user.userId} has ${user.images.length} images.`);
+        console.log("HERES THE USER")
+    console.log(user)
       });
-      
-
 
       setUsers(foundUsers);
       setIsLoading(false);
     };
     fetchData();
-  }, []);
+  }, [preferences, userId]); // Re-run the effect when preferences or userId change
 
   // Handle card swipe to left or right
   const handleSwipe = (direction) => {

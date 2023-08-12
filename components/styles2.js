@@ -819,6 +819,8 @@ const settingsStyles = StyleSheet.create({
   container: {
     paddingTop: screenHeight * 0.1, // this adds padding on top equal to navbar height
     padding: 20, // this can be adjusted as needed
+    // height: screenHeight,
+    // backgroundColor: "red",
   },
   fytrPlus: {
     fontFamily: 'Inter',
@@ -1207,8 +1209,6 @@ const noUsersStyles = StyleSheet.create({
   },
 });
 
-
-
 const progressBarStyles = StyleSheet.create({
   progressBarContainer: {
     width: screenWidth * 0.95,
@@ -1233,8 +1233,46 @@ const progressBarStyles = StyleSheet.create({
     height: '100%',
     backgroundColor: 'black',
   },
-  
 });
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: screenHeight * 0.11,
+    // height: screenHeight,
+    // backgroundColor: "red",
+    padding: 20,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    alignSelf: 'center',
+    marginTop: 115 * screenHeight / 812,
+  },
+  text: {
+    marginVertical: 10,
+    fontFamily: 'Inter',
+    fontSize: 32,
+    fontWeight: '700',
+    lineHeight: 38.73,
+    color: '#000',
+    textAlign: 'center',
+
+  }
+  // settingSection1: {
+  //   position: 'absolute',
+  //   bottom: 0, // Position right above settingSection2
+  //   left: 28 * screenWidth / 375,
+  //   // right: 28 * screenWidth / 375,
+  // },
+  // settingSection2: {
+  //   position: 'absolute',
+  //   bottom: 0, // Position at the very bottom of the container
+  //   left: 26 * screenWidth / 375,
+  //   right: 26 * screenWidth / 375,
+  // },
+});
+
 
 export {
   loginScreen,
@@ -1253,5 +1291,6 @@ export {
   swipingStyles,
   navbarStyles,
   noUsersStyles,
-  progressBarStyles
+  progressBarStyles,
+  styles
 };
