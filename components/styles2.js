@@ -866,6 +866,17 @@ const settingsStyles = StyleSheet.create({
     alignItems: 'flex-start',  // align items to the left
     paddingLeft: 10  // padding on the left
   },
+  sectionHeightRec: {
+    width: '98%', // Adjust the width to fit two in a row
+    height: 45,
+    backgroundColor: '#000000',
+    borderRadius: 40,
+    marginTop: 10,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingLeft: 10,
+  },
+  
   insideRectangleText: {
     fontFamily: 'Inter',
     fontWeight: '700',
@@ -1259,19 +1270,49 @@ const styles = StyleSheet.create({
     textAlign: 'center',
 
   }
-  // settingSection1: {
-  //   position: 'absolute',
-  //   bottom: 0, // Position right above settingSection2
-  //   left: 28 * screenWidth / 375,
-  //   // right: 28 * screenWidth / 375,
-  // },
-  // settingSection2: {
-  //   position: 'absolute',
-  //   bottom: 0, // Position at the very bottom of the container
-  //   left: 26 * screenWidth / 375,
-  //   right: 26 * screenWidth / 375,
-  // },
 });
+
+const photoSelector = StyleSheet.create({
+  mainContainer: {
+    width: screenWidth * 0.95, // 98% of screen width
+    height: screenHeight * 0.45, // 45% of screen height
+    borderRadius: 20,
+    alignSelf: 'center',
+    backgroundColor: '#D9D9D9',
+  },
+  mainContainerEdit: {
+    width: screenWidth * 0.95, // 98% of screen width
+    height: screenHeight * 0.35, // 45% of screen height
+    borderRadius: 20,
+    alignSelf: 'center',
+    backgroundColor: '#D9D9D9',
+  },
+  image: {
+    width: screenWidth * 0.95,
+    height: screenHeight * 0.45,
+    borderRadius: 20,
+    alignSelf: 'center',
+  },
+  imageEdit: {
+    width: screenWidth * 0.95,
+    height: screenHeight * 0.35, // Smaller height for edit profile screen
+    borderRadius: 20,
+    alignSelf: 'center',
+  },
+  profilePictureLabel: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 10,
+    padding: 5,
+  },
+  profilePictureText: {
+    color: 'black',
+  },
+});
+
+
 
 
 export {
@@ -1292,5 +1333,6 @@ export {
   navbarStyles,
   noUsersStyles,
   progressBarStyles,
+  photoSelector,
   styles
 };

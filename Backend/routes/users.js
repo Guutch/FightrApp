@@ -58,7 +58,7 @@ const getWeightClass = (weight, weightUnit, sex) => {
     if (weight <= 115) weightClass = 1;
     else if (weight <= 125) weightClass = 2;
     else if (weight <= 135) weightClass = 3;
-    else if (weight <= 145) weightClass = 4;
+    else weightClass = 4; // Featherweight for all women above 135lbs
   } else { // if sex is male
     if (weight <= 115) weightClass = 1;
     else if (weight <= 125) weightClass = 2;
@@ -68,7 +68,7 @@ const getWeightClass = (weight, weightUnit, sex) => {
     else if (weight <= 170) weightClass = 6;
     else if (weight <= 185) weightClass = 7;
     else if (weight <= 205) weightClass = 8;
-    else if (weight <= 265) weightClass = 9;
+    else weightClass = 9; // Heavyweight for all men above 205lbs
   }
 
   return weightClass;
@@ -117,6 +117,23 @@ router.get('/:id/image', async (req, res) => {
       return res.status(404).send({ error: 'Media not found for this user at position 1' });
     }
     res.send({ imageUrl: media.url }); // Assumes url is the name of the field that contains the image URL
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Server error' });
+  }
+});
+
+// Get user image - needs updating to handle multiple
+router.get('/:id/getSex', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findOne({ _id: id }); // Query by user_id
+    if (!user) {
+      return res.status(404).send({ error: 'User not found' });
+    }
+    // console.log(user)
+    const userSex = user.sex; // Concatenate first and last name
+    res.send({ userSex }); // Send the full name
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: 'Server error' });

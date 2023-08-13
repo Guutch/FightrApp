@@ -31,6 +31,19 @@ router.get('/:id/getWeight', async (req, res) => {
   }
 });
 
+router.get('/:id/getBio', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await Profile.findOne({ user_id: id }).select('bio');
+    // console.log(user)
+    // console.log(user.weight);
+    res.send(user);
+  } catch (error) {
+    res.status(500).send({ error: 'Server error' });
+  }
+});
+
 router.get('/:id/getActualWeight', async (req, res) => {
   const { id } = req.params;
 

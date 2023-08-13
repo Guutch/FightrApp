@@ -4,6 +4,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { settingsStyles, fightingStyleScreen } from './styles2'
 
 const SettingSection = ({ title, onPress, titleInsideRectangle = false, preference, settingButton = false, showChevron = false }) => {
+  
+  
+
   return (
     <View style={settingsStyles.sectionContainer}>
       {!titleInsideRectangle && !settingButton ? <Text style={settingsStyles.sectionTitle}>{title}</Text> : null}

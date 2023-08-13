@@ -27,6 +27,7 @@ const FirstName = ({ navigation }) => {
       return;
     }
 
+    // navigation.navigate('Photos', { firstName, lastName });
     navigation.navigate('EmailAndNumber', { firstName, lastName });
   };
 

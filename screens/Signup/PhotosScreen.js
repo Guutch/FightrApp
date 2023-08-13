@@ -163,7 +163,13 @@ const Photos = ({ navigation, route }) => {
           Add some photos{'\n'}Upload at least one photo
         </Text>
       </View>
-      <TouchableOpacity
+      <PhotoSelector
+        images={images}
+        selectPhoto={selectPhoto}
+        removePhoto={removePhoto}
+        // styles={styles} // If you're passing styles as a prop
+      />
+      {/* <TouchableOpacity
         style={{ width: 371, height: 361, borderRadius: 20, alignSelf: 'center', backgroundColor: '#D9D9D9' }}
         // onPress={() => console.log("0")}
         onPress={() => selectPhoto(0)}
@@ -226,7 +232,7 @@ const Photos = ({ navigation, route }) => {
             </View>
           )}
         />
-      </View>
+      </View> */}
 
       <InfoComponent infoText="Do not upload any rude or nude photos. Also, don't upload a photo that can cause a feud." />
 

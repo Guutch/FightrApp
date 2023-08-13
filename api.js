@@ -236,16 +236,18 @@ export const fetchUserPreferences = async (userId) => {
 
 export const fetchEditProfileData = async (userId) => {
   try {
-    const [metricsResponse, weightResponse, fightLevelResponse, fightStyleResponse, weightResponseActual, heightResponseActual] = await Promise.all([
+    const [metricsResponse, weightResponse, fightLevelResponse, fightStyleResponse, weightResponseActual, heightResponseActual, bioResponse, sexResponse] = await Promise.all([
       axios.get(`${API_URL}/profiles/${userId}/metrics`),
       axios.get(`${API_URL}/profiles/${userId}/getWeight`),      
       axios.get(`${API_URL}/profiles/${userId}/getFightLevel`),
       axios.get(`${API_URL}/profiles/${userId}/getFightStyle`),
       axios.get(`${API_URL}/profiles/${userId}/getActualWeight`),
       axios.get(`${API_URL}/profiles/${userId}/getActualHeight`),
+      axios.get(`${API_URL}/profiles/${userId}/getBio`),
+      axios.get(`${API_URL}/users/${userId}/getSex`),
     ]);
 
-    // // console.log(editProfileResponse.data)
+    console.log(sexResponse.data)
 
     // // Merging all responses
     const data = {
@@ -254,7 +256,9 @@ export const fetchEditProfileData = async (userId) => {
       actualWeight: weightResponseActual.data.weight, 
       actualHeight: heightResponseActual.data.height,
       usersFightLevel: fightLevelResponse.data.fightingLevel,
-      usersFightStyles: fightStyleResponse.data.fightingStyle
+      usersFightStyles: fightStyleResponse.data.fightingStyle,
+      usersBio: bioResponse.data.bio,
+      usersSex: sexResponse.data.userSex
     };
 
     // // console.log(data);

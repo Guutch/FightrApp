@@ -46,16 +46,17 @@ const SwipingScreen = ({ navigation }) => {
   };
 
   const weightClasses = {
-    1: 'Heavyweight',
-    2: 'Light Heavyweight',
-    3: 'Middleweight',
-    4: 'Welterweight',
+    1: 'Strawweight',
+    2: 'Flyweight',
+    3: 'Bantamweight',
+    4: 'Featherweight',
     5: 'Lightweight',
-    6: 'Featherweight',
-    7: 'Bantamweight',
-    8: 'Flyweight',
-    9: 'Strawweight',
+    6: 'Welterweight',
+    7: 'Middleweight',
+    8: 'Light Heavyweight',
+    9: 'Heavyweight',
   };
+  
 
   const getWeightClass = (classNumber) => {
     return weightClasses[classNumber] || 'Unknown';
