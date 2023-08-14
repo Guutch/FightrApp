@@ -329,6 +329,7 @@ const SettingsScreen = ({ navigation }) => {
           ageRange,
           distance,
         }}
+        editProfile={false}
       />
       <ScrollView contentContainerStyle={settingsStyles.container}>
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Text, StyleSheet } from 'react-native';
 
-const BioInput = ({ bio }) => {
+const BioInput = ({ bio, onBioChange }) => {
     const [value, setValue] = useState('');
   const maxLength = 256;
 
@@ -13,6 +13,7 @@ const BioInput = ({ bio }) => {
 
   const onChangeText = (text) => {
     setValue(text);
+    onBioChange(text); // Update the parent's state
   };
   
     return (

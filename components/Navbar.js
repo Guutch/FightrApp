@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { navbarStyles } from '../components/styles2';
-import { changeUserPreferences } from '../api'
+import { changeUserPreferences, updateEditProfileData } from '../api'
 
 const Navbar = ({
     navigation,
@@ -17,14 +17,24 @@ const Navbar = ({
     dataToUpdate,
     handleBackPressPrefSel,
     handleSavePreferences,
+    editProfile
   }) => {
 
     const handleBackPress = async () => {
       // Call the handleSavePreferences function to update preferences in the Redux store
-      handleSavePreferences(dataToUpdate);
+      
+      // console.log(editProfile)
+      if(editProfile) {
+        updateEditProfileData(dataToUpdate.userId, dataToUpdate);
+      } else {
+        console.log("lmaolmaolmao")
+        handleSavePreferences(dataToUpdate);
   
-      // Update preferences in the backend
-      await changeUserPreferences(dataToUpdate.userId, dataToUpdate);
+        // Update preferences in the backend
+        await changeUserPreferences(dataToUpdate.userId, dataToUpdate);
+      }
+
+      
   
       // Navigate back
       navigation.goBack();

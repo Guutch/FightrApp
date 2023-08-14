@@ -30,6 +30,10 @@ const EditProfileScreen = ({ navigation, route }) => {
 
   const userId = useSelector(state => state.user);  // Gets the userId from the Redux state
 
+  const handleBioChange = (newBio) => {
+    setBio(newBio);
+  };
+
   const requestCameraRollPermissions = async () => {
     try {
       const result = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
@@ -307,6 +311,11 @@ setImages(newImagesArray);
         showBackButton={true}
         navigation={navigation}  // Here we pass navigation as a prop to Navbar
         title="Edit Profile"  // Here's the custom title
+        editProfile={true}
+        dataToUpdate={{
+          userId: userId.userId,
+          bio
+        }}
       />
       <ScrollView contentContainerStyle={settingsStyles.container}>
 
@@ -373,7 +382,7 @@ setImages(newImagesArray);
 
         {/* <SettingSection title="Years Experience" onPress={() => navigation.navigate('SomeScreen')} /> */}
         <Text style={settingsStyles.sectionTitle}>Bio</Text>
-        <BioInput bio={bio}></BioInput>
+        <BioInput bio={bio} onBioChange={handleBioChange} />
       </ScrollView>
 
 

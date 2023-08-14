@@ -185,6 +185,20 @@ export const changeUserPreferences = async (userId, data) => {
 };
 
 // Definitely used in settings screen
+export const updateEditProfileData = async (userId, data) => {
+  console.log(data)
+  try {
+    console.log(data)
+    console.log("data")
+    // const response = await axios.put(`${API_URL}/preferences/${userId}/prefUpdateFromSettings`, data);
+    // console.log(response.data)
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+// Definitely used in settings screen
 export const fetchUserPreferences = async (userId) => {
   try {
     const [preferenceResponse, metricsResponse, weightResponse, fightLevelResponse, weightResponseActual, heightResponseActual] = await Promise.all([
