@@ -100,4 +100,39 @@ router.get('/:id/getFightStyle', async (req, res) => {
   }
 });
 
+// Edit Profile Screen
+router.put('/:id/updatingEditProfile', async (req, res) => {
+  const { id } = req.params;
+
+  // Extract the fields from the request body
+  const { height, weight, fightingStyles, bio, weightClass } = req.body;
+  console.log(fightingStyles)
+  try {
+    // Find the profile by user_id and update
+    const profile = await Profile.findOneAndUpdate(
+      { user_id: id }, // Use user_id to find the profile
+      {
+        height,
+        weight,
+        fightingStyle: fightingStyles,
+        bio,
+        weightClass
+      },
+      // { new: true } // This option returns the updated document
+    );
+
+    if (!profile) {
+      return res.status(404).send({ error: 'Profile not found' });
+    }
+
+    res.send(profile);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Server error' });
+  }
+});
+
+
+
   module.exports = router;

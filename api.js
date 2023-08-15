@@ -186,12 +186,12 @@ export const changeUserPreferences = async (userId, data) => {
 
 // Definitely used in settings screen
 export const updateEditProfileData = async (userId, data) => {
-  console.log(data)
+  // console.log(data)
   try {
-    console.log(data)
+    console.log(data.fightingStyles)
     console.log("data")
-    // const response = await axios.put(`${API_URL}/preferences/${userId}/prefUpdateFromSettings`, data);
-    // console.log(response.data)
+    const response = await axios.put(`${API_URL}/profiles/${userId}/updatingEditProfile`, data);
+    console.log(response.data)
   } catch (error) {
     console.error(error);
     return null;
@@ -348,26 +348,3 @@ export const handleNewMatch = async (matchData) => {
     console.error('[api.js] Error creating match', error);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

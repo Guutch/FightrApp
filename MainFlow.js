@@ -80,10 +80,10 @@ const MainFlow = () => {
         }
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
+      {/* <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/> */}
       <Tab.Screen name="Swiping" component={SwipingScreen} options={{ headerShown: false }}/>
       <Tab.Screen name="Messaging" component={MessagingScreen} options={{ headerShown: false }}/>
-      <Tab.Screen name="Calendar" component={CalendarScreen} options={{ headerShown: false }}/>
+      {/* <Tab.Screen name="Calendar" component={CalendarScreen} options={{ headerShown: false }}/> */}
       <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }}/>
       {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
     </Tab.Navigator>

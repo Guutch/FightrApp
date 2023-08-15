@@ -1,6 +1,6 @@
 // Navbar.js
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { navbarStyles } from '../components/styles2';
 import { changeUserPreferences, updateEditProfileData } from '../api'
@@ -20,12 +20,64 @@ const Navbar = ({
     editProfile
   }) => {
 
+    const validateHeight = () => {
+      if (dataToUpdate.heightUnit === "cm") {
+        return dataToUpdate.height >= 140 && dataToUpdate.height <= 210;
+      } else {
+        // const totalHeightInInches = (dataToUpdate.heightFt * 12) + dataToUpdate.heightInch;
+        if(dataToUpdate.heightFt > 7 || dataToUpdate.heightFt < 4) {
+          return false;
+        }
+        if(dataToUpdate.heightInch > 11 || dataToUpdate.heightInch < 0) {
+          return false;
+        }
+        return true;
+      }
+    }
+    
+    
+    const validateWeight = () => {
+      if (dataToUpdate.weightUnit === "kg") {
+        return dataToUpdate.weight <= 600;
+      } else { // Assuming the other unit is lbs
+        return dataToUpdate.weight <= 1323;
+      }
+    };
+
+    const transformHeight = (data) => {
+      if (data.heightUnit === "ft") {
+        return parseInt(data.heightFt) * 12 + parseInt(data.heightInch);
+      }
+      return parseInt(data.height); // assuming height is in string format, if not, you can skip parseInt
+    };
+    
+    const constructPayload = (data) => {
+      return {
+        bio: data.bio,
+        fightingStyles: data.fightingStyles,
+        weight: data.weight,
+        height: transformHeight(data),
+        weightClass: data.weightClass
+      };
+    };
+    
+
     const handleBackPress = async () => {
       // Call the handleSavePreferences function to update preferences in the Redux store
-      
+      // Alert.alert("ROgan Josh")
       // console.log(editProfile)
       if(editProfile) {
-        updateEditProfileData(dataToUpdate.userId, dataToUpdate);
+        if (!validateWeight()) {
+          Alert.alert("Invalid Weight", "Please enter a Weight within the acceptable range.");
+          return;
+        }
+        if (!validateHeight()) {
+          Alert.alert("Invalid Height", "Please enter a height within the acceptable range.");
+          return;
+        }
+        const cleanedData = constructPayload(dataToUpdate);
+updateEditProfileData(dataToUpdate.userId, cleanedData);
+
       } else {
         console.log("lmaolmaolmao")
         handleSavePreferences(dataToUpdate);
@@ -34,8 +86,6 @@ const Navbar = ({
         await changeUserPreferences(dataToUpdate.userId, dataToUpdate);
       }
 
-      
-  
       // Navigate back
       navigation.goBack();
     };

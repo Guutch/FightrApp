@@ -3,13 +3,16 @@ import { ScrollView, TextInput, View, Text, TouchableOpacity, StyleSheet } from 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { settingsStyles, fightingStyleScreen } from './styles2'
 
-const TextEditProf = ({ title, settingButton = false, showChevron = false, value, isHeightFeet, onWeightChange }) => {  // Initialize a state variable with the value passed from the parent component
+const TextEditProf = ({ title, settingButton = false, showChevron = false, value, isHeightFeet, onWeightChange, onHeightChange, heightType }) => {  // Initialize a state variable with the value passed from the parent component
   const [inputValue, setInputValue] = useState(value ? value.toString() : '');
 
   const handleChange = (text) => {
     setInputValue(text);
     if (onWeightChange) {
       onWeightChange(text);
+    }
+    if (onHeightChange) {
+      onHeightChange(text, heightType);
     }
   };
 

@@ -18,6 +18,8 @@ const EditProfileScreen = ({ navigation, route }) => {
   const [heightUnit, setHeightUnit] = useState('');
   const [weightUnit, setWeightUnit] = useState('');
   const [height, setHeight] = useState('');
+  const [heightFt, setHeightFt] = useState(0);
+  const [heightInch, setHeightInch] = useState(0);
   const [weight, setWeight] = useState('');
   const [weightClass, setWeightClass] = useState('');
   const [fightingLevel, setFightingLevel] = useState('');
@@ -32,6 +34,38 @@ const EditProfileScreen = ({ navigation, route }) => {
 
   const handleBioChange = (newBio) => {
     setBio(newBio);
+  };
+
+  const handleHeightChange = (value, type) => {
+    if (heightUnit === "cm") {
+      setHeight(value);
+    } else {
+      if (type === "ft") {
+        setHeightFt(value);
+      } else if (type === "inch") {
+        setHeightInch(value);
+      }
+    }
+  };
+
+  const handleWeightChange = (newWeight) => {
+    // Convert weight to lbs if it's in kg
+    if (weightUnit === "kg") {
+      newWeight = newWeight * 2.20462; // 1 kg is approximately 2.20462 lbs
+    }
+    console.log("newWeight", newWeight)
+    console.log("weightUnit", weightUnit)
+    console.log("sex", userSex)
+
+    // Calculate the new weight class
+    const newWeightClass = getWeightClass(newWeight, weightUnit, userSex);
+
+    // Update the weight class state
+    setWeightClass(newWeightClass);
+    setWeight(newWeight);
+
+    // Console log for debugging
+    console.log("New weight class:", newWeightClass);
   };
 
   const requestCameraRollPermissions = async () => {
@@ -111,9 +145,9 @@ const EditProfileScreen = ({ navigation, route }) => {
     // if (weightUnit === 1) {
     //   weight = weight * 2.20462; // 1 kg is approximately 2.20462 lbs
     // }
-  
+
     let weightClass = 0;
-  
+
     if (sex === 2) { // if sex is female
       if (weight <= 115) weightClass = 1;
       else if (weight <= 125) weightClass = 2;
@@ -130,29 +164,12 @@ const EditProfileScreen = ({ navigation, route }) => {
       else if (weight <= 205) weightClass = 8;
       else weightClass = 9; // Heavyweight for all men above 205lbs
     }
-  
+
     return weightClass;
   };
 
-  const handleWeightChange = (newWeight) => {
-    // Convert weight to lbs if it's in kg
-    if (weightUnit === "kg") {
-      newWeight = newWeight * 2.20462; // 1 kg is approximately 2.20462 lbs
-    }
-    console.log("newWeight", newWeight)
-    console.log("weightUnit", weightUnit)
-    console.log("sex", userSex)
-  
-    // Calculate the new weight class
-    const newWeightClass = getWeightClass(newWeight, weightUnit, userSex);
-  
-    // Update the weight class state
-    setWeightClass(newWeightClass);
-  
-    // Console log for debugging
-    console.log("New weight class:", newWeightClass);
-  };
-  
+
+
 
   const getKeyByValue = (object, value) => {
     const entry = Object.entries(object).find(([key, val]) => val === value);
@@ -176,11 +193,11 @@ const EditProfileScreen = ({ navigation, route }) => {
     if (index !== nextIndex.current) {
       console.log(index);
       console.log(nextIndex.current);
-    
+
       Alert.alert("Please select photos in order");
       return;
     }
-    
+
 
     const hasPermission = await requestCameraRollPermissions();
     if (!hasPermission) {
@@ -232,39 +249,49 @@ const EditProfileScreen = ({ navigation, route }) => {
       const updatedImages = [...prevImages];
       updatedImages.splice(index, 1); // Remove the image at the given index
       updatedImages.push(null); // Add a null value at the end to keep the array length consistent
-  
+
       // Update positions of the images if needed
       for (let i = 0; i < updatedImages.length; i++) {
         if (updatedImages[i] !== null) {
           updatedImages[i].position = i + 1;
         }
       }
-  
+
       return updatedImages;
     });
   };
-  
-  
+
+  const convertToNumbers = (selectedPreferences, mapping) => {
+    // Handle the case where there's only one value
+    const selectedPreferencesArray = selectedPreferences.includes(',') ? selectedPreferences.split(', ') : [selectedPreferences];
+
+    const reverseMapping = Object.keys(mapping).reduce((acc, key) => {
+      acc[mapping[key]] = parseInt(key, 10);
+      return acc;
+    }, {});
+
+    const numbers = selectedPreferencesArray.map(preference => reverseMapping[preference]);
+    return numbers.sort((a, b) => a - b);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchEditProfileData(userId.userId);
-      console.log("lmaodsdsdsds")
       console.log(data);
 
       const userImages = await fetchImages(userId.userId);
-userImages.sort((a, b) => a.position - b.position);
+      userImages.sort((a, b) => a.position - b.position);
 
-// Map the user images to rename 'url' to 'path'
-const normalizedUserImages = userImages.map(image => ({
-  ...image,
-  path: image.url, // Rename 'url' to 'path'
-}));
+      // Map the user images to rename 'url' to 'path'
+      const normalizedUserImages = userImages.map(image => ({
+        ...image,
+        path: image.url, // Rename 'url' to 'path'
+      }));
 
-// Create a new array of length 6, filling it with normalized user images and null for remaining spaces
-const newImagesArray = Array(6).fill(null).map((_, index) => normalizedUserImages[index] || null);
+      // Create a new array of length 6, filling it with normalized user images and null for remaining spaces
+      const newImagesArray = Array(6).fill(null).map((_, index) => normalizedUserImages[index] || null);
 
-setImages(newImagesArray);
+      setImages(newImagesArray);
 
 
       requestCameraRollPermissions();
@@ -285,7 +312,13 @@ setImages(newImagesArray);
         setHeightUnit(heightUnitMapping[data.heightUnit]);
         // console.log(weightUnitMapping[data.weightUnit])
         // setWeightUnit(weightUnitMapping(data.weightUnit.wei));
-        setHeight(data.actualHeight);
+        if (data.heightUnit === 1) {
+          setHeight(data.actualHeight);
+        } else {
+          setHeightFt(Math.floor(data.actualHeight / 12));
+          setHeightInch(data.actualHeight % 12);
+        }
+
         console.log(data.actualHeight);
         setWeight(data.actualWeight);
         setFightingLevel(data.usersFightLevel);
@@ -314,7 +347,13 @@ setImages(newImagesArray);
         editProfile={true}
         dataToUpdate={{
           userId: userId.userId,
-          bio
+          fightingStyles: convertToNumbers(fightingStyle, fightingStyles),
+          bio,
+          weightUnit,
+          weight,
+          heightUnit,
+          ...(heightUnit === "cm" ? { height } : { heightFt, heightInch }),
+          weightClass
         }}
       />
       <ScrollView contentContainerStyle={settingsStyles.container}>
@@ -354,27 +393,33 @@ setImages(newImagesArray);
           showChevron={true}
         />
         {heightUnit === "ft" && (
-  <>
-    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-      <TextEditProf
-        title="Height (ft)"
-        value={Math.floor(height / 12)} // You may want to pass the calculated feet value here
-        isHeightFeet={true}
-      />
-      <TextEditProf
-        title='Height (")'
-        value={height % 12} // You may want to pass the calculated inches value here
-        isHeightFeet={true}
-      />
-    </View>
-  </>
-)}
-{heightUnit === "cm" && (
-  <TextEditProf
-    title="Height (cm)"
-    value={height} // You may want to convert inches to cm here
-  />
-)}
+          <>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+              <TextEditProf
+                title="Height (ft)"
+                value={heightFt} // You may want to pass the calculated feet value here
+                isHeightFeet={true}
+                onHeightChange={handleHeightChange}
+                heightType="ft"
+              />
+              <TextEditProf
+                title='Height (")'
+                value={heightInch} // You may want to pass the calculated inches value here
+                isHeightFeet={true}
+                onHeightChange={handleHeightChange}
+                heightType="inch"
+              />
+            </View>
+          </>
+        )}
+        {heightUnit === "cm" && (
+          <TextEditProf
+            title="Height (cm)"
+            value={height} // You may want to convert inches to cm here
+            onHeightChange={handleHeightChange}
+            heightType="cm"
+          />
+        )}
         {/* <TextEditProf title={`Height (${heightUnit})`} value={height} showChevron={true}></TextEditProf> */}
         <TextEditProf title={`Weight (${weightUnit})`} value={weight} showChevron={true} onWeightChange={handleWeightChange} />
 
