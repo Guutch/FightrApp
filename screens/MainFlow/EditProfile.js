@@ -9,7 +9,10 @@ import PhotoSelector from '../../components/PhotoSelector';
 import TextEditProf from '../../components/TextEditProf';
 import BioInput from '../../components/BioInput';
 import { fetchEditProfileData, fetchImages } from '../../api';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateFightingLevelEdit } from '../../redux/actions';
+
+
 
 const EditProfileScreen = ({ navigation, route }) => {
   const [userSex, setuserSex] = useState('');
@@ -22,8 +25,9 @@ const EditProfileScreen = ({ navigation, route }) => {
   const [heightInch, setHeightInch] = useState(0);
   const [weight, setWeight] = useState('');
   const [weightClass, setWeightClass] = useState('');
-  const [fightingLevel, setFightingLevel] = useState('');
-  const [fightingStyle, setFightingStyle] = useState('');
+  const [fightingLevel, setFightingLevel] = useState(0);
+  const [originalFightingLevel, setOriginalFightingLevel] = useState(0);
+  const [fightingStyle, setFightingStyle] = useState('');  
   const [value, onChangeText] = useState('');
   const [images, setImages] = useState(Array(6).fill(null));
   const nextIndex = useRef(0);
@@ -31,6 +35,8 @@ const EditProfileScreen = ({ navigation, route }) => {
   const { usersName } = route.params;
 
   const userId = useSelector(state => state.user);  // Gets the userId from the Redux state
+
+  const dispatch = useDispatch();
 
   const handleBioChange = (newBio) => {
     setBio(newBio);
@@ -178,7 +184,7 @@ const EditProfileScreen = ({ navigation, route }) => {
 
   const updateFightingLevel = (newLevel) => {
     const keyForNewLevel = getKeyByValue(fightingLevels, newLevel);
-    console.log(keyForNewLevel); // This will log the key corresponding to the newLevel
+    console.log("keyForNewLevel", keyForNewLevel); // This will log the key corresponding to the newLevel
     setFightingLevel(keyForNewLevel);
   };
 
@@ -261,18 +267,32 @@ const EditProfileScreen = ({ navigation, route }) => {
     });
   };
 
-  const convertToNumbers = (selectedPreferences, mapping) => {
-    // Handle the case where there's only one value
-    const selectedPreferencesArray = selectedPreferences.includes(',') ? selectedPreferences.split(', ') : [selectedPreferences];
-
+  const convertToNumbers = (selectedPreferences, mapping, type = 'style') => {
     const reverseMapping = Object.keys(mapping).reduce((acc, key) => {
       acc[mapping[key]] = parseInt(key, 10);
       return acc;
     }, {});
-
+  
+    if (type === 'level') {
+      return reverseMapping[selectedPreferences];
+    }
+  
+    // Handle the case where there's only one value
+    const selectedPreferencesArray = selectedPreferences.includes(',') ? selectedPreferences.split(', ') : [selectedPreferences];
     const numbers = selectedPreferencesArray.map(preference => reverseMapping[preference]);
     return numbers.sort((a, b) => a - b);
   };
+  
+  const reverseFightingLevels = Object.keys(fightingLevels).reduce((acc, key) => {
+    acc[fightingLevels[key]] = parseInt(key, 10);
+    return acc;
+  }, {});
+
+  const handleSaveFightingLevel = (newFightingLevel) => {
+    console.log("newFightingLevel", newFightingLevel)
+    dispatch(updateFightingLevelEdit(newFightingLevel));
+  };
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -321,10 +341,18 @@ const EditProfileScreen = ({ navigation, route }) => {
 
         console.log(data.actualHeight);
         setWeight(data.actualWeight);
-        setFightingLevel(data.usersFightLevel);
+        // setFightingLevel([data.usersFightLevel]); // Wrap it in an array
+        // setOriginalFightingLevel([data.usersFightLevel]); // Wrap it in an array
+        // const styleNames = data.usersFightStyles.map(getFightingStyleName);
+        // setFightingStyle(styleNames);
 
+        setFightingLevel(data.usersFightLevel);
+        setOriginalFightingLevel(data.usersFightLevel);
         const styleNames = data.usersFightStyles.map(getFightingStyleName);
         setFightingStyle(styleNames.join(', '));
+        setWeightClass(data.weightClass)
+
+
         setWeightClass(data.weightClass)
       }
 
@@ -345,9 +373,12 @@ const EditProfileScreen = ({ navigation, route }) => {
         navigation={navigation}  // Here we pass navigation as a prop to Navbar
         title="Edit Profile"  // Here's the custom title
         editProfile={true}
+        handleSaveFightingLevel={handleSaveFightingLevel}
         dataToUpdate={{
           userId: userId.userId,
           fightingStyles: convertToNumbers(fightingStyle, fightingStyles),
+          fightingLevel,
+          originalFightingLevel,
           bio,
           weightUnit,
           weight,
@@ -378,7 +409,8 @@ const EditProfileScreen = ({ navigation, route }) => {
             currentPref: fightingStyle,
             updateFightingStyle: updateFightingStyle
           })}
-          preference={fightingStyle} // Use the fightingStyle state directly, as it's already a joined string
+          preference={fightingStyle}
+          // Use the fightingStyle state directly, as it's already a joined string
           showChevron={true}
         />
         <SettingSection title="Fighting Level"

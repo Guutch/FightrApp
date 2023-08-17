@@ -12,6 +12,8 @@ import { useSelector } from 'react-redux';
 const SwipingScreen = ({ navigation }) => {
   const userId = useSelector(state => state.user);
   const preferences = useSelector((state) => state.preferences);
+  // const fightingLevel = useSelector(state => state.preferences.fightingLevel);
+
   const [users, setUsers] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);  // Add this line
   const [isLoading, setIsLoading] = useState(true);

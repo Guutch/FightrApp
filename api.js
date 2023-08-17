@@ -193,10 +193,22 @@ export const updateEditProfileData = async (userId, data) => {
     const response = await axios.put(`${API_URL}/profiles/${userId}/updatingEditProfile`, data);
     console.log(response.data)
   } catch (error) {
-    console.error(error);
+    console.error("Error with edit profile update", error);
     return null;
   }
 };
+
+// Definitely used in settings screen
+export const updateFightingLevelPref = async (userId, fightingLevel) => {
+  try {
+    const response = await axios.put(`${API_URL}/preferences/${userId}/fightingLevelPref`, { fightingLevel });
+    console.log(response.data);
+  } catch (error) {
+    console.error("Error with fighting level pref", error);
+    return null;
+  }
+};
+
 
 // Definitely used in settings screen
 export const fetchUserPreferences = async (userId) => {

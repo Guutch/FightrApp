@@ -1,4 +1,4 @@
-import { SET_PREFERENCES, UPDATE_PREFERENCES } from './actions';
+import { SET_PREFERENCES, UPDATE_PREFERENCES, UPDATE_FIGHTING_LEVEL } from './actions';
 
 const initialState = {
   userId: null,
@@ -21,6 +21,14 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         preferences: { ...state.preferences, ...action.payload },
+      };
+      case UPDATE_FIGHTING_LEVEL:
+      return {
+        ...state,
+        preferences: {
+          ...state.preferences,
+          fightingLevel: action.payload
+        },
       };
     default:
       return state;

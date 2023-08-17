@@ -7,33 +7,7 @@ import { settingsStyles, fightingStyleScreen } from '../../components/styles2'
 import SettingSection from '../../components/SettingSection'
 import { fetchUserPreferences } from '../../api';  // update the path according to your project structure
 import { useDispatch, useSelector } from 'react-redux';
-import { updatePreferences } from '../../redux/actions';
-
-// Need to move this to components folder
-// const SettingSection = ({ title, onPress, titleInsideRectangle = false, preference, settingButton = false }) => {
-//   return (
-//     <View style={settingsStyles.sectionContainer}>
-//       {!titleInsideRectangle && !settingButton ? <Text style={settingsStyles.sectionTitle}>{title}</Text> : null}
-
-//       <TouchableOpacity
-//         style={[
-//           settingsStyles.sectionRectangle,
-//           // titleInsideRectangle ? { justifyContent: 'center', alignItems: 'center' } : null
-//         ]}
-//         onPress={onPress}
-//       >
-//         {titleInsideRectangle ?
-//           <Text style={[settingsStyles.sectionTitle, fightingStyleScreen.rectangleText]}>{title}</Text>
-//           : null
-//         }
-//         {preference ?
-//           <Text style={settingsStyles.preferenceText}>{preference}</Text>
-//           : <Text style={settingsStyles.preferenceText}>Loading...</Text>
-//         }
-//       </TouchableOpacity>
-//     </View>
-//   );
-// };
+import { updatePreferences, updateFightingLevelEdit } from '../../redux/actions';
 
 // Need to investigate this. Particularly for the other settings
 const DividerTitle = ({ title }) => {
@@ -88,7 +62,7 @@ const SettingsScreen = ({ navigation }) => {
 
   const handleSavePreferences = (dataToUpdate) => {
     // Update preferences in the Redux store
-    dispatch(updatePreferences(dataToUpdate));
+    dispatch(updateFightingLevelEdit(dataToUpdate));
   };
 
   const distanceChange = (values) => {
@@ -185,15 +159,15 @@ const SettingsScreen = ({ navigation }) => {
   };
 
   const weightClasses = {
-    1: 'Heavyweight',
-    2: 'Light Heavyweight',
-    3: 'Middleweight',
-    4: 'Welterweight',
+    1: 'Strawweight',
+    2: 'Flyweight',
+    3: 'Bantamweight',
+    4: 'Featherweight',
     5: 'Lightweight',
-    6: 'Featherweight',
-    7: 'Bantamweight',
-    8: 'Flyweight',
-    9: 'Strawweight',
+    6: 'Welterweight',
+    7: 'Middleweight',
+    8: 'Light Heavyweight',
+    9: 'Heavyweight',
   };
 
   const getWeightClassName = (classNumber) => {

@@ -105,7 +105,7 @@ router.put('/:id/updatingEditProfile', async (req, res) => {
   const { id } = req.params;
 
   // Extract the fields from the request body
-  const { height, weight, fightingStyles, bio, weightClass } = req.body;
+  const { height, weight, fightingStyles, fightingLevel, bio, weightClass } = req.body;
   console.log(fightingStyles)
   try {
     // Find the profile by user_id and update
@@ -115,6 +115,7 @@ router.put('/:id/updatingEditProfile', async (req, res) => {
         height,
         weight,
         fightingStyle: fightingStyles,
+        fightingLevel,
         bio,
         weightClass
       },

@@ -32,3 +32,13 @@ export const updatePreferences = (preferences) => ({
   type: UPDATE_PREFERENCES,
   payload: preferences,
 });
+
+// Action Types
+export const UPDATE_FIGHTING_LEVEL = 'UPDATE_FIGHTING_LEVEL';
+
+// Action Creators
+export const updateFightingLevelEdit = (fightingLevel) => ({
+  type: UPDATE_FIGHTING_LEVEL,
+  payload: fightingLevel,
+});
+

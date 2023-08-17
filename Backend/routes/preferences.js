@@ -151,18 +151,21 @@ router.get('/:id/preferences', async (req, res) => {
   }
 });
 
-// Get user's metric preferences
-// router.get('/:id/metrics', async (req, res) => {
-//   const { id } = req.params;
+// Update user's fighting level
+router.put('/:id/fightingLevelPref', async (req, res) => {
+  const { id } = req.params;
+  const { fightingLevel } = req.body;
 
-//   try {
-//     const user = await User.findById({ _id: id }).select('heightUnit weightUnit');
-//     console.log(user)
-//     res.send(user);
-//   } catch (error) {
-//     res.status(500).send({ error: 'Server error' });
-//   }
-// });
+  try {
+    await Preference.updateOne({ user_id: id }, { fightingLevel: fightingLevel });
+    console.log("Perhaps")
+    res.status(200).send({ message: 'Fighting level updated successfully' });
+  } catch (error) {
+    console.log("NO updated")
+    res.status(500).send({ error: 'Server error' });
+  }
+});
+
 
 // Update preferences range - values in body are undefined?
 router.put('/:userId/prefUpdateFromSettings', async (req, res) => {
@@ -205,9 +208,6 @@ router.put('/:userId/prefUpdateFromSettings', async (req, res) => {
     dataToUpdate.convertedWeight = dataToUpdate.originalWeight;
   }
 
-  // console.log(currentHeightUnit)
-  // console.log(convertedWeight)
-
   try {
     await Preference.updateOne({ user_id: userId }, {
       fightingStyle: dataToUpdate.fightingStylePreference,
@@ -231,32 +231,5 @@ router.put('/:userId/prefUpdateFromSettings', async (req, res) => {
     res.status(500).send('Error updating preferences');
   }
 });
-
-// UpdatingTysionsMedia - Only added position 1 to Tyson
-// router.put('/:userId/quick', async (req, res) => {
-//   const { userId } = req.params;
-//   const { position } = req.body;
-
-//   try {
-//     // Find the user's media document
-//     const media = await Media.findOne({ user_id: userId });
-
-//     if (!media) {
-//       // If the media document does not exist, return an appropriate response
-//       return res.status(404).send('Media document not found');
-//     }
-
-//     // Add the "position" attribute to the media document and set its value to 1
-//     media.position = position;
-    
-//     // Save the updated media document
-//     await media.save();
-
-//     res.status(200).send('Media updated successfully');
-//   } catch (error) {
-//     console.error('Error updating media:', error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
 
 module.exports = router;
