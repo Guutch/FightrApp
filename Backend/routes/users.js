@@ -6,7 +6,7 @@ const Preference = require('../models/preference');
 const Profile = require('../models/profile');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
-const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 // const Media = require('../models/Media');
 
 const bcrypt = require('bcrypt');
@@ -30,12 +30,52 @@ const upload = multer({
       cb(null, Date.now().toString() + "-" + file.originalname);
     }
   })
-}).array('photos', 5); // This allows up to 5 photos to be uploaded at once
+}).array('photos', 6); // This allows up to 5 photos to be uploaded at once
+
+// First delete AWS file, THEN delete MongoDB record
+// const uploadToS3 = async (photo) => {
+//   const { path, name, type } = photo;
+//   const file = fs.readFileSync(path);
+//   const params = {
+//     Bucket: process.env.AWS_BUCKET_NAME,
+//     Key: Date.now().toString() + "-" + name,
+//     Body: file,
+//     ContentType: type,
+//     // ACL: 'public-read' // If you want the file to be publicly accessible
+//   };
+
+//   try {
+//     const result = await s3.upload(params).promise();
+//     return result.Location; // This will be the URL of the uploaded photo
+//   } catch (error) {
+//     console.error("Error uploading to S3:", error);
+//     throw error;
+//   }
+// };
+
+// First delete AWS file, THEN delete MongoDB record
+// key = 1689790266086-49ed9502-7732-40b2-a50b-596619eb005b.jpg
+const deleteFromS3 = async (key) => {
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: key
+  };
+
+  const command = new DeleteObjectCommand(params);
+
+  try {
+    await s3.send(command);
+  } catch (error) {
+    console.error("Error deleting from S3:", error);
+    throw error;
+  }
+};
+
 
 // Written to populate user's preference doc (weight_range)
 const getDefaultWeightRange = (weightClass, userSex) => {
   let upperLimit = userSex === 2 ? 4 : 9; // for female 4, for male 9
-  
+
   if (weightClass === 1) {
     return [weightClass, weightClass + 1];
   } else if (weightClass === upperLimit) {
@@ -73,40 +113,6 @@ const getWeightClass = (weight, weightUnit, sex) => {
 
   return weightClass;
 };
-
-// const determineWeightRange = (weight, weightUnit) => {
-//   // Convert weight to lbs if necessary
-//   if (weightUnit !== 'lbs') {
-//     weight = weight * 2.20462; // convert kg to lbs
-//   }
-
-//   // Define the UFC divisions
-//   const divisions = {
-//     strawweight: [0, 115],
-//     flyweight: [115, 125],
-//     bantamweight: [125, 135],
-//     featherweight: [135, 145],
-//     lightweight: [145, 155],
-//     welterweight: [155, 170],
-//     middleweight: [170, 185],
-//     lightHeavyweight: [185, 205],
-//     heavyweight: [205, Infinity],
-//   };
-
-//   // Identify the user's division and weight range
-//   for (let [division, range] of Object.entries(divisions)) {
-//     if (weight > range[0] && weight <= range[1]) {
-//       // Special cases for strawweight and heavyweight divisions
-//       if (division === 'strawweight') return [0, 125];
-//       if (division === 'heavyweight') return [185, 999];
-
-//       // General case for other divisions
-//       let previousDivisionMax = Object.values(divisions)[Object.keys(divisions).indexOf(division) - 1][1];
-//       let nextDivisionMax = Object.values(divisions)[Object.keys(divisions).indexOf(division) + 1][1];
-//       return [previousDivisionMax, nextDivisionMax];
-//     }
-//   }
-// };
 
 // Get user image - needs updating to handle multiple
 router.get('/:id/image', async (req, res) => {
@@ -154,6 +160,80 @@ router.get('/:id/getName', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: 'Server error' });
+  }
+});
+
+// Get users name - needs updating to handle multiple
+// router.post('/:id/uploadNewImages', async (req, res) => {
+router.post('/:id/uploadNewImages', upload, async (req, res) => {
+
+  const { id } = req.params;
+  try {
+    let uploadedImageUrls = [];
+
+    for (let i = 0; i < req.files.length; i++) {
+      let file = req.files[i];
+      let position = req.body.position[i]; // Retrieve the corresponding position
+
+      uploadedImageUrls.push({
+        location: file.location,
+        position: position // Use the retrieved position
+      });
+    }
+
+    
+
+    // Use the uploaded image URLs and positions to update MongoDB
+    for (let image of uploadedImageUrls) {
+      console.log(image.position)
+      const newMedia = new Media({
+        user_id: id,
+        url: image.location,
+        mediaType: 'image',
+        createdAt: new Date(),
+        position: image.position // Use the dynamic position
+      });
+      await newMedia.save();
+    }
+
+    res.status(200).send({ message: 'Images uploaded successfully' });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Server error during image upload' });
+  }
+});
+
+router.post('/:id/deleteImages', async (req, res) => {
+  const { id } = req.params;
+  const { photoIdsToDelete } = req.body;
+
+  try {
+    // Find the photos in MongoDB
+    const photosToDelete = await Media.find({
+      _id: { $in: photoIdsToDelete },
+      user_id: id
+    }).select('url');
+
+    // Delete the photos from S3
+    for (let photo of photosToDelete) {
+      // Extract the key from the URL based on the provided example
+      // URL structure: https://fightr.s3.eu-west-2.amazonaws.com/1692900903787-82aeeabc-fce7-489b-ac34-022d3fba2230.jpg
+      let key = photo.url.split('https://fightr.s3.eu-west-2.amazonaws.com/')[1];
+    
+      // Delete from S3
+      await deleteFromS3(key);
+    }
+
+    // Delete from MongoDB
+    for (let photoId of photoIdsToDelete) {
+      await Media.deleteOne({ _id: photoId, user_id: id });
+    }
+
+    res.status(200).send({ message: 'Images deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Server error during image deletion' });
   }
 });
 
@@ -304,7 +384,7 @@ router.put('/:userId/bio', async (req, res) => {
 // Update user's TnCs
 router.put('/:userId/tncs', async (req, res) => {
   const { userId } = req.params;
-  
+
 
   try {
     await User.updateOne({ _id: userId }, { hasAgreedToTnC: true });

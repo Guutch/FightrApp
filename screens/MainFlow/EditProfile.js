@@ -27,9 +27,12 @@ const EditProfileScreen = ({ navigation, route }) => {
   const [weightClass, setWeightClass] = useState('');
   const [fightingLevel, setFightingLevel] = useState(0);
   const [originalFightingLevel, setOriginalFightingLevel] = useState(0);
-  const [fightingStyle, setFightingStyle] = useState('');  
+  const [fightingStyle, setFightingStyle] = useState('');
   const [value, onChangeText] = useState('');
   const [images, setImages] = useState(Array(6).fill(null));
+  const [newlyUploadedPhotos, setNewlyUploadedPhotos] = useState([]);
+  const [deletedPhotos, setDeletedPhotos] = useState([]);
+
   const nextIndex = useRef(0);
 
   const { usersName } = route.params;
@@ -237,11 +240,22 @@ const EditProfileScreen = ({ navigation, route }) => {
           }
         }
 
+        const newPhoto = {
+          path: response.path,
+          data: response.data,
+          name: response.path.split("/").pop(),
+          type: 'image/jpeg',
+          position: index + 1
+        };
+      
+        setNewlyUploadedPhotos(prevPhotos => [...prevPhotos, newPhoto]);
+      
         const newImages = [...images];
-        newImages[index] = { path: response.path, data: response.data, name: response.path.split("/").pop(), type: 'image/jpeg', position: index + 1 };
+        newImages[index] = newPhoto;
         setImages(newImages);
         nextIndex.current = nextIndex.current + 1;
 
+        console.log("newlyUploadedPhotos - Select photo", newlyUploadedPhotos.length)
 
         // setImagePaths((prevPaths) => [...prevPaths, response.path]);
       })
@@ -251,38 +265,56 @@ const EditProfileScreen = ({ navigation, route }) => {
   };
 
   const removePhoto = (index) => {
+    const photoToRemove = images[index];
+  
+    // Check if the photo is from the backend
+    if (photoToRemove._id) {
+      setDeletedPhotos(prevDeleted => [...prevDeleted, photoToRemove._id]);
+      console.log("deletedPhotos - Remove photo", deletedPhotos.length);
+    } else {
+      // If it's a newly uploaded photo, remove it from the newlyUploadedPhotos array
+      setNewlyUploadedPhotos(prevPhotos => prevPhotos.filter(photo => photo.path !== photoToRemove.path));
+      console.log("newlyUploadedPhotos - Remove photo", newlyUploadedPhotos.length);
+    }
+  
     setImages((prevImages) => {
       const updatedImages = [...prevImages];
+      console.log("First updated", updatedImages)
       updatedImages.splice(index, 1); // Remove the image at the given index
       updatedImages.push(null); // Add a null value at the end to keep the array length consistent
-
+  
       // Update positions of the images if needed
       for (let i = 0; i < updatedImages.length; i++) {
         if (updatedImages[i] !== null) {
           updatedImages[i].position = i + 1;
         }
       }
-
+      console.log("2nd updated", updatedImages)
       return updatedImages;
     });
+  
+    // Adjust the nextIndex pointer
+    nextIndex.current = Math.max(0, nextIndex.current - 1);
   };
+  
+  
 
   const convertToNumbers = (selectedPreferences, mapping, type = 'style') => {
     const reverseMapping = Object.keys(mapping).reduce((acc, key) => {
       acc[mapping[key]] = parseInt(key, 10);
       return acc;
     }, {});
-  
+
     if (type === 'level') {
       return reverseMapping[selectedPreferences];
     }
-  
+
     // Handle the case where there's only one value
     const selectedPreferencesArray = selectedPreferences.includes(',') ? selectedPreferences.split(', ') : [selectedPreferences];
     const numbers = selectedPreferencesArray.map(preference => reverseMapping[preference]);
     return numbers.sort((a, b) => a - b);
   };
-  
+
   const reverseFightingLevels = Object.keys(fightingLevels).reduce((acc, key) => {
     acc[fightingLevels[key]] = parseInt(key, 10);
     return acc;
@@ -292,7 +324,7 @@ const EditProfileScreen = ({ navigation, route }) => {
     console.log("newFightingLevel", newFightingLevel)
     dispatch(updateFightingLevelEdit(newFightingLevel));
   };
-  
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -301,22 +333,23 @@ const EditProfileScreen = ({ navigation, route }) => {
 
       const userImages = await fetchImages(userId.userId);
       userImages.sort((a, b) => a.position - b.position);
-
+      
       // Map the user images to rename 'url' to 'path'
       const normalizedUserImages = userImages.map(image => ({
         ...image,
         path: image.url, // Rename 'url' to 'path'
       }));
-
+      
       // Create a new array of length 6, filling it with normalized user images and null for remaining spaces
       const newImagesArray = Array(6).fill(null).map((_, index) => normalizedUserImages[index] || null);
-
+      
       setImages(newImagesArray);
-
-
+      
       requestCameraRollPermissions();
-
-      nextIndex.current = images.filter((image) => image !== null).length;
+      
+      // Compute nextIndex based on newImagesArray
+      nextIndex.current = newImagesArray.filter((image) => image !== null).length;
+      
 
       // // Will need API (Google maps/OSM) to convert from coordinates to city/town
       // if (data && data.location) {
@@ -384,7 +417,10 @@ const EditProfileScreen = ({ navigation, route }) => {
           weight,
           heightUnit,
           ...(heightUnit === "cm" ? { height } : { heightFt, heightInch }),
-          weightClass
+          weightClass,
+          images,
+          newlyUploadedPhotos,
+          deletedPhotos
         }}
       />
       <ScrollView contentContainerStyle={settingsStyles.container}>

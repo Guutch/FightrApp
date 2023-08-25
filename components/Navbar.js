@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { navbarStyles } from '../components/styles2';
-import { changeUserPreferences, updateEditProfileData, updateFightingLevelPref } from '../api'
+import { changeUserPreferences, updateEditProfileData, updateFightingLevelPref, handlePhotos } from '../api'
 
 const Navbar = ({
   navigation,
@@ -63,6 +63,13 @@ const Navbar = ({
     };
   };
 
+  const constructImagesPayload = (data) => {
+    return {
+      newImages: data.newlyUploadedPhotos,
+      deletedImages: data.deletedPhotos
+    };
+  }
+
 
   const handleBackPress = async () => {
     // Call the handleSavePreferences function to update preferences in the Redux store
@@ -89,9 +96,20 @@ const Navbar = ({
       console.log(dataToUpdate)
 
       const cleanedData = constructPayload(dataToUpdate);
+      
       console.log("cleanedData")
       console.log(cleanedData)
+      
       updateEditProfileData(dataToUpdate.userId, cleanedData);
+
+      console.log("Images", dataToUpdate.images)
+
+      // Gives the ID of the MongoDB record
+      console.log("Deleted From AWS", dataToUpdate.deletedPhotos)
+
+      const cleanedPhotos =  constructImagesPayload(dataToUpdate);
+      console.log("New Photo(s)", cleanedPhotos.newImages)
+      // handlePhotos(dataToUpdate.userId, cleanedPhotos)
 
     } else {
       console.log("lmaolmaolmao")

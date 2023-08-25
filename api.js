@@ -144,7 +144,7 @@ export const fetchImage = async (userId) => {
 
 export const fetchName = async (userId) => {
   try {
-    
+
     const response = await axios.get(`${API_URL}/users/${userId}/getName`); // Note the template string
     if (response.data) {
       console.log(response.data)
@@ -198,6 +198,71 @@ export const updateEditProfileData = async (userId, data) => {
   }
 };
 
+export const handlePhotos = async (userId, data) => {
+  try {
+
+
+    // Handle deletions first
+    if (data.deletedImages.length > 0) {
+      // Make a call to your deleteImages API
+      // ...  
+
+      console.log("deletedImages", data.deletedImages)
+      const response = await axios.post(`${API_URL}/users/${userId}/deleteImages`, { photoIdsToDelete: data.deletedImages });
+    }
+
+    // Handle uploads next
+    if (data.newImages.length > 0) {
+
+      const formData = new FormData();
+
+      // Append each image to the form data
+      for (let image of data.newImages) {
+        // Assuming image.data is a Blob or File object
+        formData.append('photos', {
+          uri: image.path,
+          type: image.type,
+          name: image.name
+        }, image.name);
+        formData.append('position', image.position); // Add this line
+        // console.log(image.position)
+      }
+      
+
+      // console.log("Big josh")
+      // console.log(data.newImages)
+      const response = await axios.post(`${API_URL}/users/${userId}/uploadNewImages`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+            // console.log(response)
+    }
+
+  } catch (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log()
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+      // http.ClientRequest in Node.js
+      console.log(error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log('Error', error.message);
+    }
+    console.log(error.config);
+    console.log()
+  }
+};
+
+
+
 // Definitely used in settings screen
 export const updateFightingLevelPref = async (userId, fightingLevel) => {
   try {
@@ -216,7 +281,7 @@ export const fetchUserPreferences = async (userId) => {
     const [preferenceResponse, metricsResponse, weightResponse, fightLevelResponse, weightResponseActual, heightResponseActual] = await Promise.all([
       axios.get(`${API_URL}/preferences/${userId}/preferences`),
       axios.get(`${API_URL}/profiles/${userId}/metrics`),
-      axios.get(`${API_URL}/profiles/${userId}/getWeight`),      
+      axios.get(`${API_URL}/profiles/${userId}/getWeight`),
       axios.get(`${API_URL}/profiles/${userId}/getFightLevel`),
       axios.get(`${API_URL}/profiles/${userId}/getActualWeight`),
       axios.get(`${API_URL}/profiles/${userId}/getActualHeight`),
@@ -240,7 +305,7 @@ export const fetchUserPreferences = async (userId) => {
       ...weightResponse.data,
       // actualWeight: weightResponseActual.data.weight,
       // ...heightResponseActual.data,
-      actualWeight: weightResponseActual.data.weight, 
+      actualWeight: weightResponseActual.data.weight,
       actualHeight: heightResponseActual.data.height,
       // weightUnit: 'lbs', // The weight unit is now always lbs
       usersFightLevel: fightLevelResponse.data.fightingLevel
@@ -264,7 +329,7 @@ export const fetchEditProfileData = async (userId) => {
   try {
     const [metricsResponse, weightResponse, fightLevelResponse, fightStyleResponse, weightResponseActual, heightResponseActual, bioResponse, sexResponse] = await Promise.all([
       axios.get(`${API_URL}/profiles/${userId}/metrics`),
-      axios.get(`${API_URL}/profiles/${userId}/getWeight`),      
+      axios.get(`${API_URL}/profiles/${userId}/getWeight`),
       axios.get(`${API_URL}/profiles/${userId}/getFightLevel`),
       axios.get(`${API_URL}/profiles/${userId}/getFightStyle`),
       axios.get(`${API_URL}/profiles/${userId}/getActualWeight`),
@@ -279,7 +344,7 @@ export const fetchEditProfileData = async (userId) => {
     const data = {
       ...metricsResponse.data,
       ...weightResponse.data,
-      actualWeight: weightResponseActual.data.weight, 
+      actualWeight: weightResponseActual.data.weight,
       actualHeight: heightResponseActual.data.height,
       usersFightLevel: fightLevelResponse.data.fightingLevel,
       usersFightStyles: fightStyleResponse.data.fightingStyle,
@@ -308,31 +373,31 @@ export const fetchUsersAndImages = async (userId) => {
     // console.log("HI")
 
     const swipeData = await axios.get(`${API_URL}/swipes/${userId}/getAll`);
-const swipes = swipeData.data;
+    const swipes = swipeData.data;
 
-// Filter out users who were ever swiped by the current user
-const unswipedUsers = users.filter(user => !swipes[user.userId]);
+    // Filter out users who were ever swiped by the current user
+    const unswipedUsers = users.filter(user => !swipes[user.userId]);
 
-// Filter out users who were swiped left by the current user
-const usersToDisplay = unswipedUsers.filter(user => swipes[user.userId] !== 'left');
+    // Filter out users who were swiped left by the current user
+    const usersToDisplay = unswipedUsers.filter(user => swipes[user.userId] !== 'left');
 
-usersToDisplay.forEach(user => {
-  if (swipes[user.userId] === 'right') {
-    user.swiped = true;
-  } else {
-    user.swiped = null;
-  }
-});
+    usersToDisplay.forEach(user => {
+      if (swipes[user.userId] === 'right') {
+        user.swiped = true;
+      } else {
+        user.swiped = null;
+      }
+    });
 
-    
+
     // Only select relevant information
     for (let user of usersToDisplay) {
       const images = await fetchImages(user.userId);
       user.images = images;
     }
-    
+
     return usersToDisplay;
-    
+
 
   } catch (error) {
     console.error("Error fetching users and images: ", error);
