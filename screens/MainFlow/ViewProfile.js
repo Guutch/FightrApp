@@ -2,29 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import Navbar from '../../components/Navbar';
 import { settingsStyles, welcomeStyles } from '../../components/styles2';
+import SettingSection from '../../components/SettingSection'
 import { fetchEditProfileData, fetchImages } from '../../api';
 import { useSelector } from 'react-redux';
-
-// Will use for Share, Block, and Report functionality
-const SettingSection = ({ title, onPress, titleInsideRectangle = false, data }) => {
-    return (
-        <View style={settingsStyles.sectionContainer}>
-            {titleInsideRectangle ? null : <Text style={settingsStyles.sectionTitle}>{title}</Text>}
-            <TouchableOpacity
-                style={[
-                    settingsStyles.sectionRectangle,
-                    titleInsideRectangle ? { justifyContent: 'center', alignItems: 'center' } : null
-                ]}
-                onPress={onPress}
-            >
-                {data ?
-                    <Text style={settingsStyles.preferenceText}>{data}</Text>
-                    : <Text style={settingsStyles.preferenceText}>Loading...</Text>
-                }
-            </TouchableOpacity>
-        </View>
-    );
-};
 
 // {
 //   "birthday": "2000-07-23T23:00:00.000Z",
@@ -56,6 +36,12 @@ const SettingSection = ({ title, onPress, titleInsideRectangle = false, data }) 
 // - Height
 // - Weight
 
+const DividerTitle = ({ title }) => {
+  return (
+    <Text style={settingsStyles.dividerTitle}>{title}</Text>
+  );
+};
+
 const ViewProfileScreen = ({ navigation, route }) => {
   const [images, setImages] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -63,23 +49,24 @@ const ViewProfileScreen = ({ navigation, route }) => {
   const userId = useSelector(state => state.user);  // Gets the userId from the Redux state
   const passedUser = route.params?.user; // Access the passed user data from navigation parameters
 
+  const isOwnProfile = userId.userId === passedUser?.userId;
+
   useEffect(() => {
     const fetchData = async () => {
-      // Decide whether to display the passed user's info or the logged-in user's info
-      const targetUserId = passedUser ? passedUser.userId : userId.userId;
+      const targetUserId = isOwnProfile ? userId.userId : passedUser.userId;
       const data = await fetchEditProfileData(targetUserId);
       const imageData = await fetchImages(targetUserId);
-      console.log("imageData")
-      console.log(imageData)
-      console.log("imageData")
-      // sort image data by position before setting state
+
       if (imageData) {
         const sortedImageData = imageData.sort((a, b) => a.position - b.position);
         setImages(sortedImageData);
       }
     };
+
+    console.log("route", route)
+
     fetchData();
-  }, [userId, passedUser]);  // Add 'passedUser' to the dependency array so that the effect re-runs when 'passedUser' changes
+  }, [userId, passedUser]);
 
   const handleImagePress = () => {
     setCurrentImageIndex((prevIndex) => {
@@ -100,20 +87,83 @@ const ViewProfileScreen = ({ navigation, route }) => {
         title="Fytr"  // Here's the custom title
       />
       <ScrollView contentContainerStyle={settingsStyles.container}>
-        {images && 
+        {images &&
           <TouchableOpacity onPress={handleImagePress}>
-            <Image 
-              source={{ uri: images[currentImageIndex].url }} 
-              style={{ 
-                width: 371, 
-                height: 361, 
-                borderRadius: 20, 
-                alignSelf: 'center', 
-                marginTop: 3 
-              }} 
+            <Image
+              source={{ uri: images[currentImageIndex].url }}
+              style={{
+                width: 371,
+                height: 361,
+                borderRadius: 20,
+                alignSelf: 'center',
+                marginTop: 3
+              }}
             />
           </TouchableOpacity>
         }
+        <DividerTitle title={route.params?.user?.firstName} />
+
+        <Text style={settingsStyles.sectionTitle}>Fighter Details</Text>
+        <View style={{
+          width: 371,
+          backgroundColor: '#D9D9D9',
+          alignSelf: 'center',
+          paddingLeft: 10,
+          paddingRight: 10,
+          paddingTop: 10,
+          paddingBottom: 10,
+          borderRadius: 5,
+        }}>
+          {/* First Row */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+            <Text>Class</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text> Height: </Text>
+              <Text> Weight: </Text>
+            </View>
+
+          </View>
+
+          {/* Second Row */}
+          <View style={{ marginBottom: 10 }}>
+            <Text>Fighting Styles: Dummy Data</Text>
+          </View>
+
+          {/* Third Row */}
+          <View style={{ marginBottom: 10 }}>
+            <Text>Fight Level: Dummy Data</Text>
+          </View>
+
+          {/* Fourth Row */}
+          <View>
+            <Text>Location: Dummy Data</Text>
+          </View>
+        </View>
+        <Text style={settingsStyles.sectionTitle}>Bio</Text>
+        <View style={{
+          width: 371,
+          backgroundColor: '#D9D9D9',
+          alignSelf: 'center',
+          paddingLeft: 10,
+          paddingRight: 10,
+          paddingTop: 10,
+          minHeight: 100,
+          paddingBottom: 10,
+          borderRadius: 5,
+        }}>
+
+          <View>
+            <Text>Location: Dummy Data</Text>
+          </View>
+        </View>
+        {!isOwnProfile && (
+          <View>
+            <SettingSection settingButton={true} preference={"Share Profile"} />
+            <SettingSection settingButton={true} preference={"Block Account"} />
+            <SettingSection settingButton={true} preference={"Report Account"} />
+          </View>
+        )}
+
       </ScrollView>
     </View>
   );

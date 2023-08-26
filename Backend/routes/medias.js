@@ -43,6 +43,25 @@ router.delete('/:mediaId', async (req, res) => {
   // Delete a media document
 });
 
+router.post('/changePosition', async (req, res) => {
+  try {
+    const { photo } = req.body; // Now we're expecting an individual photo object
+
+    await Media.updateOne(
+      { _id: photo._id },
+      { $set: { position: photo.position } }
+    );
+
+    res.status(200).send({ message: 'Position updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Error updating position' });
+  }
+});
+
+
+
+
 
 
 module.exports = router;

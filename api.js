@@ -198,6 +198,22 @@ export const updateEditProfileData = async (userId, data) => {
   }
 };
 
+export const changePhotoPositions = async (changedPhotos) => {
+  try {
+    for (const photo of changedPhotos) {
+      const response = await axios.post(`${API_URL}/medias/changePosition`, { photo });
+      // Optionally, do something with each response, e.g., logging
+    }
+    return 'Positions updated successfully';
+  } catch (error) {
+    console.error('An error occurred while changing photo positions:', error);
+    throw error;
+  }
+};
+
+
+
+
 export const handlePhotos = async (userId, data) => {
   try {
 

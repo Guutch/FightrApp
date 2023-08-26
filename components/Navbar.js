@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { navbarStyles } from '../components/styles2';
-import { changeUserPreferences, updateEditProfileData, updateFightingLevelPref, handlePhotos } from '../api'
+import { changeUserPreferences, changePhotoPositions, updateEditProfileData, updateFightingLevelPref, handlePhotos } from '../api'
 
 const Navbar = ({
   navigation,
@@ -93,23 +93,33 @@ const Navbar = ({
         updateFightingLevelPref(dataToUpdate.userId, dataToUpdate.fightingLevel);
       }
 
-      console.log(dataToUpdate)
+      // console.log(dataToUpdate)
 
       const cleanedData = constructPayload(dataToUpdate);
       
-      console.log("cleanedData")
-      console.log(cleanedData)
+      // console.log("cleanedData")
+      // console.log(cleanedData)
       
       updateEditProfileData(dataToUpdate.userId, cleanedData);
 
       console.log("Images", dataToUpdate.images)
+      console.log("changedPhotos", dataToUpdate.changedPhotos)
+      console.log("Type of changedPhotos:", typeof(dataToUpdate.changedPhotos));
+console.log("Is changedPhotos an array?", Array.isArray(dataToUpdate.changedPhotos));
+
 
       // Gives the ID of the MongoDB record
       console.log("Deleted From AWS", dataToUpdate.deletedPhotos)
 
+      if(dataToUpdate.changedPhotos !== null) {
+        console.log(dataToUpdate.changedPhotos.length)
+        await changePhotoPositions(dataToUpdate.changedPhotos)
+      }
+      
+
       const cleanedPhotos =  constructImagesPayload(dataToUpdate);
       console.log("New Photo(s)", cleanedPhotos.newImages)
-      // handlePhotos(dataToUpdate.userId, cleanedPhotos)
+      handlePhotos(dataToUpdate.userId, cleanedPhotos)
 
     } else {
       console.log("lmaolmaolmao")

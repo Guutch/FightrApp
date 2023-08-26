@@ -32,6 +32,7 @@ const EditProfileScreen = ({ navigation, route }) => {
   const [images, setImages] = useState(Array(6).fill(null));
   const [newlyUploadedPhotos, setNewlyUploadedPhotos] = useState([]);
   const [deletedPhotos, setDeletedPhotos] = useState([]);
+  const [changedPhotosState, setChangedPhotosState] = useState([]);
 
   const nextIndex = useRef(0);
 
@@ -267,31 +268,48 @@ const EditProfileScreen = ({ navigation, route }) => {
   const removePhoto = (index) => {
     const photoToRemove = images[index];
   
-    // Check if the photo is from the backend
+    const changedPhotos = [];
+
     if (photoToRemove._id) {
       setDeletedPhotos(prevDeleted => [...prevDeleted, photoToRemove._id]);
-      console.log("deletedPhotos - Remove photo", deletedPhotos.length);
+      // console.log("deletedPhotos - Remove photo", deletedPhotos.length);
     } else {
       // If it's a newly uploaded photo, remove it from the newlyUploadedPhotos array
       setNewlyUploadedPhotos(prevPhotos => prevPhotos.filter(photo => photo.path !== photoToRemove.path));
-      console.log("newlyUploadedPhotos - Remove photo", newlyUploadedPhotos.length);
+      // console.log("newlyUploadedPhotos - Remove photo", newlyUploadedPhotos.length);
     }
-  
+
     setImages((prevImages) => {
       const updatedImages = [...prevImages];
-      console.log("First updated", updatedImages)
-      updatedImages.splice(index, 1); // Remove the image at the given index
-      updatedImages.push(null); // Add a null value at the end to keep the array length consistent
-  
-      // Update positions of the images if needed
+      const changedPhotos = []; // Moved inside setImages
+      updatedImages.splice(index, 1);
+      updatedImages.push(null);
+    
       for (let i = 0; i < updatedImages.length; i++) {
         if (updatedImages[i] !== null) {
-          updatedImages[i].position = i + 1;
+          const newPosition = i + 1;
+          if (updatedImages[i].position !== newPosition) {
+            updatedImages[i].position = newPosition;
+            changedPhotos.push(updatedImages[i]); // Store changed photo
+          }
         }
       }
-      console.log("2nd updated", updatedImages)
+    
+      // Update the changedPhotosState with the newly changed photos
+      if (changedPhotos.length > 0) {
+        setChangedPhotosState(prevChangedPhotos => [...prevChangedPhotos, ...changedPhotos]);
+      }
+    
       return updatedImages;
     });
+  
+    console.log("Lol", changedPhotos)
+
+    // Update the changedPhotosState with the newly changed photos
+    // if (changedPhotos.length > 0) {
+    //   console.log("Big test")
+    //   setChangedPhotosState(prevChangedPhotos => [...prevChangedPhotos, ...changedPhotos]);
+    // }
   
     // Adjust the nextIndex pointer
     nextIndex.current = Math.max(0, nextIndex.current - 1);
@@ -420,7 +438,8 @@ const EditProfileScreen = ({ navigation, route }) => {
           weightClass,
           images,
           newlyUploadedPhotos,
-          deletedPhotos
+          deletedPhotos,
+          changedPhotos: changedPhotosState
         }}
       />
       <ScrollView contentContainerStyle={settingsStyles.container}>
