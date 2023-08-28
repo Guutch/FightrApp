@@ -134,6 +134,55 @@ router.put('/:id/updatingEditProfile', async (req, res) => {
   }
 });
 
+// View Profile
+router.get('/profiles/:userId/additionalData', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: 'Invalid User ID' });
+    }
+
+    const profile = await Profile.findOne({ user_id: userId });
+    if (!profile) {
+      return res.status(404).json({ error: 'Profile not found' });
+    }
+
+    const additionalData = {
+      height: profile.height,
+      weight: profile.weight,
+      bio: profile.bio
+    };
+
+    res.status(200).json(additionalData);
+  } catch (error) {
+    console.error('An error occurred:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/profiles/:userId/units', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: 'Invalid User ID' });
+    }
+
+    const profile = await Profile.findOne({ user_id: userId });
+    if (!profile) {
+      return res.status(404).json({ error: 'Profile not found' });
+    }
+
+    const unitsData = {
+      heightUnit: profile.heightUnit,
+      weightUnit: profile.weightUnit
+    };
+
+    res.status(200).json(unitsData);
+  } catch (error) {
+    console.error('An error occurred:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
   module.exports = router;

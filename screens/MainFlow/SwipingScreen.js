@@ -234,6 +234,7 @@ const SwipingScreen = ({ navigation }) => {
                 setCurrentImageIndex={setCurrentImageIndex}
                 handleImagePress={handleImageTap}
                 style={getFightingStyles(users[0]?.fightingStyle)}
+                fightingStyleDict ={fightingStyles}
                 level={getFightingLevel(users[0]?.fightingLevel)}
                 weightClass={getWeightClass(users[0]?.weightClass)}
                 showMissedMatchAlert={showMissedMatchAlert}

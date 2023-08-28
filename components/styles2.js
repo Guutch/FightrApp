@@ -1312,6 +1312,65 @@ const photoSelector = StyleSheet.create({
   },
 });
 
+const matchedUsersInterface = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    paddingTop: screenHeight * 0.11,  // Replace 'screenHeight' with the actual value
+  },
+  centeredTextContainer: {
+    flex: 1,
+    height: "100%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    // backgroundColor: 'red' // For visibility
+  },
+  mainText: {
+    fontSize: 24
+  },
+  subText: {
+    fontSize: 18
+  },
+  textInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '95%',
+    height: 40,
+    borderRadius: 40,
+    backgroundColor: '#D9D9D9',
+    borderColor: '#FAF4F4',
+    borderWidth: 1,
+    position: 'absolute',
+    bottom: 15,
+    alignSelf: 'center'
+  },
+  textInput: {
+    flex: 0.8,
+    paddingLeft: 15,
+  },
+  sendText: {
+    flex: 0.2,
+    textAlign: 'center',
+    color: '#000'
+  },
+  messageItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+  },
+  profilePicture: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  senderName: {
+    fontWeight: 'bold',
+  },
+  lastMessage: {
+    maxWidth: 200, // You can adjust this value
+  },
+});
 
 
 
@@ -1334,5 +1393,6 @@ export {
   noUsersStyles,
   progressBarStyles,
   photoSelector,
-  styles
+  styles,
+  matchedUsersInterface
 };

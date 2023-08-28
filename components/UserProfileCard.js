@@ -8,7 +8,7 @@ import ProgressBar from './ProgressBar';
 
 const UserProfileCard = ({ 
   user, navigation, viewOnly, pan, handlers, currentImageIndex, setCurrentImageIndex, handleImagePress,
-  style, level, weightClass, handleSwipe, showMissedMatchAlert, matchMade
+  style, level, weightClass, handleSwipe, showMissedMatchAlert, matchMade, fightingStyleDict
   }) => {
   const [alertVisible, setAlertVisible] = useState(false);
   const totalImages = user.images.length;
@@ -157,7 +157,7 @@ const handleImageTap = () => {
             </View>
             {/* <Text style={swipingStyles.xxxText}>{'xxx miles away'}</Text> */}
           </View>
-          <TouchableOpacity style={{ position: 'absolute', top: 10, right: 10 }} onPress={() => { navigation.navigate('ViewProfileScreen', { user }); }}>
+          <TouchableOpacity style={{ position: 'absolute', top: 10, right: 10 }} onPress={() => { navigation.navigate('ViewProfileScreen', { user, weightClass, level, fightingStyleDict, totalImages }); }}>
             <Icon name="info-circle" size={25} color="#000" />
           </TouchableOpacity>
         </View>

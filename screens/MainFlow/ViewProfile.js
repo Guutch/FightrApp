@@ -3,44 +3,9 @@ import { View, Text, Image, TouchableOpacity, ScrollView, TextInput } from 'reac
 import Navbar from '../../components/Navbar';
 import { settingsStyles, welcomeStyles } from '../../components/styles2';
 import SettingSection from '../../components/SettingSection'
-import { fetchEditProfileData, fetchImages } from '../../api';
+import ProgressBar from '../../components/ProgressBar'
+import { fetchEditProfileData, fetchImages, fetchAdditionalUserData, fetchMetrics } from '../../api';
 import { useSelector } from 'react-redux';
-
-// {
-//   "birthday": "2000-07-23T23:00:00.000Z",
-//   "fightingLevel": 1,
-//   "fightingStyle": [
-//     1
-//   ],
-//   "firstName": "Muhammed",
-//   "images": [
-//     // Image data
-//   ],
-//   "location": {
-//     // Location data
-//   },
-//   "swiped": null,
-//   "userId": "64be991fce3d5eaf1892897a",
-//   "weightClass": 1
-// }
-// What I get:
-// "firstName": "Muhammed"
-// "birthday": "2000-07-23T23:00:00.000Z"
-// "fightingLevel": 1
-// "fightingStyle": [1]
-// images
-// "weightClass": 1
-
-// I am missing:
-// - Bio
-// - Height
-// - Weight
-
-const DividerTitle = ({ title }) => {
-  return (
-    <Text style={settingsStyles.dividerTitle}>{title}</Text>
-  );
-};
 
 const ViewProfileScreen = ({ navigation, route }) => {
   const [images, setImages] = useState(null);
@@ -51,31 +16,119 @@ const ViewProfileScreen = ({ navigation, route }) => {
 
   const isOwnProfile = userId.userId === passedUser?.userId;
 
+  const [profileDataState, setProfileDataState] = useState(null);
+
+  const totalImages = route.params.totalImages; // Since totalImages is static, we can just take it from route.params
+const [progress, setProgress] = useState(1 / totalImages); // Initialize progress
+
+  // 1. When looking at another user's profile,
+  // you need to get that user's height, weight, and bio information,
+  // as well as both the heightUnit and weightUnit for the logged-in user
+  // and the other user.
+  // 2. When looking at their own profile, a user only needs
+  // their own height, weight, bio, heightUnit, and weightUnit.
+
+  const weightUnitMapping = {
+    1: 'kg',
+    2: 'lbs'
+  };
+
+  const heightUnitMapping = {
+    1: 'cm',
+    2: 'in'
+  };
+
+  const inchesToFeetAndInches = (inches) => {
+    const feet = Math.floor(inches / 12);
+    const remainingInches = inches % 12;
+    return { feet, remainingInches };
+  };
+
+
   useEffect(() => {
     const fetchData = async () => {
-      const targetUserId = isOwnProfile ? userId.userId : passedUser.userId;
-      const data = await fetchEditProfileData(targetUserId);
-      const imageData = await fetchImages(targetUserId);
+      let targetUserId, profileData;
+      const { user: passedUser, weightClass: passedWeightClass, level: passedLevel, fightingStyleDict: fightingStyleDict, totalImages } = route.params;
+  
+      console.log(totalImages)
+      setProgress((currentImageIndex + 1) / totalImages);
 
+      if (isOwnProfile) {
+        targetUserId = userId.userId;
+        profileData = await fetchEditProfileData(targetUserId);
+      } else {
+        targetUserId = passedUser.userId;
+        const loggedInMetrics = await fetchMetrics(userId.userId); // Logged in user
+        let additionalData = await fetchAdditionalUserData(targetUserId); // Other user
+        const styleNames = passedUser.fightingStyle.map(styleId => fightingStyleDict[styleId]);
+  
+        if (loggedInMetrics && additionalData) {
+          // Conversion if needed
+          if (loggedInMetrics.heightUnit !== additionalData.heightUnit) {
+            if (loggedInMetrics.heightUnit === 1 && additionalData.heightUnit === 2) {
+              // Convert height from inches to cm
+              additionalData.height = Math.round(additionalData.height * 2.54);
+              additionalData.heightUnit = 1;
+            } else if (loggedInMetrics.heightUnit === 2 && additionalData.heightUnit === 1) {
+              // Convert height from cm to inches
+              additionalData.height = Math.round(additionalData.height * 0.393701);
+              additionalData.heightUnit = 2;
+            }
+          }
+  
+          if (loggedInMetrics.weightUnit !== additionalData.weightUnit) {
+            if (loggedInMetrics.weightUnit === 1 && additionalData.weightUnit === 2) {
+              // Convert weight from lbs to kg
+              additionalData.weight = Math.round(additionalData.weight * 0.453592);
+              additionalData.weightUnit = 1;
+            } else if (loggedInMetrics.weightUnit === 2 && additionalData.weightUnit === 1) {
+              // Convert weight from kg to lbs
+              additionalData.weight = Math.round(additionalData.weight * 2.20462);
+              additionalData.weightUnit = 2;
+            }
+          }
+        }
+  
+        profileData = {
+          ...passedUser,
+          ...additionalData,
+          weightClass: passedWeightClass,
+          style: styleNames.join(', '),
+          level: passedLevel
+        };
+      }
+  
+      const imageData = await fetchImages(targetUserId);
       if (imageData) {
         const sortedImageData = imageData.sort((a, b) => a.position - b.position);
         setImages(sortedImageData);
       }
+      setProfileDataState(profileData);
     };
-
-    console.log("route", route)
-
+  
     fetchData();
-  }, [userId, passedUser]);
+  }, [userId, passedUser, isOwnProfile]);
+  
+
+
+
 
   const handleImagePress = () => {
-    setCurrentImageIndex((prevIndex) => {
-      if (prevIndex < images.length - 1) {
-        return prevIndex + 1;
-      }
-      return 0;
+    setCurrentImageIndex(prevIndex => {
+        let newIndex;
+        if (prevIndex < images.length - 1) {
+            newIndex = prevIndex + 1;
+        } else {
+            newIndex = 0;
+        }
+        
+        // Update progress here
+        console.log(progress)
+        setProgress((newIndex + 1) / totalImages);
+
+        return newIndex;
     });
-  };
+};
 
   return (
     <View>
@@ -87,8 +140,10 @@ const ViewProfileScreen = ({ navigation, route }) => {
         title="Fytr"  // Here's the custom title
       />
       <ScrollView contentContainerStyle={settingsStyles.container}>
+      
         {images &&
           <TouchableOpacity onPress={handleImagePress}>
+            <ProgressBar progress={progress} isInsideCard={true} />
             <Image
               source={{ uri: images[currentImageIndex].url }}
               style={{
@@ -101,7 +156,28 @@ const ViewProfileScreen = ({ navigation, route }) => {
             />
           </TouchableOpacity>
         }
-        <DividerTitle title={route.params?.user?.firstName} />
+        <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+          <Text style={settingsStyles.dividerTitle}>
+            {profileDataState ? profileDataState.firstName : 'Loading...'}
+          </Text>
+          {profileDataState && profileDataState.birthday && (
+            <Text style={{
+              fontFamily: 'Inter',
+              fontSize: 20,
+              fontWeight: '400',
+              lineHeight: 24,
+              letterSpacing: 0,
+              paddingTop: 2,
+              textAlign: 'left',
+              marginLeft: 5  // Adds a small space between the name and the age
+            }}>
+              {new Date().getFullYear() - new Date(profileDataState.birthday).getFullYear()}
+            </Text>
+          )}
+        </View>
+
+        {/* <DividerTitle title={profileDataState ? profileDataState.firstName : 'Loading...'} /> */}
+
 
         <Text style={settingsStyles.sectionTitle}>Fighter Details</Text>
         <View style={{
@@ -116,30 +192,48 @@ const ViewProfileScreen = ({ navigation, route }) => {
         }}>
           {/* First Row */}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
-            <Text>Class</Text>
+            <Text>{profileDataState ? profileDataState.weightClass : 'Loading...'}</Text>
             <View style={{ flexDirection: 'row' }}>
-              <Text> Height: </Text>
-              <Text> Weight: </Text>
-            </View>
+              {
+                profileDataState && (
+                  <>
+                    {
+                      profileDataState.heightUnit === 2 ?
+                        (() => {
+                          const { feet, remainingInches } = inchesToFeetAndInches(Math.round(profileDataState.height));
+                          return <Text>{feet}ft {remainingInches}in  </Text>;
+                        })()
+                        :
+                        <Text>{Math.round(profileDataState.height)} {heightUnitMapping[profileDataState.heightUnit]} </Text>
+                    }
+                    <Text>{Math.round(profileDataState.weight)} {weightUnitMapping[profileDataState.weightUnit]} </Text>
+                  </>
+                )
+              }
 
+            </View>
+            {/* profileData.level */}
           </View>
 
           {/* Second Row */}
           <View style={{ marginBottom: 10 }}>
-            <Text>Fighting Styles: Dummy Data</Text>
+            <Text>{profileDataState ? profileDataState.style : 'Loading...'}</Text>
           </View>
 
           {/* Third Row */}
           <View style={{ marginBottom: 10 }}>
-            <Text>Fight Level: Dummy Data</Text>
+            <Text>{profileDataState ? profileDataState.level : 'Loading...'}</Text>
           </View>
 
           {/* Fourth Row */}
-          <View>
-            <Text>Location: Dummy Data</Text>
-          </View>
+          {!isOwnProfile && (
+            <View>
+              <Text>Location: Loading...</Text>
+            </View>
+          )}
         </View>
-        <Text style={settingsStyles.sectionTitle}>Bio</Text>
+        <Text style={{ ...settingsStyles.sectionTitle, marginTop: 10 }}>Bio</Text>
+
         <View style={{
           width: 371,
           backgroundColor: '#D9D9D9',
@@ -153,11 +247,11 @@ const ViewProfileScreen = ({ navigation, route }) => {
         }}>
 
           <View>
-            <Text>Location: Dummy Data</Text>
+            <Text>{profileDataState ? profileDataState.bio : 'Loading...'}</Text>
           </View>
         </View>
         {!isOwnProfile && (
-          <View>
+          <View style={ {marginTop: 10} }>
             <SettingSection settingButton={true} preference={"Share Profile"} />
             <SettingSection settingButton={true} preference={"Block Account"} />
             <SettingSection settingButton={true} preference={"Report Account"} />

@@ -18,7 +18,9 @@ const Navbar = ({
   handleBackPressPrefSel,
   handleSavePreferences,
   handleSaveFightingLevel,
-  editProfile
+  editProfile,
+  showLockIcon=false,
+  onLockPress
 }) => {
 
   const validateHeight = () => {
@@ -73,8 +75,6 @@ const Navbar = ({
 
   const handleBackPress = async () => {
     // Call the handleSavePreferences function to update preferences in the Redux store
-    // Alert.alert("ROgan Josh")
-    // console.log(editProfile)
     if (editProfile) {
       if (!validateWeight()) {
         Alert.alert("Invalid Weight", "Please enter a Weight within the acceptable range.");
@@ -93,42 +93,37 @@ const Navbar = ({
         updateFightingLevelPref(dataToUpdate.userId, dataToUpdate.fightingLevel);
       }
 
-      // console.log(dataToUpdate)
-
       const cleanedData = constructPayload(dataToUpdate);
-      
-      // console.log("cleanedData")
-      // console.log(cleanedData)
-      
+
+
       updateEditProfileData(dataToUpdate.userId, cleanedData);
 
       console.log("Images", dataToUpdate.images)
       console.log("changedPhotos", dataToUpdate.changedPhotos)
-      console.log("Type of changedPhotos:", typeof(dataToUpdate.changedPhotos));
-console.log("Is changedPhotos an array?", Array.isArray(dataToUpdate.changedPhotos));
+      console.log("Type of changedPhotos:", typeof (dataToUpdate.changedPhotos));
+      console.log("Is changedPhotos an array?", Array.isArray(dataToUpdate.changedPhotos));
 
 
       // Gives the ID of the MongoDB record
       console.log("Deleted From AWS", dataToUpdate.deletedPhotos)
 
-      if(dataToUpdate.changedPhotos !== null) {
+      if (dataToUpdate.changedPhotos !== null) {
         console.log(dataToUpdate.changedPhotos.length)
         await changePhotoPositions(dataToUpdate.changedPhotos)
       }
-      
 
-      const cleanedPhotos =  constructImagesPayload(dataToUpdate);
+
+      const cleanedPhotos = constructImagesPayload(dataToUpdate);
       console.log("New Photo(s)", cleanedPhotos.newImages)
       handlePhotos(dataToUpdate.userId, cleanedPhotos)
 
     } else {
       console.log("lmaolmaolmao")
-      handleSavePreferences(dataToUpdate);
+      // handleSavePreferences(dataToUpdate);
 
-      // Update preferences in the backend
-      await changeUserPreferences(dataToUpdate.userId, dataToUpdate);
+      // // Update preferences in the backend
+      // await changeUserPreferences(dataToUpdate.userId, dataToUpdate);
     }
-
     // Navigate back
     navigation.goBack();
   };
@@ -176,6 +171,11 @@ console.log("Is changedPhotos an array?", Array.isArray(dataToUpdate.changedPhot
               <Icon name="check" size={navbarStyles.iconSize.width} color={textColor} />
             </TouchableOpacity>
           )}
+          {showLockIcon && (
+         <TouchableOpacity style={navbarStyles.nextButton} onPress={onLockPress}>
+         <Icon name="lock" size={navbarStyles.iconSize.width} color={textColor} />
+       </TouchableOpacity>
+      )}
         </>
       )}
     </View>

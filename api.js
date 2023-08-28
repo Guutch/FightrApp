@@ -211,9 +211,6 @@ export const changePhotoPositions = async (changedPhotos) => {
   }
 };
 
-
-
-
 export const handlePhotos = async (userId, data) => {
   try {
 
@@ -441,3 +438,40 @@ export const handleNewMatch = async (matchData) => {
     console.error('[api.js] Error creating match', error);
   }
 }
+
+export const fetchAdditionalUserData = async (userId) => {
+  try {
+    const bioResponse = await axios.get(`${API_URL}/profiles/${userId}/getBio`);
+    const metricsResponse = await axios.get(`${API_URL}/profiles/${userId}/metrics`);
+    const actualWeightResponse = await axios.get(`${API_URL}/profiles/${userId}/getActualWeight`);
+    const actualHeightResponse = await axios.get(`${API_URL}/profiles/${userId}/getActualHeight`);
+
+    // Return just the values we need
+    return {
+      bio: bioResponse.data.bio,
+      distanceUnit: metricsResponse.data.distanceUnit,
+      heightUnit: metricsResponse.data.heightUnit,
+      weightUnit: metricsResponse.data.weightUnit,
+      weight: actualWeightResponse.data.weight,
+      height: actualHeightResponse.data.height,
+    };
+
+  } catch (error) {
+    console.error("An error occurred while fetching additional user data:", error);
+    return null;
+  }
+};
+
+export const fetchMetrics = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/profiles/${userId}/metrics`);
+    return {
+      heightUnit: response.data.heightUnit,
+      weightUnit: response.data.weightUnit
+    };
+  } catch (error) {
+    console.error("An error occurred while fetching metrics:", error);
+    return null;
+  }
+};
+
