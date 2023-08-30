@@ -1316,6 +1316,8 @@ const matchedUsersInterface = StyleSheet.create({
   mainContainer: {
     flex: 1,
     paddingTop: screenHeight * 0.11,  // Replace 'screenHeight' with the actual value
+    marginBottom: screenHeight * 0.08,
+    // paddingVertical: screenHeight * 0.11
   },
   centeredTextContainer: {
     flex: 1,
@@ -1372,6 +1374,47 @@ const matchedUsersInterface = StyleSheet.create({
   },
 });
 
+const popUpStyles = StyleSheet.create({
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-end',
+  },
+  container: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
+  },
+  iconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+const chatMessageStyles = StyleSheet.create({
+  messageContainer: {
+    maxWidth: '70%',
+    padding: 10,
+    margin: 5,
+    borderRadius: 5,
+  },
+  sent: {
+    alignSelf: 'flex-end',
+    backgroundColor: 'grey',
+  },
+  received: {
+    alignSelf: 'flex-start',
+    backgroundColor: 'blue',
+  },
+  messageText: {
+    color: 'white',
+  },
+});
 
 
 export {
@@ -1394,5 +1437,7 @@ export {
   progressBarStyles,
   photoSelector,
   styles,
-  matchedUsersInterface
+  matchedUsersInterface,
+  popUpStyles,
+  chatMessageStyles
 };
