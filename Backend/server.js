@@ -3,12 +3,29 @@ dotenv.config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const WebSocket = require('ws');
 
+// Initialize Express app
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
+// Initialize WebSocket server
+const wss = new WebSocket.Server({ port: 3001 });
+
+wss.on('connection', (ws) => {
+  console.log('New client connected');
+
+  ws.on('message', (message) => {
+    console.log(`Received message => ${message}`);
+  });
+
+  ws.on('close', () => {
+    console.log('Client has disconnected');
+  });
+});
+
+// Your existing routes
 const usersRoute = require('./routes/users');
 const mediasRoute = require('./routes/medias');
 const matchesRoute = require('./routes/matches');
@@ -17,37 +34,25 @@ const swipesRoute = require('./routes/swipes');
 const connectionsRoute = require('./routes/connections');
 const profilesRoute = require('./routes/profiles');
 
-// Set up the routes for the "/users" path
 app.use('/users', usersRoute);
+app.use('/medias', mediasRoute);
+app.use('/matches', matchesRoute);
+app.use('/preferences', preferencesRoute);
+app.use('/swipes', swipesRoute);
+app.use('/connections', connectionsRoute);
+app.use('/profiles', profilesRoute);
 
-app.use('/medias', mediasRoute)
-
-app.use('/matches', matchesRoute)
-
-app.use('/preferences', preferencesRoute)
-
-app.use('/swipes', swipesRoute)
-
-app.use('/connections', connectionsRoute)
-
-app.use('/profiles', profilesRoute)
-
-// app.put('/preferences/:userId/radius', (req, res) => {
-//     res.send(`UserId is ${req.params.userId}`);
-// });
-
-
-console.log(process.env.MONGODB_URI);
-
+// MongoDB connection
 const uri = process.env.MONGODB_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const connection = mongoose.connection;
 connection.once('open', () => {
-    console.log("MongoDB database connection established successfully");
+  console.log("MongoDB database connection established successfully");
 });
 
+// Start the HTTP server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
+  console.log(`Server is running on port: ${port}`);
 });

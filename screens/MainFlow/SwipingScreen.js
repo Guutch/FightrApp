@@ -80,15 +80,15 @@ const SwipingScreen = ({ navigation }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(userId)
+      // console.log(userId)
       const foundUsers = await fetchUsersAndImages(userId.userId); // Pass userId directly
 
       // Sort each user's images array by the 'position' attribute
       foundUsers.forEach((user) => {
         user.images.sort((a, b) => a.position - b.position);
-        console.log(`User ${user.userId} has ${user.images.length} images.`);
-        console.log("HERES THE USER")
-    console.log(user)
+    //     console.log(`User ${user.userId} has ${user.images.length} images.`);
+    //     console.log("HERES THE USER")
+    // console.log(user)
       });
 
       setUsers(foundUsers);
@@ -185,7 +185,7 @@ const SwipingScreen = ({ navigation }) => {
       }
       // If user tapped the card
       else if (Math.abs(pan.x._value) < 5 && Math.abs(pan.y._value) < 5) {
-        console.log("lol")
+        // console.log("lol")
         handleImageTap();
       }
       // If user dragged the card but not enough to trigger a swipe
