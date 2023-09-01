@@ -21,6 +21,7 @@ const EmailLogin = ({ navigation }) => {
     const result = await dispatch(login(email, password)); // login is now an async action
     
     console.log(result);
+    console.log(result)
     
     if (result) {
       navigation.navigate('MainFlow');

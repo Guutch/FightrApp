@@ -6,10 +6,11 @@ const websocketMiddleware = (store) => (next) => (action) => {
   switch (action.type) {
     case 'USER_LOGGED_IN':
       // Initialize WebSocket connection
-      ws = new WebSocket();
+      ws = new WebSocket('ws://192.168:3001');
       
       ws.onopen = () => {
         console.log('WebSocket connection established');
+        // store.dispatch(setWebSocketInstance(ws));
       };
 
       ws.onmessage = (event) => {

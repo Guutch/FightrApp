@@ -78,7 +78,7 @@ export const createUser = async (userData) => {
       },
     });
 
-    console.log('User created successfully:', response.data);
+    // console.log('User created successfully:', response.data);
 
     // dispatch(userLoggedIn(response.data.user)); // dispatch the action here
 
@@ -111,7 +111,7 @@ export const handleTnCs = async (userId) => {
 export const handleWaiver = async (userId) => {
   try {
     const response = await axios.put(`${API_URL}/users/${userId}/waiver`);
-    console.log(response.data)
+    // console.log(response.data)
     return response.data;
   } catch (error) {  // <-- Add 'error' here
     console.error('[api.js] Error agreeing to waiver', error);
@@ -308,8 +308,8 @@ export const fetchUserPreferences = async (userId) => {
     //   weight *= 2.20462; // Conversion factor from kg to lbs
     // }
 
-    console.log(weightResponseActual.data.weight)
-    console.log(heightResponseActual.data)
+    // console.log(weightResponseActual.data.weight)
+    // console.log(heightResponseActual.data)
 
     // Merging all responses
     const data = {
@@ -324,10 +324,10 @@ export const fetchUserPreferences = async (userId) => {
       usersFightLevel: fightLevelResponse.data.fightingLevel
     };
 
-    console.log("Here")
+    // console.log("Here")
 
-    console.log("response.data");
-    console.log(data);
+    // console.log("response.data");
+    // console.log(data);
 
 
 
@@ -421,7 +421,7 @@ export const fetchUsersAndImages = async (userId) => {
 export const handleNewSwipe = async (swipeData) => {
   try {
     const response = await axios.post(`${API_URL}/swipes/newSwipe`, swipeData);
-    console.log(response.data)
+    // console.log(response.data)
     return response.data;
   } catch (error) {  // <-- Add 'error' here
     console.error('[api.js] Error agreeing to waiver', error);
@@ -432,7 +432,7 @@ export const handleNewSwipe = async (swipeData) => {
 export const handleNewMatch = async (matchData) => {
   try {
     const response = await axios.post(`${API_URL}/swipes/newMatch`, matchData);
-    console.log(response.data)
+    // console.log(response.data)
     return response.data;
   } catch (error) {
     console.error('[api.js] Error creating match', error);
@@ -474,4 +474,3 @@ export const fetchMetrics = async (userId) => {
     return null;
   }
 };
-

@@ -10,6 +10,7 @@ export const userLoggedIn = (userId) => ({
 export const login = (email, password, callback) => async (dispatch) => {
   try {
     const user = await loginUser(email, password);
+    console.log("user gets logged in", user)
     dispatch(userLoggedIn(user.userId)); 
     if (callback) {
       callback();
@@ -42,3 +43,16 @@ export const updateFightingLevelEdit = (fightingLevel) => ({
   payload: fightingLevel,
 });
 
+export const sendMessage = (message, recipientId) => ({
+  type: 'SEND_MESSAGE',
+  payload: { message, recipientId },
+});
+
+// export const setWebSocketInstance = (ws) => ({
+//   type: 'SET_WEBSOCKET_INSTANCE',
+//   payload: ws,
+// });
+
+// export const clearWebSocketInstance = () => ({
+//   type: 'CLEAR_WEBSOCKET_INSTANCE',
+// });

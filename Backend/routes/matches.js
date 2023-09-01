@@ -140,7 +140,7 @@ const matchedUserIds = matches.map(match =>
 allUsers = filterByMatches(allUsers, matchedUserIds);
 
 
-console.log("Filtered Users:", allUsers);
+// console.log("Filtered Users:", allUsers);
 
 // get array of all user ids
 const userIds = allUsers.map(user => user._id);
@@ -168,8 +168,8 @@ if (!userProfile) {
 // Get the user's distance unit
 let userDistanceUnit = userProfile.distanceUnit;
 
-  console.log(user)
-  console.log(allUsersWithProfiles)
+  // console.log(user)
+  // console.log(allUsersWithProfiles)
 
 
 

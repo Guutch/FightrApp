@@ -3,6 +3,7 @@ import { SET_PREFERENCES, UPDATE_PREFERENCES, UPDATE_FIGHTING_LEVEL } from './ac
 const initialState = {
   userId: null,
   preferences: {},
+  ws: null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -29,6 +30,16 @@ const userReducer = (state = initialState, action) => {
           ...state.preferences,
           fightingLevel: action.payload
         },
+      };
+      case 'SET_WEBSOCKET_INSTANCE':
+      return {
+        ...state,
+        ws: action.payload,
+      };
+    case 'CLEAR_WEBSOCKET_INSTANCE':
+      return {
+        ...state,
+        ws: null,
       };
     default:
       return state;
