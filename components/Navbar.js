@@ -119,10 +119,10 @@ const Navbar = ({
 
     } else {
       console.log("lmaolmaolmao")
-      // handleSavePreferences(dataToUpdate);
+      handleSavePreferences(dataToUpdate);
 
       // // Update preferences in the backend
-      // await changeUserPreferences(dataToUpdate.userId, dataToUpdate);
+      await changeUserPreferences(dataToUpdate.userId, dataToUpdate);
     }
     // Navigate back
     navigation.goBack();

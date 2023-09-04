@@ -195,7 +195,7 @@ const SwipingScreen = ({ navigation }) => {
     },
   });
   return (
-    <View style={swipingStyles.firstContainer}>
+    <View style={[swipingStyles.firstContainer, {backgroundColor: "white"}]}>
       <Navbar
         backgroundColor="#FFFFFF"
         textColor="#000000"

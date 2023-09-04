@@ -11,7 +11,7 @@ router.get('/:id/metrics', async (req, res) => {
 
   try {
     const user = await Profile.findOne({ user_id: id }).select('heightUnit weightUnit distanceUnit');
-    console.log(user)
+    // console.log(user)
     res.send(user);
   } catch (error) {
     res.status(500).send({ error: 'Server error' });

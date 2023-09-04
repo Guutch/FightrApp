@@ -26,7 +26,7 @@ const [name, setName] = useState(null);
   }, [userId]);
 
   return (
-    <View>
+    <View style={{backgroundColor: "white", height: "100%"}}>
       <Navbar 
         backgroundColor="#FFFFFF" 
         textColor="#000000" 

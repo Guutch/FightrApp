@@ -9,14 +9,14 @@ const Profile = require('../models/profile');
 router.put('/:userId/radius', async (req, res) => {
   const { userId } = req.params;
   const { radius } = req.body;
-  console.log(radius)
+  // console.log(radius)
   if (radius < 1 || radius > 50) {
     return res.status(400).send('Invalid radius. Must be between 1 and 50.');
   }
 
 
   const userPreferences = await Preference.findOne({ user_id: userId });
-  console.log(userPreferences.location_range)
+  // console.log(userPreferences.location_range)
   try {
     await Preference.updateOne({ user_id: userId }, { location_range: radius });
     // const userPreferences2 = await Preference.findOne({ user_id: userId });
@@ -38,12 +38,12 @@ router.put('/:userId/age', async (req, res) => {
 
   try {
     let preference = await Preference.findOne({ user_id: userId });
-    console.log('Current Age Range: ', preference.age_range);
+    // console.log('Current Age Range: ', preference.age_range);
 
     preference.age_range = [minAge, maxAge];
     await preference.save();
 
-    console.log('Updated Age Range: ', preference.age_range);
+    // console.log('Updated Age Range: ', preference.age_range);
     res.status(200).send('Age range updated successfully');
   } catch (error) {
     console.error('Error updating age range: ', error);
@@ -79,7 +79,7 @@ router.put('/:userId/weight', async (req, res) => {
 
   try {
     let preference = await Preference.findOne({ user_id: userId });
-    console.log('Current Weight Categories: ', preference.weight_categories);
+    // console.log('Current Weight Categories: ', preference.weight_categories);
 
     // Determine the overall range
     const minWeight = Math.min(...weightCategories.map(category => categories[category][0]));
@@ -90,8 +90,8 @@ router.put('/:userId/weight', async (req, res) => {
 
     await preference.save();
 
-    console.log('Updated Weight Categories: ', preference.weight_categories);
-    console.log('Updated Weight Range: ', preference.weight_range);
+    // console.log('Updated Weight Categories: ', preference.weight_categories);
+    // console.log('Updated Weight Range: ', preference.weight_range);
 
     res.status(200).send('Weight categories and range updated successfully');
   } catch (error) {
@@ -158,10 +158,10 @@ router.put('/:id/fightingLevelPref', async (req, res) => {
 
   try {
     await Preference.updateOne({ user_id: id }, { fightingLevel: fightingLevel });
-    console.log("Perhaps")
+    // console.log("Perhaps")
     res.status(200).send({ message: 'Fighting level updated successfully' });
   } catch (error) {
-    console.log("NO updated")
+    // console.log("NO updated")
     res.status(500).send({ error: 'Server error' });
   }
 });

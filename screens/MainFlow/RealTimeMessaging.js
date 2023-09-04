@@ -6,29 +6,73 @@ import ChatMessage from '../../components/ChatMessage';
 import { matchedUsersInterface } from '../../components/styles2';
 import { useSelector, useDispatch } from 'react-redux';
 import { sendMessage as sendMessageAction } from '../../redux/actions';
+import { saveMessageToDatabase } from '../../api';
+import { getWebSocketInstance } from '../../Backend/websocketInstance'
+
 
 const RealTimeMessaging = ({ route, navigation }) => {
-    const { selectedUser, relevantMessages } = route.params;
+    const { selectedUser, relevantMessages, userId } = route.params;
+    console.log(userId)
     const [isPopupVisible, setPopupVisible] = useState(false);
     const [message, setMessage] = useState('');
     const [chatMessages, setChatMessages] = useState([]);  // New state to hold messages
 
+    const ws = getWebSocketInstance();
+    // console.log("ws", ws)
+
     const dispatch = useDispatch();
+    
+    // Inside RealTimeMessaging component
+    useEffect(() => {
+        console.log(userId)
+        if (ws) {
+            console.log("ws is true")
+
+          ws.onmessage = (event) => {
+            //   console.log("event", event)
+            const messageData = JSON.parse(event.data);
+            // console.log("messageData", messageData)
+            if (messageData.type === 'chat') {
+              setChatMessages((prevMessages) => [...prevMessages, { message: messageData.content, isSent: false }]);
+            }
+          };
+        } else {
+            console.log("ws is false")
+        }
+        
+      }, [ws]);
+      
+  
+    
 
     const togglePopup = () => {
         setPopupVisible(!isPopupVisible);
     };
 
-    const handleSendMessage = () => {
-        dispatch(sendMessageAction(message));
-        setChatMessages([...chatMessages, { message, isSent: true }]);  // Update the messages state
+    const handleSendMessage = async () => {
+        // Dispatch the message to be sent via WebSocket
+        dispatch(sendMessageAction(message, selectedUser.id));  // Include the recipientId
+        
+        // Save the message to the database
+        try {
+          await saveMessageToDatabase(userId, selectedUser.id, message);
+        } catch (error) {
+          console.error("Failed to save message:", error);
+        }
+      
+        // Update the local state to display the message
+        setChatMessages([...chatMessages, { message, isSent: true }]);
+        
+        // Clear the input field
         setMessage('');
-    };
+      };
+      
+    
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
             <Navbar navigation={navigation}
-                title={selectedUser.firstName}
+                title={selectedUser.name}
                 backgroundColor="#000000"
                 textColor="#FFFFFF"
                 showLockIcon={true}

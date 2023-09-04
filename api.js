@@ -132,7 +132,7 @@ export const fetchImage = async (userId) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}/image`); // Note the template string
     if (response.data) {
-      console.log(response.data)
+      // console.log(response.data)
       return response.data;
     } else {
       throw new Error("No data in response");
@@ -147,7 +147,7 @@ export const fetchName = async (userId) => {
 
     const response = await axios.get(`${API_URL}/users/${userId}/getName`); // Note the template string
     if (response.data) {
-      console.log(response.data)
+      // console.log(response.data)
       return response.data;
     } else {
       throw new Error("No data in response");
@@ -174,8 +174,8 @@ export const fetchImages = async (userId) => {
 // Definitely used in settings screen
 export const changeUserPreferences = async (userId, data) => {
   try {
-    console.log(data)
-    console.log("data")
+    // console.log(data)
+    // console.log("data")
     const response = await axios.put(`${API_URL}/preferences/${userId}/prefUpdateFromSettings`, data);
     console.log(response.data)
   } catch (error) {
@@ -188,8 +188,8 @@ export const changeUserPreferences = async (userId, data) => {
 export const updateEditProfileData = async (userId, data) => {
   // console.log(data)
   try {
-    console.log(data.fightingStyles)
-    console.log("data")
+    // console.log(data.fightingStyles)
+    // console.log("data")
     const response = await axios.put(`${API_URL}/profiles/${userId}/updatingEditProfile`, data);
     console.log(response.data)
   } catch (error) {
@@ -286,6 +286,22 @@ export const updateFightingLevelPref = async (userId, fightingLevel) => {
     return null;
   }
 };
+
+// Definitely used in settings screen
+export const saveMessageToDatabase = async (senderId, receiverId, content) => {
+  try {
+    const response = await axios.post(`${API_URL}/connections/saveMessage`, {
+      sender_id: senderId,  // changed to sender_id
+      receiver_id: receiverId,  // changed to receiver_id
+      content
+    });
+    console.log(response.data);
+  } catch (error) {
+    console.error("Error while saving message", error);
+    return null;
+  }
+};
+
 
 
 // Definitely used in settings screen
@@ -471,6 +487,33 @@ export const fetchMetrics = async (userId) => {
     };
   } catch (error) {
     console.error("An error occurred while fetching metrics:", error);
+    return null;
+  }
+};
+
+export const fetchAllMatches = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/connections/allMatches/${userId}`);
+    const matches = response.data;
+
+    // console.log("Matches", matches)
+
+    // Extract the IDs of the people the user has matched with
+    // const matchedUserIds = matches.map(match => {
+    //   if (String(match.user1_id) === String(userId.userId)) {
+    //     return String(match.user2_id);
+    //   } else if (String(match.user2_id) === String(userId.userId)) {
+    //     return String(match.user1_id);
+    //   }
+    // }).filter(id => id);  // This will remove any undefined values
+    
+    
+
+    // console.log("matchedUserIds",matchedUserIds)
+
+    return matches;
+  } catch (error) {
+    console.error("An error occurred while fetching matches:", error);
     return null;
   }
 };

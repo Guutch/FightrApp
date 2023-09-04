@@ -48,10 +48,10 @@ export const sendMessage = (message, recipientId) => ({
   payload: { message, recipientId },
 });
 
-// export const setWebSocketInstance = (ws) => ({
-//   type: 'SET_WEBSOCKET_INSTANCE',
-//   payload: ws,
-// });
+export const setWebSocketInstance = (ws) => ({
+  type: 'SET_WEBSOCKET_INSTANCE',
+  payload: ws,
+});
 
 // export const clearWebSocketInstance = () => ({
 //   type: 'CLEAR_WEBSOCKET_INSTANCE',
