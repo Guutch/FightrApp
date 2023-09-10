@@ -20,7 +20,8 @@ const Navbar = ({
   handleSaveFightingLevel,
   editProfile,
   showLockIcon=false,
-  onLockPress
+  onLockPress,
+  onBackPressCustom
 }) => {
 
   const validateHeight = () => {
@@ -125,6 +126,7 @@ const Navbar = ({
       await changeUserPreferences(dataToUpdate.userId, dataToUpdate);
     }
     // Navigate back
+    console.log("lol")
     navigation.goBack();
   };
 
@@ -149,14 +151,22 @@ const Navbar = ({
         </>
       ) : (
         <>
-          {showBackButton && !dataToUpdate && (
-            <TouchableOpacity
-              style={navbarStyles.backButton}
-              onPress={handleBackPressPrefSel || (() => navigation.goBack())} // Use the custom handler if provided, otherwise use the default behavior
-            >
-              <Icon name="arrow-left" size={navbarStyles.iconSize.width} color={textColor} />
-            </TouchableOpacity>
-          )}
+          {showBackButton && !dataToUpdate && !onBackPressCustom && (
+        <TouchableOpacity
+          style={navbarStyles.backButton}
+          onPress={handleBackPressPrefSel || (() => navigation.goBack())} // Use the custom handler if provided, otherwise use the default behavior
+        >
+          <Icon name="arrow-left" size={navbarStyles.iconSize.width} color={textColor} />
+        </TouchableOpacity>
+      )}
+      {showBackButton && !dataToUpdate && onBackPressCustom && (
+        <TouchableOpacity
+          style={navbarStyles.backButton}
+          onPress={onBackPressCustom}
+        >
+          <Icon name="arrow-left" size={navbarStyles.iconSize.width} color={textColor} />
+        </TouchableOpacity>
+      )}
           {showBackButton && dataToUpdate && (
             <TouchableOpacity
               style={navbarStyles.backButton}

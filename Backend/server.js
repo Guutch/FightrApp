@@ -28,29 +28,39 @@ wss.on('connection', (ws, req) => {
 
   console.log(`New client connected with userId: ${userId}`);
 
-  // console.log(connectedUsers)
-
   ws.on('message', async (message) => {
+
     console.log(`Received message => ${message}`);
+
     const parsedMessage = JSON.parse(message);
-  
-    // Save the message to the database, regardless of whether the other user is online
-    // try {
-    //   await saveMessageToDatabase(parsedMessage);  // Replace with your actual database-saving function
-    // } catch (error) {
-    //   console.error("Failed to save message:", error);
-    // }
-  
+
+    console.log(`parsedMessage message => ${parsedMessage}`);
+
     // Forward the message only if the other user is online
     if (parsedMessage.type === 'chat' && parsedMessage.targetUserId) {
+
       const targetWs = connectedUsers[parsedMessage.targetUserId];
       if (targetWs) {
+
+        // Inject the sender's ID
+        parsedMessage.senderId = userId;
+
         console.log(`Forwarding message to user: ${parsedMessage.targetUserId}`);
         targetWs.send(JSON.stringify(parsedMessage));
+
+        // Emit a new message notification to the receiver
+        // const notificationMessage = {
+        //   type: 'new_message_notification',
+        //   sender_id: userId,
+        //   receiver_id: parsedMessage.targetUserId,
+        // };
+        // targetWs.send(JSON.stringify(notificationMessage));
+
+        // Notify the frontend to update the 'read' status
+        // ws.send(JSON.stringify({ type: 'updateReadStatus', read: false }));
       }
     }
   });
-  
 
 
   ws.on('close', () => {
@@ -59,6 +69,7 @@ wss.on('connection', (ws, req) => {
     delete connectedUsers[userId];
   });
 });
+
 
 
 // Your existing routes

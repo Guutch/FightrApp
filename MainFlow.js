@@ -7,7 +7,7 @@ import CalendarScreen from './screens/MainFlow/CalendarScreen';
 import ProfileScreen from './screens/MainFlow/ProfileScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SettingsScreen from './screens/MainFlow/SettingsScreen';
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
 import { fetchImage } from './api';
 import { useSelector } from 'react-redux';
 
@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator();
 
 const MainFlow = () => {
   const userId = useSelector(state => state.user);  // Gets the userId from the Redux state
-  console.log('User ID is:', userId.userId);
+  // console.log('User ID is:', userId.userId);
   const [imageUrl, setImageUrl] = useState(null);
 
   // Get's users photo for the navbar
@@ -24,7 +24,7 @@ const MainFlow = () => {
       try {
         const data = await fetchImage(userId.userId);
         if (data) {
-          console.log('Got data', data);
+          // console.log('Got data', data);
           setImageUrl(data.imageUrl);
         } else {
           throw new Error("No data returned from fetchImage");
@@ -64,13 +64,29 @@ const MainFlow = () => {
             }
           }
   
-          // Assign the iconName to the iconProps if Component is Icon
           if (Component === Icon) {
             iconProps.name = iconName;
           }
   
-          // You can return any component that you like here!
-          return <Component {...iconProps} />;
+          return (
+            <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
+              <Component {...iconProps} />
+              {route.name === 'Messaging' && (
+                <View
+                  // style={{
+                  //   position: 'absolute',
+                  //   right: 0,
+                  //   top: 0,
+                  //   backgroundColor: 'red',
+                  //   borderRadius: 5, // half of width and height
+                  //   width: 10,
+                  //   height: 10,
+                  // }}
+                />
+              )}
+              
+            </View>
+          );
         },
         tabBarActiveTintColor: "white",
         tabBarInactiveTintColor: "gray",
@@ -80,12 +96,9 @@ const MainFlow = () => {
         }
       })}
     >
-      {/* <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/> */}
       <Tab.Screen name="Swiping" component={SwipingScreen} options={{ headerShown: false }}/>
       <Tab.Screen name="Messaging" component={MessagingScreen} options={{ headerShown: false }}/>
-      {/* <Tab.Screen name="Calendar" component={CalendarScreen} options={{ headerShown: false }}/> */}
       <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }}/>
-      {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
     </Tab.Navigator>
   );
   

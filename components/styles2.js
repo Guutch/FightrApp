@@ -488,7 +488,7 @@ const fightingStyleScreen = StyleSheet.create({
     paddingTop: screenHeight * 0.02,
     // paddingTop: screenHeight * 0.02,
   },
-  
+
   list: {
     alignItems: "center",
     paddingTop: screenHeight * 0.07,
@@ -876,7 +876,7 @@ const settingsStyles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingLeft: 10,
   },
-  
+
   insideRectangleText: {
     fontFamily: 'Inter',
     fontWeight: '700',
@@ -937,17 +937,17 @@ const settingsStyles = StyleSheet.create({
 const swipingStyles = StyleSheet.create({
   firstContainer: {
     position: 'relative',
-      height: '100%',
-      width: '100%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingTop: screenHeight * 0.1,
-      // backgroundColor: '#000' // black background
-  },  
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: screenHeight * 0.1,
+    // backgroundColor: '#000' // black background
+  },
   container: {
     position: 'relative',
     justifyContent: 'center',
-        alignItems: 'center',
+    alignItems: 'center',
     paddingTop: screenHeight * 0.1, // this adds padding on top equal to navbar height
     padding: 20, // this can be adjusted as needed
     // backgroundColor: '#000' // black background
@@ -1023,7 +1023,7 @@ const swipingStyles = StyleSheet.create({
     fontWeight: 'bold', // bold text
     fontSize: 18,
   },
-  
+
   xxxText: {
     color: '#000', // black
     fontSize: 16,
@@ -1055,7 +1055,7 @@ const swipingStyles = StyleSheet.create({
     lineHeight: 24,
     color: '#fff',
     textAlign: 'center',
-    
+
   },
   missedMatchAlertSubtitle: {
     fontFamily: 'Inter',
@@ -1074,7 +1074,7 @@ const swipingStyles = StyleSheet.create({
   //   position: 'absolute', // This will allow the progress bar to overlay the image
   //   top: 0, // This will position the progress bar at the top of the container
   // },
-  
+
   gameOnText: {
     color: '#fff',
     fontFamily: 'Inter',
@@ -1102,7 +1102,7 @@ const swipingStyles = StyleSheet.create({
     bottom: screenHeight * 0.03, // adjust this as needed
     alignSelf: 'center',
   },
-  
+
   previewProfileButton: {
     width: '90%',
     height: 45,
@@ -1115,10 +1115,10 @@ const swipingStyles = StyleSheet.create({
     position: 'absolute',
     height: screenHeight * 0.032,
     top: screenHeight * 0.64, // adjust this as needed
-  left: screenWidth * 0.031, // adjust this as needed
-  // marginVertical: 50,
+    left: screenWidth * 0.031, // adjust this as needed
+    // marginVertical: 50,
   },
-  
+
   sendMessageContainer: {
     width: '90%',
     height: 45,
@@ -1131,15 +1131,15 @@ const swipingStyles = StyleSheet.create({
     position: 'absolute',
     height: screenHeight * 0.032,
     top: screenHeight * 0.68, // adjust this as needed
-  left: screenWidth * 0.031, // adjust this as needed
+    left: screenWidth * 0.031, // adjust this as needed
   },
-  
-  
+
+
   sendMessageInput: {
     flex: 1,
     color: '#000', // change this to the color you want
   },
-  
+
   sendButton: {
     marginLeft: 10,
   },
@@ -1372,6 +1372,16 @@ const matchedUsersInterface = StyleSheet.create({
   lastMessage: {
     maxWidth: 200, // You can adjust this value
   },
+  redDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: 'red',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+  }
+
 });
 
 const popUpStyles = StyleSheet.create({

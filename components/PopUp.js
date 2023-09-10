@@ -4,7 +4,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import SettingSection from './SettingSection'; // Assuming it's in the same folder
 import { popUpStyles, navbarStyles } from '../components/styles2';
 
-const PopUp = ({ isVisible, onClose, options }) => {
+const PopUp = ({ isVisible, onClose, options, selectedPreference, onPreferenceClick }) => {
+  const titleMap = {
+    'Unmatch user': 'Are you sure you want to unmatch this user?',
+    'Report user': 'Are you sure you want to report this user?',
+    'Block user': 'Are you sure you want to block this user?'
+  };
   const slideAnim = new Animated.Value(300);  // Initial value for bottom position
 
   useEffect(() => {
@@ -30,21 +35,25 @@ const PopUp = ({ isVisible, onClose, options }) => {
   }, [isVisible]);
 
   return (
-    <Modal
-      animationType="none"  // Changed to 'none'
+<Modal
+      animationType="none"
       transparent={true}
       visible={isVisible}
       onRequestClose={onClose}
     >
       <TouchableWithoutFeedback onPress={onClose}>
-        <View style={popUpStyles.overlay}>
+  <View style={popUpStyles.overlay}>
           <TouchableWithoutFeedback onPress={() => {}}>
             <Animated.View style={[popUpStyles.container, { transform: [{ translateY: slideAnim }] }]}>
               <View style={popUpStyles.iconContainer}>
-              <Icon name="lock" size={navbarStyles.iconSize.width} color={"#000"} />
+                {selectedPreference ? (
+                  <Text>{titleMap[selectedPreference]}</Text>
+                ) : (
+                  <Icon name="lock" size={navbarStyles.iconSize.width} color={"#000"} />
+                )}
               </View>
               {options.map((option, index) => (
-                <SettingSection key={index} preference={option.preference} />
+                <SettingSection key={index} preference={option.preference} onPress={() => onPreferenceClick(option.preference)} />
               ))}
             </Animated.View>
           </TouchableWithoutFeedback>

@@ -287,7 +287,7 @@ export const updateFightingLevelPref = async (userId, fightingLevel) => {
   }
 };
 
-// Definitely used in settings screen
+// Saves messages to the backend
 export const saveMessageToDatabase = async (senderId, receiverId, content) => {
   try {
     const response = await axios.post(`${API_URL}/connections/saveMessage`, {
@@ -302,7 +302,20 @@ export const saveMessageToDatabase = async (senderId, receiverId, content) => {
   }
 };
 
-
+// Fetches messages from the backend
+export const fetchMessages = async (user1Id, user2Id, lastOnly = false) => {
+  try {
+    const response = await axios.get(`${API_URL}/connections/fetchMessages/${user1Id}/${user2Id}`, {
+      params: {
+        lastOnly
+      }
+    });
+    return response.data.messages;
+  } catch (error) {
+    console.error("Error while fetching messages", error);
+    return null;
+  }
+};
 
 // Definitely used in settings screen
 export const fetchUserPreferences = async (userId) => {
@@ -496,24 +509,23 @@ export const fetchAllMatches = async (userId) => {
     const response = await axios.get(`${API_URL}/connections/allMatches/${userId}`);
     const matches = response.data;
 
-    // console.log("Matches", matches)
-
-    // Extract the IDs of the people the user has matched with
-    // const matchedUserIds = matches.map(match => {
-    //   if (String(match.user1_id) === String(userId.userId)) {
-    //     return String(match.user2_id);
-    //   } else if (String(match.user2_id) === String(userId.userId)) {
-    //     return String(match.user1_id);
-    //   }
-    // }).filter(id => id);  // This will remove any undefined values
-    
-    
-
-    // console.log("matchedUserIds",matchedUserIds)
-
     return matches;
   } catch (error) {
     console.error("An error occurred while fetching matches:", error);
+    return null;
+  }
+};
+
+export const markMessagesAsRead = async (senderId, receiverId) => {
+  try {
+    const response = await axios.put(`${API_URL}/connections/markAsRead`, {
+      senderId,
+      receiverId,
+    });
+    console.log("markMessagesAsRead", response.data)
+    return response.data;
+  } catch (error) {
+    console.error("Error while marking messages as read", error);
     return null;
   }
 };
