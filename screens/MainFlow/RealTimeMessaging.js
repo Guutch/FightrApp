@@ -6,9 +6,9 @@ import ChatMessage from '../../components/ChatMessage';
 import { matchedUsersInterface } from '../../components/styles2';
 import { useSelector, useDispatch } from 'react-redux';
 import { sendMessage as sendMessageAction } from '../../redux/actions';
-import { saveMessageToDatabase, fetchMessages, markMessagesAsRead } from '../../api';
+import { saveMessageToDatabase, fetchMessages, markMessagesAsRead, handleUserAction } from '../../api';
 import { getWebSocketInstance } from '../../Backend/websocketInstance'
-import { setShouldRefresh } from '../../sharedState'
+import { setShouldRefresh, setshouldRefreshMatches } from '../../sharedState'
 
 
 const RealTimeMessaging = ({ route, navigation }) => {
@@ -17,6 +17,9 @@ const RealTimeMessaging = ({ route, navigation }) => {
   const [selectedPreference, setSelectedPreference] = useState(null);
   const [message, setMessage] = useState('');
   const [chatMessages, setChatMessages] = useState([]);  // New state to hold messages
+  const [actionCompleted, setActionCompleted] = useState(false);
+  // const [shouldRefreshMatches, setShouldRefreshMatches] = useShouldRefreshMatches();
+
 
   const ws = getWebSocketInstance();
   // console.log("ws", ws)
@@ -26,7 +29,8 @@ const RealTimeMessaging = ({ route, navigation }) => {
     // Mark messages as read when returning to the previous screen
     const markRead = async () => {
       try {
-        await markMessagesAsRead(userId, selectedUser.id);
+        // SenderId, receiverId
+        await markMessagesAsRead(selectedUser.id, userId);
       } catch (error) {
         console.error("Failed to mark messages as read:", error);
       }
@@ -85,13 +89,30 @@ const RealTimeMessaging = ({ route, navigation }) => {
     setSelectedPreference(null);  // Reset to original state
   };
 
-  const handlePreferenceClick = (preference) => {
-    if (preference === 'No') {
-      setSelectedPreference(null);  // Reset to original state
+  const handlePreferenceClick = async (preference, userId, selectedUserId) => {
+    if (preference === 'Yes') {
+      try {
+        await handleUserAction(selectedPreference, userId, selectedUserId);
+        setActionCompleted(true);
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    } else if (preference === 'No') {
+      setSelectedPreference(null);
     } else {
       setSelectedPreference(preference);
     }
   };
+
+  const resetAndNavigate = () => {
+    setActionCompleted(false);
+    setSelectedPreference(null);
+    setPopupVisible(false);
+    // Navigate to Messaging screen and refresh matches
+    setshouldRefreshMatches(true);
+    navigation.goBack();
+  };
+  
 
   const options = selectedPreference
     ? [{ preference: 'Yes' }, { preference: 'No' }]
@@ -132,6 +153,10 @@ const RealTimeMessaging = ({ route, navigation }) => {
         options={options}
         selectedPreference={selectedPreference}
         onPreferenceClick={handlePreferenceClick}
+        userId={userId}
+      selectedUserId={selectedUser.id}
+      actionCompleted={actionCompleted}
+      resetAndNavigate={resetAndNavigate}
       />
       <View style={[matchedUsersInterface.mainContainer, { justifyContent: 'flex-end' }]}>
       <FlatList

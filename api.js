@@ -240,7 +240,7 @@ export const handlePhotos = async (userId, data) => {
         formData.append('position', image.position); // Add this line
         // console.log(image.position)
       }
-      
+
 
       // console.log("Big josh")
       // console.log(data.newImages)
@@ -249,7 +249,7 @@ export const handlePhotos = async (userId, data) => {
           'Content-Type': 'multipart/form-data',
         },
       });
-            // console.log(response)
+      // console.log(response)
     }
 
   } catch (error) {
@@ -410,18 +410,17 @@ export const fetchUsersAndImages = async (userId) => {
   try {
     const response = await axios.get(`${API_URL}/matches/${userId}`); // replace with your API endpoint to fetch users
     const users = response.data; // Use .data to get response body with axios
-    // console.log("HI")
-    // console.log(users[0].userId)
-    // console.log("HI")
+
+    console.log("users", users);
 
     const swipeData = await axios.get(`${API_URL}/swipes/${userId}/getAll`);
     const swipes = swipeData.data;
-
-    // Filter out users who were ever swiped by the current user
-    const unswipedUsers = users.filter(user => !swipes[user.userId]);
+    console.log("SWIPES", swipes);
 
     // Filter out users who were swiped left by the current user
-    const usersToDisplay = unswipedUsers.filter(user => swipes[user.userId] !== 'left');
+    const usersToDisplay = users.filter(user => swipes[user.userId] !== 'left');
+
+    console.log("usersToDisplay", usersToDisplay);
 
     usersToDisplay.forEach(user => {
       if (swipes[user.userId] === 'right') {
@@ -527,5 +526,42 @@ export const markMessagesAsRead = async (senderId, receiverId) => {
   } catch (error) {
     console.error("Error while marking messages as read", error);
     return null;
+  }
+};
+
+// Handle report, unmatch, block
+export const handleUserAction = async (actionType, userId, selectedUserId) => {
+
+  try {
+    // Remove the match record
+    console.log("Unmatch User replacement")
+    // await axios.delete(`${API_URL}/connections/unmatch`, {
+    //   data: {
+    //     userId,
+    //     selectedUserId,
+    //   }
+    // });
+    
+    console.log("Action Type:", actionType);  // Debug line
+
+    switch (actionType) {
+      case 'Unmatch user':
+        console.log("unmatch")
+        // API call to remove match record
+        // const response = await axios.put(`${API_URL}/connections/unmatch`, {
+        break;
+      case 'Block user':
+        console.log("block")
+        // API call to remove match record and create block record
+        break;
+      case 'Report user':
+        // API call to remove match record and create report record
+        console.log("lol")
+        break;
+      default:
+        throw new Error('Invalid action type');
+    }
+  } catch (error) {
+    throw new Error(`Error handling action: ${error}`);
   }
 };

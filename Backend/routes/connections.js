@@ -4,17 +4,29 @@ const Match = require('../models/match');
 const Message = require('../models/message')
 
 // Unmatching
-// Literally just deletes a match - need to handle a lot more
-router.delete('/unmatch/:id', async (req, res) => {
-  const { id } = req.params;
+// Literally just deletes a match
+router.delete('/unmatch', async (req, res) => {
+  const { userId, selectedUserId } = req.body;
 
   try {
-    await Match.findByIdAndDelete(id);
+    const match = await Match.findOne({
+      $or: [
+        { user1_id: userId, user2_id: selectedUserId },
+        { user1_id: selectedUserId, user2_id: userId }
+      ]
+    });
+
+    if (!match) {
+      return res.status(404).send({ message: 'Match not found.' });
+    }
+
+    await Match.findByIdAndDelete(match._id);
     res.status(200).send({ message: 'Unmatched successfully.' });
   } catch (error) {
     res.status(500).send({ message: 'Error unmatching.', error });
   }
 });
+
 
 // GET all matches
 router.get('/allMatches/:userId', async (req, res) => {
