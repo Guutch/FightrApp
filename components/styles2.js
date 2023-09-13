@@ -142,6 +142,40 @@ const navbarStyles = StyleSheet.create({
   },
 });
 
+
+const notificationStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white'
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  mainContainer: {
+    paddingTop: screenHeight * 0.1
+  },
+  notificationItem: {
+    padding: 16,
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  image: {
+    width: 50,
+    height: 50
+  },
+  textContainer: {
+    marginLeft: 10
+  },
+  titleText: {
+    fontWeight: 'bold'
+  }
+});
+
 const emailLogin = StyleSheet.create({
   forgottenPasswordText: {
     color: 'grey',
@@ -351,6 +385,9 @@ const photosScreen = StyleSheet.create({
     marginBottom: screenHeight * 0.025,
     marginRight: screenWidth * 0.015, // Updated marginRight property
     marginLeft: screenWidth * 0.015, // Added marginLeft property
+  },
+  extendedPhotosRectangle: {
+    height: screenHeight * 0.2,
   },
   photosbutton: {
     backgroundColor: '#000000',
@@ -1449,5 +1486,6 @@ export {
   styles,
   matchedUsersInterface,
   popUpStyles,
-  chatMessageStyles
+  chatMessageStyles,
+  notificationStyles,
 };

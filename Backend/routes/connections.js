@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Match = require('../models/match');
 const Message = require('../models/message')
+const Report = require('../models/report')
+const Block = require('../models/block')
 
 // Unmatching
 // Literally just deletes a match
@@ -49,7 +51,7 @@ router.post('/saveMessage', async (req, res) => {
   console.log("here")
   try {
     const { sender_id, receiver_id, content } = req.body;
-    
+
     // Validate the input
     if (!sender_id || !receiver_id || !content) {
       return res.status(400).json({ error: 'All fields are required' });
@@ -124,6 +126,40 @@ router.put('/markAsRead', async (req, res) => {
     res.status(200).json({ message: 'Messages marked as read' });
   } catch (error) {
     console.error('An error occurred while updating the read status:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.post('/handleSerious', async (req, res) => {
+  const { actionType, userId, selectedUserId, reason } = req.body;
+
+  try {
+    switch (actionType) {
+      case 'Block user':
+        const newBlock = new Block({
+          blocker: userId,
+          blocked: selectedUserId
+        });
+        await newBlock.save();
+        break;
+      case 'Report user':
+        if (!reason) {
+          return res.status(400).json({ error: 'Reason for reporting is required' });
+        }
+        const newReport = new Report({
+          reporting_id: userId,
+          reported_id: selectedUserId,
+          reason
+        });
+        await newReport.save();
+        break;
+      default:
+        return res.status(400).json({ error: 'Invalid action type' });
+    }
+
+    res.status(200).json({ message: 'Action successfully completed' });
+  } catch (error) {
+    console.error('An error occurred:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });

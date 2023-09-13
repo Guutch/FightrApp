@@ -139,7 +139,7 @@ const Navbar = ({
             {title}
           </Text>
           <View style={navbarStyles.iconContainer}>
-            <TouchableOpacity style={[navbarStyles.homeNextButton, { marginRight: 15 }]} onPress={() => navigation.navigate('SomeScreen')}>
+            <TouchableOpacity style={[navbarStyles.homeNextButton, { marginRight: 15 }]} onPress={() => navigation.navigate('NotificationScreen')}>
               <Icon name="bell" size={navbarStyles.iconSize.width} color={textColor} />
             </TouchableOpacity>
             <TouchableOpacity style={navbarStyles.homeNextButton} onPress={() => navigation.navigate('SettingsScreen')}>

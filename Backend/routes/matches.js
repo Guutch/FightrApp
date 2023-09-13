@@ -3,8 +3,10 @@ const express = require('express');
 const router = express.Router();
 const Match = require('../models/match');
 const Preference = require('../models/preference');
-const User = require('../models/user'); 
-const Profile = require('../models/profile'); 
+const User = require('../models/user');
+const Profile = require('../models/profile');
+const Report = require('../models/report')
+const Block = require('../models/block')
 
 // Helper function to calculate distance between two coordinates
 
@@ -24,8 +26,8 @@ function calculateDistance(coord1, coord2, distanceUnit) {
   // Haversine formula to calculate the distance between two points on the surface of a sphere
   let dlon = lon2 - lon1;
   let dlat = lat2 - lat1;
-  let a = Math.sin(dlat/2) * Math.sin(dlat/2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon/2) * Math.sin(dlon/2);
-  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  let a = Math.sin(dlat / 2) * Math.sin(dlat / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) * Math.sin(dlon / 2);
+  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
   let distance;
   if (distanceUnit === 1) {
@@ -43,9 +45,9 @@ function toRadians(degree) {
   return degree * (Math.PI / 180);
 }
 
-function filterByMatches(allUsers, matchedUserIds) {
-  return allUsers.filter(user => !matchedUserIds.includes(user._id.toString()));
-}
+// function filterByMatches(allUsers, matchedUserIds) {
+//   return allUsers.filter(user => !matchedUserIds.includes(user._id.toString()));
+// }
 
 
 // Helper function to filter users based on location
@@ -122,31 +124,80 @@ router.get('/:userId', async (req, res) => {
   if (!userPreferences) {
     return res.status(404).send('No preferences set for user with id ' + req.params.userId);
   }
-
-// Fetch all other users
-let allUsers = await User.find({ _id: { $ne: user._id } }).select('-password');
+  
+  // Fetch all other users
+  let allUsers = await User.find({ _id: { $ne: user._id } }).select('-password');
+console.log("All Users:", allUsers);
 
 // Fetch all matches where the user is involved
 const matches = await Match.find({
   $or: [{ user1_id: user._id }, { user2_id: user._id }]
 });
+console.log("Matches:", matches);
 
-// Get the ids of the matched users
-const matchedUserIds = matches.map(match => 
-  match.user1_id.toString() === user._id.toString() ? match.user2_id.toString() : match.user1_id.toString()
-);
+// Fetch all blocks where the user is involved
+const blocks = await Block.find({
+  $or: [{ blocker: user._id }, { blocked: user._id }]
+});
+console.log("Blocks:", blocks);
 
-// Filter out the matched users from allUsers
-allUsers = filterByMatches(allUsers, matchedUserIds);
+// Fetch all reports where the user is involved
+const reports = await Report.find({
+  $or: [{ reporting_id: user._id }, { reported_id: user._id }]
+});
+console.log("Reports:", reports);
+
+// Get the ids of the matched, blocked, and reported users
+const matchedUserIds = getInvolvedUserIds(matches, user._id, 'match');
+const blockedUserIds = getInvolvedUserIds(blocks, user._id, 'block');
+const reportedUserIds = getInvolvedUserIds(reports, user._id, 'report');
+
+console.log("Matched User IDs:", matchedUserIds);
+console.log("Blocked User IDs:", blockedUserIds);
+console.log("Reported User IDs:", reportedUserIds);
+
+// Combine all the ids
+const excludedUserIds = [...matchedUserIds, ...blockedUserIds, ...reportedUserIds];
+console.log("Excluded User IDs:", excludedUserIds);
+
+// Filter out the matched, blocked, and reported users from allUsers
+allUsers = filterByExclusions(allUsers, excludedUserIds);
+console.log("Filtered Users:", allUsers);
+
+// Helper functions
+function getInvolvedUserIds(records, userId, type) {
+  return records.map(record => {
+    let id1, id2;
+    if (type === 'match') {
+      id1 = record.user1_id;
+      id2 = record.user2_id;
+    } else if (type === 'block') {
+      id1 = record.blocker;
+      id2 = record.blocked;
+    } else if (type === 'report') {
+      id1 = record.reporting_id;
+      id2 = record.reported_id;
+    }
+
+    if (id1 && id2) {
+      return id1.toString() === userId.toString() ? id2.toString() : id1.toString();
+    }
+    return null;  // or some default value
+  }).filter(id => id);  // Remove any null or undefined values
+}
 
 
-// console.log("Filtered Users:", allUsers);
+function filterByExclusions(allUsers, excludedUserIds) {
+  return allUsers.filter(user => !excludedUserIds.includes(user._id.toString()));
+}
 
-// get array of all user ids
-const userIds = allUsers.map(user => user._id);
+  
+  // Get array of all user ids
+  const userIds = allUsers.map(user => user._id);
+  
 
-// fetch all profiles belonging to any of the users in allUsers
-const allProfiles = await Profile.find({ user_id: { $in: userIds } });
+  // fetch all profiles belonging to any of the users in allUsers
+  const allProfiles = await Profile.find({ user_id: { $in: userIds } });
 
 
   // convert to a map for easier lookup
@@ -159,14 +210,14 @@ const allProfiles = await Profile.find({ user_id: { $in: userIds } });
   }));
 
   // Get the user's profile
-const userProfile = await Profile.findOne({ user_id: user._id });
+  const userProfile = await Profile.findOne({ user_id: user._id });
 
-if (!userProfile) {
-  return res.status(404).send('Profile for user with id ' + req.params.userId + ' not found');
-}
+  if (!userProfile) {
+    return res.status(404).send('Profile for user with id ' + req.params.userId + ' not found');
+  }
 
-// Get the user's distance unit
-let userDistanceUnit = userProfile.distanceUnit;
+  // Get the user's distance unit
+  let userDistanceUnit = userProfile.distanceUnit;
 
   // console.log(user)
   // console.log(allUsersWithProfiles)
@@ -176,12 +227,12 @@ let userDistanceUnit = userProfile.distanceUnit;
   // Filter based on location
   const locationMatches = filterByLocation(userProfile, allUsersWithProfiles, userPreferences, userDistanceUnit);
 
-        
+
   // Filter based on age
   const ageMatches = filterByAge(user, locationMatches, userPreferences);
   // console.log("ageMatches")
   // console.log(ageMatches)
-        
+
   // Filter based on weight
   const weightMatches = filterByWeight(user, ageMatches, userPreferences);
   // console.log("weightMatches")
@@ -191,13 +242,13 @@ let userDistanceUnit = userProfile.distanceUnit;
   const styleMatches = filterByStyle(user, weightMatches, userPreferences);
   // console.log("styleMatches")
   // console.log(styleMatches)    
-  
+
   // Filter based on fighting level
   const levelMatches = filterByLevel(user, styleMatches, userPreferences);
 
   // console.log("levelMatches")    
   // console.log(levelMatches)
-  
+
 
   const filteredMatches = levelMatches.map(match => {
     return {
@@ -213,7 +264,7 @@ let userDistanceUnit = userProfile.distanceUnit;
     };
   });
 
-  console.log(filteredMatches)
+  // console.log(filteredMatches)
 
   // Return the matches
   res.send(filteredMatches);

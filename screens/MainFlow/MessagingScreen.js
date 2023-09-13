@@ -6,7 +6,7 @@ import { settingsStyles, matchedUsersInterface, photosScreen } from '../../compo
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllMatches, fetchImage, fetchName, fetchMessages, markMessagesAsRead } from '../../api'
 import { getWebSocketInstance } from '../../Backend/websocketInstance'
-import { getShouldRefresh, setShouldRefresh, setChatId, getChatId, getshouldRefreshMatches, setshouldRefreshMatches} from '../../sharedState'
+import { getShouldRefresh, setShouldRefresh, setChatId, getChatId, getshouldRefreshMatches, setshouldRefreshMatches } from '../../sharedState'
 
 const MessagingScreen = ({ navigation }) => {
   // const [shouldRefreshMatches, setShouldRefreshMatches] = useShouldRefreshMatches();
@@ -99,7 +99,7 @@ const MessagingScreen = ({ navigation }) => {
       };
     });
 
-    
+
 
     // Wait for all fetch operations to complete and update the state
     const matchedUsersData = await Promise.all(fetchPromises);
@@ -107,7 +107,7 @@ const MessagingScreen = ({ navigation }) => {
   };
 
 
-  console.log("state of matches", matches[1])
+  // console.log("state of matches", matches[1])
 
   // First UseEffect called - useEffect hook to run fetchData when the component mounts
   useEffect(() => {
@@ -149,12 +149,14 @@ const MessagingScreen = ({ navigation }) => {
         })();
       } else {
         if (getshouldRefreshMatches()) {
-          const userIdToRemove = getChatId();
-          const updatedMatches = matches.filter(match => match.id !== userIdToRemove);
-          setMatches(updatedMatches);
+          // console.log("matches", matches)
+          // const userIdToRemove = getChatId();
+          fetchData()
+          // const updatedMatches = matches.filter(match => match.id !== userIdToRemove);
+          // setMatches(updatedMatches);
           setshouldRefreshMatches(false);  // Reset the flag
         }
-        
+
       }
     });
 
@@ -171,16 +173,16 @@ const MessagingScreen = ({ navigation }) => {
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <Navbar navigation={navigation} backgroundColor="#FFFFFF" textColor="#000000" homeStyle={true} />
       <View style={matchedUsersInterface.mainContainer}>
-{/* Scenario 1: No matches & No messages */}
-{matches.length === 0 && (
+        {/* Scenario 1: No matches & No messages */}
+        {matches.length === 0 && (
           <View style={matchedUsersInterface.centeredTextContainer}>
             <Text style={matchedUsersInterface.mainText}>Get To Swiping</Text>
             <Text style={matchedUsersInterface.subText}>Messages and Matches will show up here</Text>
           </View>
         )}
 
-{/* Scenario 2: Match(es) & No messages */}
-{matches.length > 0 && !matches.some(match => match.lastMessage) && (
+        {/* Scenario 2: Match(es) & No messages */}
+        {matches.length > 0 && !matches.some(match => match.lastMessage) && (
           <View style={{ flex: 1 }}>
             <MatchesDisplay matches={matches} navigateToChat={(selectedUser) => navigateToChat(selectedUser, userId.userId)} />
 
@@ -194,26 +196,34 @@ const MessagingScreen = ({ navigation }) => {
           </View>
         )}
 
-{/* Scenario 3: Match(es) & message(s) */}
-{matches.length > 0 && matches.some(match => match.lastMessage) && (
+        {/* Scenario 3: Match(es) & message(s) */}
+        {matches.length > 0 && matches.some(match => match.lastMessage) && (
           <View style={{ flex: 1 }}>
             <MatchesDisplay matches={matches} navigateToChat={(selectedUser) => navigateToChat(selectedUser, userId.userId)} />
 
-            <View style={{ flex: 0.7 }}>
+            <View style={{ flex: 0.7, paddingTop: 10 }}>
               <Text style={settingsStyles.sectionTitle}>Messages</Text>
               <FlatList
                 data={matches}
                 renderItem={({ item }) => (
                   item.lastMessage ? (
                     <TouchableOpacity onPress={() => navigateToChat(item, userId.userId)}>
-                      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
+                      <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        padding: 16,
+                        borderBottomColor: '#ccc',
+                        borderBottomWidth: 1,
+                        width: '95%',
+                        alignSelf: 'center'  // This will center the View
+                      }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                           <Image source={{ uri: item.image }} style={{ width: 50, height: 50, borderRadius: 25 }} />
                           {/* {!item.read && <View style={matchedUsersInterface.redDot}></View>} */}
                           {!readChats[item.id] && !item.read && <View style={matchedUsersInterface.redDot}></View>}
                         </View>
                         <View style={{ marginLeft: 10 }}>
-                        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.name}</Text>
+                          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.name}</Text>
 
                           <Text>
                             {item.lastMessage.length > 40 ? `${item.lastMessage.substring(0, 40)}...` : item.lastMessage}

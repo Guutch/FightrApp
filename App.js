@@ -13,6 +13,7 @@ import ViewProfileScreen from './screens/MainFlow/ViewProfile';
 import MyProfileScreen from './screens/MainFlow/MyProfileScreen';
 import PreferenceSel from './screens/MainFlow/PreferenceSel';
 import RealTimeMessaging from './screens/MainFlow/RealTimeMessaging';
+import NotificationScreen from './screens/MainFlow/NotificationScreen';
 import FightingScreen from './screens/Signup/FightingScreen';
 import TermsAndCond from './screens/Legal/TermsAndCond';
 
@@ -39,7 +40,8 @@ const MyStack = () => {
             <Stack.Screen name="ViewProfileScreen" component={ViewProfileScreen} />
             <Stack.Screen name="MyProfileScreen" component={MyProfileScreen} />
             <Stack.Screen name="TermsAndCond" component={TermsAndCond} />
-            <Stack.Screen name="RealTimeMessaging" component={TermsAndCond} />
+            <Stack.Screen name="RealTimeMessaging" component={RealTimeMessaging} />
+            <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
           </>
         ) : (
           // User is not logged in already
@@ -56,6 +58,7 @@ const MyStack = () => {
             <Stack.Screen name="FightingScreen" component={FightingScreen} />
             <Stack.Screen name="TermsAndCond" component={TermsAndCond} />
             <Stack.Screen name="RealTimeMessaging" component={RealTimeMessaging} />
+            <Stack.Screen name="NotificationScreen" component={NotificationScreen} />
           </>
         )}
       </Stack.Navigator>

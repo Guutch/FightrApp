@@ -534,33 +534,39 @@ export const handleUserAction = async (actionType, userId, selectedUserId) => {
 
   try {
     // Remove the match record
-    console.log("Unmatch User replacement")
-    // await axios.delete(`${API_URL}/connections/unmatch`, {
-    //   data: {
-    //     userId,
-    //     selectedUserId,
-    //   }
-    // });
+    // console.log("Unmatch User replacement")
+    await axios.delete(`${API_URL}/connections/unmatch`, {
+      data: {
+        userId,
+        selectedUserId,
+      }
+    });
     
     console.log("Action Type:", actionType);  // Debug line
 
     switch (actionType) {
-      case 'Unmatch user':
-        console.log("unmatch")
-        // API call to remove match record
-        // const response = await axios.put(`${API_URL}/connections/unmatch`, {
-        break;
       case 'Block user':
-        console.log("block")
         // API call to remove match record and create block record
+        await axios.post(`${API_URL}/connections/handleSerious`, {
+          actionType,
+          userId,
+          selectedUserId
+        });
         break;
       case 'Report user':
         // API call to remove match record and create report record
-        console.log("lol")
+        // You should also pass 'reason' here if you have it
+        await axios.post(`${API_URL}/connections/handleSerious`, {
+          actionType,
+          userId,
+          selectedUserId,
+          reason: 'Your reason here'  // Replace with the actual reason
+        });
         break;
       default:
-        throw new Error('Invalid action type');
+        // Handle other cases or errors
     }
+    
   } catch (error) {
     throw new Error(`Error handling action: ${error}`);
   }
