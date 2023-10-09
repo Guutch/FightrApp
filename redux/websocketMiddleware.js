@@ -8,8 +8,14 @@ const websocketMiddleware = (store) => (next) => (action) => {
   switch (action.type) {
     case 'USER_LOGGED_IN':
       // Initialize WebSocket connection
+
+      if (!action.payload) {
+        console.error('User ID is not available. Skipping WebSocket initialization.');
+        return next(action);
+      }
+
       console.log("action.payload", action.payload)
-      ws = new WebSocket(`ws://192.168.1.14:3001?userID=${action.payload}`);
+      ws = new WebSocket(`ws://172.16.3.155:3001?userID=${action.payload}`);
 
       ws.onopen = () => {
         console.log('WebSocket connection established');
@@ -21,6 +27,13 @@ const websocketMiddleware = (store) => (next) => (action) => {
         console.log(`Received message: ${JSON.stringify(messageData)}`);
         // Dispatch an action to update Redux store
         store.dispatch({ type: 'RECEIVE_MESSAGE', payload: messageData });
+      };
+      
+      ws.onmessage = (event) => {
+        const messageData = JSON.parse(event.data);
+        if (messageData.type === 'NEW_MATCH') {
+          store.dispatch({ type: 'SHOW_NOTIFICATION', payload: messageData });
+        }
       };
       
 

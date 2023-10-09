@@ -17,11 +17,21 @@ const url = require('url');
 // Initialize WebSocket server
 const wss = new WebSocket.Server({ port: 3001 });
 
+console.log(`WebSocket server is running and listening on port 3001`);
+
 const connectedUsers = {};
 
 wss.on('connection', (ws, req) => {
   const params = url.parse(req.url, true).query;
   const userId = params.userID;
+
+  console.log("Params in connection", params)
+
+  if (!userId) {
+    console.error('User ID not provided. Rejecting connection.');
+    ws.close();
+    return;
+  }
 
   // Associate the WebSocket connection with the userId
   connectedUsers[userId] = ws;
@@ -70,6 +80,9 @@ wss.on('connection', (ws, req) => {
   });
 });
 
+wss.on('error', (error) => {
+  console.error(`WebSocket Error: ${error}`);
+});
 
 
 // Your existing routes

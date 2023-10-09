@@ -24,6 +24,10 @@ export const login = (email, password, callback) => async (dispatch) => {
 export const SET_PREFERENCES = 'SET_PREFERENCES';
 export const UPDATE_PREFERENCES = 'UPDATE_PREFERENCES';
 
+export const userLoggedOut = () => ({
+  type: 'USER_LOGGED_OUT',
+});
+
 export const setPreferences = (preferences) => ({
   type: SET_PREFERENCES,
   payload: preferences,
@@ -52,6 +56,14 @@ export const setWebSocketInstance = (ws) => ({
   type: 'SET_WEBSOCKET_INSTANCE',
   payload: ws,
 });
+
+export const showNotification = (payload) => {
+  return {
+    type: 'SHOW_NOTIFICATION',
+    payload,
+  };
+};
+
 
 // export const clearWebSocketInstance = () => ({
 //   type: 'CLEAR_WEBSOCKET_INSTANCE',

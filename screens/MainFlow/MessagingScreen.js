@@ -32,6 +32,7 @@ const MessagingScreen = ({ navigation }) => {
     navigation.navigate('RealTimeMessaging', { selectedUser: selectedUser, userId });
   };
 
+
   ws.onmessage = async (event) => {
     // Parse the received WebSocket message
     const messageData = JSON.parse(event.data);
@@ -64,6 +65,7 @@ const MessagingScreen = ({ navigation }) => {
   // First UseEffect called - Asynchronous function to fetch all necessary data
   const fetchData = async () => {
     // Fetch all matches for the current user
+    console.log("THIS IS THE WEB SOCKET",ws)
     const matches = await fetchAllMatches(userId.userId);
 
     // Extract the IDs of users that the current user has matched with

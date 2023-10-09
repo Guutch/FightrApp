@@ -1,10 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native'
 import { loginScreen } from '../components/styles2';
 import { postmanTest } from '../api';
+import { useSelector } from 'react-redux';
+// import { useFocusEffect } from '@react-navigation/native';
 
 
 const LoginScreen = ({ navigation }) => {
+
+    const isAuthenticated = useSelector(state => state.user.isAuthenticated);
+    const state = useSelector(state => state);
+
+  useEffect(() => {
+    console.log(state.user.isAuthenticated)
+    if (isAuthenticated) {
+      console.log("Authenticated");
+      navigation.navigate('MainFlow');
+    } else {
+      console.log("Not authenticated");
+    }
+  }, [isAuthenticated]);
 
     return (
         <View style={loginScreen.container}>

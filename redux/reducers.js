@@ -4,6 +4,7 @@ const initialState = {
   userId: null,
   preferences: {},
   ws: null,
+  isAuthenticated: false,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -12,7 +13,15 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         userId: action.payload,
+        isAuthenticated: true,
       };
+      case 'USER_LOGGED_OUT':
+      return {
+        ...state,
+        userId: null,
+        isAuthenticated: false,
+      };
+
     case SET_PREFERENCES:
       return {
         ...state,
@@ -23,7 +32,7 @@ const userReducer = (state = initialState, action) => {
         ...state,
         preferences: { ...state.preferences, ...action.payload },
       };
-      case UPDATE_FIGHTING_LEVEL:
+    case UPDATE_FIGHTING_LEVEL:
       return {
         ...state,
         preferences: {
@@ -31,7 +40,7 @@ const userReducer = (state = initialState, action) => {
           fightingLevel: action.payload
         },
       };
-      case 'SET_WEBSOCKET_INSTANCE':
+    case 'SET_WEBSOCKET_INSTANCE':
       return {
         ...state,
         ws: action.payload,
@@ -41,6 +50,13 @@ const userReducer = (state = initialState, action) => {
         ...state,
         ws: null,
       };
+    // Inside your Redux reducer
+    case 'SHOW_NOTIFICATION':
+      return {
+        ...state,
+        showRedDot: true,
+      };
+
     default:
       return state;
   }

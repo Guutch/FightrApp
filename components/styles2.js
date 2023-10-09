@@ -1415,7 +1415,7 @@ const matchedUsersInterface = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: 'red',
     position: 'absolute',
-    left: 0,
+    left: 2,
     top: 0,
   }
 

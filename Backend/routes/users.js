@@ -7,10 +7,9 @@ const Profile = require('../models/profile');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const { S3Client, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
-// const Media = require('../models/Media');
 
 const bcrypt = require('bcrypt');
-// const saltRounds = 10;
+const secret = process.env.JWT_SECRET;
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
@@ -150,13 +149,18 @@ router.get('/:id/getSex', async (req, res) => {
 router.get('/:id/getName', async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await User.findOne({ _id: id }); // Query by user_id
-    if (!user) {
-      return res.status(404).send({ error: 'User not found' });
+    if(id) {
+      const user = await User.findOne({ _id: id }); // Query by user_id
+      if (!user) {
+        return res.status(404).send({ error: 'User not found' });
+      }
+      console.log(user)
+      const fullName = `${user.firstName} ${user.lastName}`; // Concatenate first and last name
+      res.send({ fullName }); // Send the full name
+    } else {
+      console.lof("No id")
     }
-    console.log(user)
-    const fullName = `${user.firstName} ${user.lastName}`; // Concatenate first and last name
-    res.send({ fullName }); // Send the full name
+    
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: 'Server error' });
@@ -337,6 +341,8 @@ router.post('/register', upload, async (req, res) => {
 });
 
 // Add more routes (e.g., login) here
+const jwt = require('jsonwebtoken');
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -353,20 +359,18 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ auth: false, token: null });
     }
 
-    // Generate and return a token if you are using token-based authentication
-    // const token = jwt.sign({ id: user._id }, config.secret, {
-    //   expiresIn: 86400, // expires in 24 hours
-    // });
-    // res.status(200).json({ auth: true, token: token });
+    // Generate JWT
+    const token = jwt.sign({ userId: user._id, email: user.email }, secret, { expiresIn: '365d' }); // 365 days
 
-    // or just inform the client about successful authentication
-    res.status(200).json({ auth: true, message: 'Logged in successfully', userId: user._id });
-    console.log(email)
+    // Inform the client about successful authentication along with the token
+    res.status(200).json({ auth: true, message: 'Logged in successfully', userId: user._id, token });
+    console.log(email);
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 // Update user's bio
 router.put('/:userId/bio', async (req, res) => {

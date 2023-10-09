@@ -1,6 +1,6 @@
 // api.js
 import axios from 'axios';
-// import { userLoggedIn } from 'redux/actions'; // Not used?
+import * as Keychain from 'react-native-keychain';
 
 const API_URL = 'http://10.0.2.2:3000';
 
@@ -118,10 +118,15 @@ export const handleWaiver = async (userId) => {
   }
 }
 
+// Will need to use SecureStore in the future... HIGHLY RECOMMENDED
 export const loginUser = async (email, password) => {
   try {
     const response = await axios.post(`${API_URL}/users/login`, { email, password });
-    console.log(response.data)
+    console.log(response.data);
+
+    // Store the token securely
+    await Keychain.setGenericPassword('userToken', response.data.token);
+
     return response.data;
   } catch (error) {
     console.error('[api.js] Error logging in:', error);
@@ -129,10 +134,15 @@ export const loginUser = async (email, password) => {
 };
 
 export const fetchImage = async (userId) => {
+  if (!userId) {
+    console.log('[api.js] User ID is not available. Skipping fetchImage.');
+    return null;
+  }
+
   try {
+    console.log("This is the user's ID in fetchImage", userId);
     const response = await axios.get(`${API_URL}/users/${userId}/image`); // Note the template string
     if (response.data) {
-      // console.log(response.data)
       return response.data;
     } else {
       throw new Error("No data in response");
@@ -141,6 +151,7 @@ export const fetchImage = async (userId) => {
     console.error('[api.js] Error fetching image:', error);
   }
 };
+
 
 export const fetchName = async (userId) => {
   try {
@@ -407,6 +418,12 @@ export const fetchEditProfileData = async (userId) => {
 
 // Finds all users + their images with respect to user's preferences
 export const fetchUsersAndImages = async (userId) => {
+
+  if (!userId) {
+    console.log('[api.js] User ID is not available. Skipping fetchImage.');
+    return null;
+  }
+
   try {
     const response = await axios.get(`${API_URL}/matches/${userId}`); // replace with your API endpoint to fetch users
     const users = response.data; // Use .data to get response body with axios
@@ -459,13 +476,19 @@ export const handleNewSwipe = async (swipeData) => {
 // Used SwipingScreen
 export const handleNewMatch = async (matchData) => {
   try {
+    // Assume matchData contains all the relevant information about the match.
+    ws.send(JSON.stringify({
+      type: 'NEW_MATCH',
+      payload: matchData,  // You might want to send only the parts of matchData that are actually needed for the notification.
+    }));
+
     const response = await axios.post(`${API_URL}/swipes/newMatch`, matchData);
-    // console.log(response.data)
     return response.data;
   } catch (error) {
     console.error('[api.js] Error creating match', error);
   }
 }
+
 
 export const fetchAdditionalUserData = async (userId) => {
   try {
@@ -541,7 +564,7 @@ export const handleUserAction = async (actionType, userId, selectedUserId) => {
         selectedUserId,
       }
     });
-    
+
     console.log("Action Type:", actionType);  // Debug line
 
     switch (actionType) {
@@ -564,9 +587,9 @@ export const handleUserAction = async (actionType, userId, selectedUserId) => {
         });
         break;
       default:
-        // Handle other cases or errors
+      // Handle other cases or errors
     }
-    
+
   } catch (error) {
     throw new Error(`Error handling action: ${error}`);
   }

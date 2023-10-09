@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { navbarStyles } from '../components/styles2';
+import { navbarStyles, matchedUsersInterface } from '../components/styles2';
 import { changeUserPreferences, changePhotoPositions, updateEditProfileData, updateFightingLevelPref, handlePhotos } from '../api'
 
 const Navbar = ({
@@ -141,6 +141,7 @@ const Navbar = ({
           <View style={navbarStyles.iconContainer}>
             <TouchableOpacity style={[navbarStyles.homeNextButton, { marginRight: 15 }]} onPress={() => navigation.navigate('NotificationScreen')}>
               <Icon name="bell" size={navbarStyles.iconSize.width} color={textColor} />
+              <View style={matchedUsersInterface.redDot}></View>
             </TouchableOpacity>
             <TouchableOpacity style={navbarStyles.homeNextButton} onPress={() => navigation.navigate('SettingsScreen')}>
               <Icon name="cog" size={navbarStyles.iconSize.width} color={textColor} />
