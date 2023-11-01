@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, FlatList } from 'react-native';
+import { View, Text, TextInput, FlatList, StatusBar } from 'react-native';
 import Navbar from '../../components/Navbar';
 import PopUp from '../../components/PopUp';
 import ChatMessage from '../../components/ChatMessage';
@@ -68,20 +68,23 @@ const RealTimeMessaging = ({ route, navigation }) => {
 
   const handleSendMessage = async () => {
     // Dispatch the message to be sent via WebSocket
-    dispatch(sendMessageAction(message, selectedUser.id));  // Include the recipientId
+    if(message!="") {
+      dispatch(sendMessageAction(message, selectedUser.id));  // Include the recipientId
 
-    // Save the message to the database
-    try {
-      await saveMessageToDatabase(userId, selectedUser.id, message);
-    } catch (error) {
-      console.error("Failed to save message:", error);
+      // Save the message to the database
+      try {
+        await saveMessageToDatabase(userId, selectedUser.id, message);
+      } catch (error) {
+        console.error("Failed to save message:", error);
+      }
+  
+      // Update the local state to display the message
+      setChatMessages([...chatMessages, { message, isSent: true }]);
+  
+      // Clear the input field
+      setMessage('');
     }
-
-    // Update the local state to display the message
-    setChatMessages([...chatMessages, { message, isSent: true }]);
-
-    // Clear the input field
-    setMessage('');
+    
   };
 
   const togglePopup = () => {
@@ -133,6 +136,7 @@ const RealTimeMessaging = ({ route, navigation }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      <StatusBar backgroundColor="black" barStyle="light-content"/>
       <Navbar navigation={navigation}
         title={selectedUser.name}
         backgroundColor="#000000"

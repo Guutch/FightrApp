@@ -28,6 +28,20 @@ const loginScreen = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'black',
   },
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }, 
+  buttonContainer: {
+    width: '100%', // or set a specific width if needed
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: 80/* height of terms and conditions + 30 + any additional space you want */,
+  },
   title: {
     ...commonStyles.primaryText,
     ...commonStyles.absolutePosition,
@@ -36,6 +50,12 @@ const loginScreen = StyleSheet.create({
     color: 'white',
     top: 63,
   },
+  fytrImg: {
+    position: 'absolute',
+    top: 43,
+    resizeMode: 'contain',
+},
+
   subtitle: {
     ...commonStyles.primaryText,
     ...commonStyles.absolutePosition,
@@ -259,9 +279,10 @@ const lastNameScreen = StyleSheet.create({
     paddingLeft: screenWidth * 0.04,
     fontSize: screenWidth * 0.04,
     color: 'white',
+    justifyContent: 'center'
   },
   rectangleText: {
-    //  align: 'center', 
+    //  alignItems: 'center', 
     fontSize: screenWidth * 0.04,
     color: 'white',
   }

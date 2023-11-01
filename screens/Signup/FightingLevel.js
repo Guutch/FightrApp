@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, StatusBar, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { fightingStyleScreen, firstNameScreen, photosScreen } from '../../components/styles2';
 import Navbar from '../../components/Navbar';
 import NextButton from '../../components/NextButton';
 import ProgressBar from '../../components/ProgressBar';
-
 const CheckBox = ({ isChecked, onToggle }) => (
   <TouchableOpacity
     style={[fightingStyleScreen.checkBox, isChecked && fightingStyleScreen.checked]}
@@ -67,6 +66,7 @@ const FightingLevelScreen = ({ navigation, route }) => {
 
   return (
     <View style={fightingStyleScreen.container}>
+      <StatusBar backgroundColor="black" barStyle="light-content"/>
       <Navbar
         backgroundColor="#000000"
         textColor="#FFFFFF"

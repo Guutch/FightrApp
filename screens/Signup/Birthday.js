@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Platform, StatusBar } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { firstNameScreen, birthdayScreen, lastNameScreen, navbarStyles } from '../../components/styles2';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Navbar from '../../components/Navbar';
+import PopUp from '../../components/PopUp';
 import InfoComponent from '../../components/InfoComponent';
+// import SettingSection from '../../components/SettingSection';
 import ProgressBar from '../../components/ProgressBar';
-import { Picker } from '@react-native-picker/picker';
+// import { Picker } from '@react-native-picker/picker';
 
 const formatDate = (date) => {
   if (!date) {
@@ -22,16 +24,19 @@ const formatDate = (date) => {
 const BirthdayScreen = ({ navigation, route }) => {
   const [date, setDate] = useState(null);
   const [sex, setSex] = useState(null);
-  const [showSexPicker, setShowSexPicker] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
-
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [selectedPreference, setSelectedPreference] = useState("Please Select");
+  const options =
+  [
+        { preference: 'Male' },
+        { preference: 'Female' },
+        // { preference: 'Oth' }
+      ];
 
   const toggleDatePicker = () => {
     setShowDatePicker(prevShowDatePicker => !prevShowDatePicker);
-  };
-
-  const toggleSexPicker = () => {
-    setShowSexPicker(prevShowSexPicker => !prevShowSexPicker);
+    
   };
 
   const onChange = (event, selectedDate) => {
@@ -42,9 +47,17 @@ const BirthdayScreen = ({ navigation, route }) => {
     }
   };
 
-  // const showDatePicker = () => {
-  //   setShow(true);
-  // };
+  const togglePopup = () => {
+    setPopupVisible(!isPopupVisible);
+    // Need to do something here with selectedPreference
+    // setSelectedPreference(null);  // Reset to original state
+  };
+
+  const handlePreferenceChange = (newPreference) => {
+    setSelectedPreference(newPreference);
+    setSex(newPreference)
+    setPopupVisible(!isPopupVisible);
+  };
 
   const handlePress = () => {
     const now = new Date();
@@ -65,7 +78,7 @@ const BirthdayScreen = ({ navigation, route }) => {
 
   return (
     <View style={firstNameScreen.container}>
-
+<StatusBar backgroundColor="black" barStyle="light-content" />
       <Navbar
         backgroundColor="#000000"
         textColor="#FFFFFF"
@@ -73,6 +86,19 @@ const BirthdayScreen = ({ navigation, route }) => {
         showBackButton={true}
         showNextButton={true}
         onNext={handlePress}
+      />
+      <PopUp
+        isVisible={isPopupVisible}
+        onClose={togglePopup}
+        options={options}
+        selectedPreference={selectedPreference}
+        sexSelector={true}
+        onPreferenceChange={handlePreferenceChange}
+      //   onPreferenceClick={handlePreferenceClick}
+        // userId={"test"}
+      // selectedUserId={selectedUser.id}
+      // actionCompleted={actionCompleted}
+      // resetAndNavigate={resetAndNavigate}
       />
       <ProgressBar progress={5 / 8} />
       <Text style={firstNameScreen.questionText}>When is your birthday?</Text>
@@ -90,23 +116,9 @@ const BirthdayScreen = ({ navigation, route }) => {
       )}
       <Text style={lastNameScreen.questionText}>What's your biological sex?</Text>
       {/* Top of view */}
-      <View style={lastNameScreen.rectangle}>
-    <TouchableOpacity 
-      style={{ flex: 1, justifyContent: 'center' }} 
-    >
-      <Picker
-      style={birthdayScreen.sexPicker}
-      color="blue"
-        selectedValue={sex}
-        style={{ height: 50, width: '100%' }}
-        onValueChange={(itemValue, itemIndex) => setSex(itemValue)}
-      >
-        <Picker.Item label="Select Sex" color="blue" value={null} />
-        <Picker.Item label="Male" color="blue" value="Male" />
-        <Picker.Item label="Female" color="blue" value="Female" />
-      </Picker>
-    </TouchableOpacity>
-</View>
+      <TouchableOpacity style={lastNameScreen.rectangle} onPress={togglePopup}>
+      <Text style={lastNameScreen.rectangleText}>{selectedPreference}</Text>
+</TouchableOpacity>
       {/* Bottom of view */}
       <InfoComponent infoText="You have to be at least 18 years old to use Fytr!" />
     </View>

@@ -32,10 +32,10 @@ const SignUpPassword = ({ navigation, route }) => {
   };
 
   const handlePress = () => {
-    if (password !== confirmPassword) {
-      alert('Passwords do not match!');
-      return;
-    }
+    // if (password !== confirmPassword) {
+    //   alert('Passwords do not match!');
+    //   return;
+    // }
 
     // const passwordError = validatePassword(password);
     // if (passwordError) {
@@ -48,7 +48,7 @@ const SignUpPassword = ({ navigation, route }) => {
 
   return (
     <View style={firstNameScreen.container}>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
+      <StatusBar backgroundColor="black" barStyle="light-content"/>
       <Navbar
       backgroundColor="#000000"
       textColor="#FFFFFF"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Alert, Image, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import { View, Text, Alert, Image, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
 import Navbar from '../../components/Navbar';
 import { settingsStyles, welcomeStyles, fightingStyleScreen } from '../../components/styles2';
 import SettingSection from '../../components/SettingSection';
@@ -60,6 +60,8 @@ const EditProfileScreen = ({ navigation, route }) => {
 
   const handleWeightChange = (newWeight) => {
     // Convert weight to lbs if it's in kg
+    prevWeight = newWeight
+
     if (weightUnit === "kg") {
       newWeight = newWeight * 2.20462; // 1 kg is approximately 2.20462 lbs
     }
@@ -72,7 +74,7 @@ const EditProfileScreen = ({ navigation, route }) => {
 
     // Update the weight class state
     setWeightClass(newWeightClass);
-    setWeight(newWeight);
+    setWeight(prevWeight);
 
     // Console log for debugging
     console.log("New weight class:", newWeightClass);
@@ -417,6 +419,7 @@ const EditProfileScreen = ({ navigation, route }) => {
 
   return (
     <View>
+      <StatusBar backgroundColor="black" barStyle="light-content" />
       <Navbar
         backgroundColor="#000000"
         textColor="#FFFFFF"

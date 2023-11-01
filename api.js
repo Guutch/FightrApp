@@ -418,49 +418,66 @@ export const fetchEditProfileData = async (userId) => {
 
 // Finds all users + their images with respect to user's preferences
 export const fetchUsersAndImages = async (userId) => {
-
   if (!userId) {
-    console.log('[api.js] User ID is not available. Skipping fetchImage.');
+    console.log('[api.js] User ID is not available. Skipping fetchImage');
     return null;
   }
 
   try {
-    const response = await axios.get(`${API_URL}/matches/${userId}`); // replace with your API endpoint to fetch users
-    const users = response.data; // Use .data to get response body with axios
+    // Fetch potential matches for the logged-in user
+    const response = await axios.get(`${API_URL}/matches/${userId}`);
+    const users = response.data; // this should be an array of user objects
 
     console.log("users", users);
 
+    // Fetch all swipe data for the logged-in user
     const swipeData = await axios.get(`${API_URL}/swipes/${userId}/getAll`);
-    const swipes = swipeData.data;
-    console.log("SWIPES", swipes);
+    const swipes = swipeData.data; // this should be an array of swipe objects
 
-    // Filter out users who were swiped left by the current user
-    const usersToDisplay = users.filter(user => swipes[user.userId] !== 'left');
+    console.log("swipes", swipes);
 
-    console.log("usersToDisplay", usersToDisplay);
+    // Filter users based on swipe history
+    const usersToDisplay = users.filter(potentialMatch => {
+      // Check if the current user has swiped on the potential match
+      const userSwiped = swipes.some(swipe =>
+        swipe.swiper_id === userId && swipe.swiped_id === potentialMatch.userId
+      );
 
-    usersToDisplay.forEach(user => {
-      if (swipes[user.userId] === 'right') {
-        user.swiped = true;
-      } else {
-        user.swiped = null;
-      }
+      // Check if the potential match has swiped left on the current user
+      const matchSwipedLeft = swipes.some(swipe =>
+        swipe.swiper_id === potentialMatch.userId && swipe.swiped_id === userId && swipe.direction === 'left'
+      );
+
+      // A user should be displayed if the current user hasn't swiped on them and they haven't swiped left on the current user
+      return !userSwiped && !matchSwipedLeft;
     });
 
+    // Add property to indicate if a user has swiped right on the current user
+    const enhancedUsersToDisplay = usersToDisplay.map(user => {
+      const swipedRightOnUser = swipes.some(swipe =>
+        swipe.swiper_id === user.userId && swipe.swiped_id === userId && swipe.direction === 'right'
+      );
+
+      return { ...user, swipedRightOnUser };
+    });
+
+    console.log("enhancedUsersToDisplay ", enhancedUsersToDisplay);
 
     // Only select relevant information
-    for (let user of usersToDisplay) {
+    for (let user of enhancedUsersToDisplay) {
+      // Assuming fetchImages is a function that you've defined elsewhere
       const images = await fetchImages(user.userId);
       user.images = images;
     }
 
-    return usersToDisplay;
-
+    return enhancedUsersToDisplay;
 
   } catch (error) {
     console.error("Error fetching users and images: ", error);
+    return null; // Return null or appropriate error handling
   }
 };
+
 
 // Used SwipingScreen
 export const handleNewSwipe = async (swipeData) => {
@@ -469,7 +486,7 @@ export const handleNewSwipe = async (swipeData) => {
     // console.log(response.data)
     return response.data;
   } catch (error) {  // <-- Add 'error' here
-    console.error('[api.js] Error agreeing to waiver', error);
+    console.error('[api.js] Error agreeing to waiver ', error);
   }
 }
 

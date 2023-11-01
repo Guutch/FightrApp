@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, Image, FlatList, Alert, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList, Alert, StatusBar } from 'react-native';
 import { Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -149,6 +149,7 @@ const Photos = ({ navigation, route }) => {
 
   return (
     <View style={photosScreen.photoscontainer}>
+      <StatusBar backgroundColor="black" barStyle="light-content"/>
       <Navbar
         backgroundColor="#000000"
         textColor="#FFFFFF"

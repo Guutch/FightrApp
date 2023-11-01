@@ -1,6 +1,6 @@
 // screens/MainFlow/SettingsScreen.js
 import React, { useEffect, useState, useMemo } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Navbar from '../../components/Navbar';
 import { settingsStyles, fightingStyleScreen } from '../../components/styles2'
@@ -20,7 +20,7 @@ const DividerTitle = ({ title }) => {
 const MetricsSection = ({ title, option1, option2, selected, onSelect }) => {
   return (
     <View style={settingsStyles.metricsMargin}>
-
+      <StatusBar backgroundColor="black" barStyle="light-content" />
 
       <View style={settingsStyles.titleAndValueContainer}>
         <Text style={settingsStyles.sectionTitle}>{title}</Text>
@@ -407,9 +407,10 @@ const SettingsScreen = ({ navigation }) => {
 
 
 
-        <DividerTitle title="Blocks" />
+        {/* <DividerTitle title="Ignore the buttons below" /> */}
+        {/* <DividerTitle title="Blocks" /> */}
         {/* Gap between divider title and rectangle... investigate styling */}
-        <SettingSection onPress={() => navigation.navigate('BlockContactsScreen')} preference={"Block Contacts"} settingButton={true} />
+        {/* <SettingSection onPress={() => navigation.navigate('BlockContactsScreen')} preference={"Block Contacts"} settingButton={true} />
         <SettingSection title="Blocked Users" onPress={() => navigation.navigate('BlockedUsersScreen')} settingButton={true} preference={"Blocked Users"} />
 
         <DividerTitle title="Notifications" />
@@ -424,7 +425,7 @@ const SettingsScreen = ({ navigation }) => {
         <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Privacy Preferences"} />
         <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Cookie Policy"} />
         <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Terms & Conditions"} />
-        <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Help & Support"} />
+        <SettingSection onPress={() => navigation.navigate('SomeScreen')} settingButton={true} preference={"Help & Support"} /> */}
 
 
 

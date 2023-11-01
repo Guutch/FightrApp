@@ -230,24 +230,24 @@ function filterByExclusions(allUsers, excludedUserIds) {
 
   // Filter based on age
   const ageMatches = filterByAge(user, locationMatches, userPreferences);
-  // console.log("ageMatches")
-  // console.log(ageMatches)
+  console.log("ageMatches")
+  console.log(ageMatches)
 
   // Filter based on weight
   const weightMatches = filterByWeight(user, ageMatches, userPreferences);
-  // console.log("weightMatches")
-  // console.log(weightMatches)      
+  console.log("weightMatches")
+  console.log(weightMatches)      
 
   // Filter based on fighting style
   const styleMatches = filterByStyle(user, weightMatches, userPreferences);
-  // console.log("styleMatches")
-  // console.log(styleMatches)    
+  console.log("styleMatches")
+  console.log(styleMatches)    
 
   // Filter based on fighting level
   const levelMatches = filterByLevel(user, styleMatches, userPreferences);
 
-  // console.log("levelMatches")    
-  // console.log(levelMatches)
+  console.log("levelMatches")    
+  console.log(levelMatches)
 
 
   const filteredMatches = levelMatches.map(match => {
@@ -264,7 +264,8 @@ function filterByExclusions(allUsers, excludedUserIds) {
     };
   });
 
-  // console.log(filteredMatches)
+  console.log("filteredMatches")
+  console.log(filteredMatches)
 
   // Return the matches
   res.send(filteredMatches);

@@ -40,7 +40,7 @@ const EmailLogin = ({ navigation }) => {
 
   return (
     <View style={firstNameScreen.container}>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
+     <StatusBar backgroundColor="black" barStyle="light-content" />
       <Navbar navigation={navigation} backgroundColor="#000000" textColor="#FFFFFF"/>
 
       <Text style={firstNameScreen.questionText}>Email address</Text>

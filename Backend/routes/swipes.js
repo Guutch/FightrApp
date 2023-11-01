@@ -57,20 +57,26 @@ router.get('/:userId/getAll', async (req, res) => {
     // Fetch all swipes where the given user was the swiper
     const swiperSwipes = await Swipe.find({ swiper_id: userId });
 
+    console.log("swiperSwipes");
+    console.log(swiperSwipes); 
+
+
+
     // Fetch all swipes where the given user was swiped
     const swipedSwipes = await Swipe.find({ swiped_id: userId });
+
+    console.log("swipedSwipes"); 
+    console.log(swipedSwipes);
+    
+
 
     // Combine the two sets of swipes
     const allSwipes = [...swiperSwipes, ...swipedSwipes];
 
-    // Transform the swipes into a more convenient format
-    const swipeData = allSwipes.reduce((acc, swipe) => {
-      const otherUserId = swipe.swiper_id.toString() === userId ? swipe.swiped_id : swipe.swiper_id;
-      acc[otherUserId] = swipe.direction;
-      return acc;
-    }, {});
+    console.log("allSwipes")
+    console.log(allSwipes)
 
-    res.status(201).send(swipeData);
+    res.status(201).send(allSwipes);
   } catch (error) {
     res.status(500).send();
   }

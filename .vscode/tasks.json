@@ -1,0 +1,25 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "lint",
+			"problemMatcher": [],
+			"label": "npm: lint",
+			"detail": "eslint \"src/**/*.{js,jsx}\"",
+			"runOptions": {
+				//"runOn": "folderOpen"
+			}
+		},
+		{
+			"type": "npm",
+			"script": "lint-fix",
+			"problemMatcher": [],
+			"label": "npm: lint-fix",
+			"detail": "eslint \"src/**/*.{js,jsx}\" --fix",
+			"runOptions": {
+				//"runOn": "folderOpen"
+			}
+		}
+	]
+}

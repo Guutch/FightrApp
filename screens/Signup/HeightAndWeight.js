@@ -25,54 +25,54 @@ const HeightAndWeight = ({ navigation, route }) => {
   };
 
   const handlePress = () => {
-    if (!weight) {
-      Alert.alert('Validation error', 'Weight cannot be empty.');
-      return;
-    }
-    if(heightUnit==="cm" && !height) {
-      Alert.alert('Validation error', 'Height (cm) cannot be empty.')
-    }
-    if(heightUnit==="ft" && !heightFeet && !heightInches) {
-      Alert.alert('Validation error', 'Height (ft) cannot be empty.')
-    }
+    // if (!weight) {
+    //   Alert.alert('Validation error', 'Weight cannot be empty.');
+    //   return;
+    // }
+    // if(heightUnit==="cm" && !height) {
+    //   Alert.alert('Validation error', 'Height (cm) cannot be empty.')
+    // }
+    // if(heightUnit==="ft" && !heightFeet && !heightInches) {
+    //   Alert.alert('Validation error', 'Height (ft) cannot be empty.')
+    // }
   
-    // Height Validations
-    if (heightUnit === "cm") {
-      if (!height || isNaN(height) || height > 300) {
-        Alert.alert("Validation error", "You cannot enter a height more than 300cm")
-        return;
-      }
-    } else {
-      if (!heightFeet || isNaN(heightFeet) || heightFeet > 10) {
-        Alert.alert("Validation error", "Feet must be a number less than or equal to 10ft")
-        return;
-      }
+    // // Height Validations
+    // if (heightUnit === "cm") {
+    //   if (!height || isNaN(height) || height > 300) {
+    //     Alert.alert("Validation error", "You cannot enter a height more than 300cm")
+    //     return;
+    //   }
+    // } else {
+    //   if (!heightFeet || isNaN(heightFeet) || heightFeet > 10) {
+    //     Alert.alert("Validation error", "Feet must be a number less than or equal to 10ft")
+    //     return;
+    //   }
   
-      if (!heightInches || isNaN(heightInches) || heightInches > 12) {
-        Alert.alert("Validation error", "Inches must be a number less than or equal to 12in.")
-        return;
-      }
-      convertedHeight=parseInt(heightFeet*12)+parseInt(heightInches);
-      // console.log(heightFeet)
-      // console.log(heightInches)
-      // setHeight(convertedHeight)
-    }
+    //   if (!heightInches || isNaN(heightInches) || heightInches > 12) {
+    //     Alert.alert("Validation error", "Inches must be a number less than or equal to 12in.")
+    //     return;
+    //   }
+    //   convertedHeight=parseInt(heightFeet*12)+parseInt(heightInches);
+    //   // console.log(heightFeet)
+    //   // console.log(heightInches)
+    //   // setHeight(convertedHeight)
+    // }
   
-    // Weight Validation
-    if (weightUnit === "kg") {
-      if (!weight || isNaN(weight) || weight > 600) {
-        Alert.alert('Validation error', 'Weight must be a number less than or equal to 600kg.');
-        return;
-      }
-    } else {
-      if (!weight || isNaN(weight) || weight > 1323) {
-        Alert.alert('Validation error', 'Weight must be a number less than or equal to 1323lbs.');
-        return;
-      }
-    }
+    // // Weight Validation
+    // if (weightUnit === "kg") {
+    //   if (!weight || isNaN(weight) || weight > 600) {
+    //     Alert.alert('Validation error', 'Weight must be a number less than or equal to 600kg.');
+    //     return;
+    //   }
+    // } else {
+    //   if (!weight || isNaN(weight) || weight > 1323) {
+    //     Alert.alert('Validation error', 'Weight must be a number less than or equal to 1323lbs.');
+    //     return;
+    //   }
+    // }
   
-    console.log(height)
-    console.log("Height is aboove")
+    // console.log(height)
+    // console.log("Height is aboove")
 
     if(heightUnit==="ft") {
       navigation.navigate('Birthday', { ...route.params, height: convertedHeight, weight, heightUnit, weightUnit });
@@ -86,7 +86,7 @@ const HeightAndWeight = ({ navigation, route }) => {
 
   return (
     <View style={firstNameScreen.container}>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
+      <StatusBar backgroundColor="black" barStyle="light-content"/>
       <Navbar
         backgroundColor="#000000"
         textColor="#FFFFFF"

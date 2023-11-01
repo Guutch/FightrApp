@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import SettingSection from './SettingSection'; // Assuming it's in the same folder
 import { popUpStyles, navbarStyles } from '../components/styles2';
 
-const PopUp = ({ isVisible, onClose, options, selectedPreference, onPreferenceClick, userId, selectedUserId, actionCompleted, resetAndNavigate }) => {
+const PopUp = ({ isVisible, onClose, options, selectedPreference, onPreferenceClick, userId, selectedUserId, actionCompleted, resetAndNavigate, sexSelector, onPreferenceChange }) => {
   const titleMap = {
     'Unmatch user': 'Are you sure you want to unmatch this user?',
     'Report user': 'Are you sure you want to report this user?',
@@ -37,6 +37,15 @@ const PopUp = ({ isVisible, onClose, options, selectedPreference, onPreferenceCl
     }
   }, [isVisible]);
 
+  const handleRoute = (option) => {
+    if(sexSelector=true) {
+      console.log(option)
+      onPreferenceChange(option); 
+    } else {
+      onPreferenceClick(option, userId, selectedUserId)
+    }
+  }
+
   return (
     <Modal
       animationType="none"
@@ -64,7 +73,9 @@ const PopUp = ({ isVisible, onClose, options, selectedPreference, onPreferenceCl
                   <SettingSection
                     key={index}
                     preference={option.preference}
-                    onPress={() => onPreferenceClick(option.preference, userId, selectedUserId)}
+                    // Need to fiddle with this to handle signup process
+                    onPress={() => handleRoute(option.preference)}
+                    // onPress={() => onPreferenceClick(option.preference, userId, selectedUserId)}
                   />
                 ))
               )}

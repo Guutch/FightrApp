@@ -139,10 +139,11 @@ const Navbar = ({
             {title}
           </Text>
           <View style={navbarStyles.iconContainer}>
-            <TouchableOpacity style={[navbarStyles.homeNextButton, { marginRight: 15 }]} onPress={() => navigation.navigate('NotificationScreen')}>
+            {/* Notification bell */}
+            {/* <TouchableOpacity style={[navbarStyles.homeNextButton, { marginRight: 15 }]} onPress={() => navigation.navigate('NotificationScreen')}>
               <Icon name="bell" size={navbarStyles.iconSize.width} color={textColor} />
               <View style={matchedUsersInterface.redDot}></View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity style={navbarStyles.homeNextButton} onPress={() => navigation.navigate('SettingsScreen')}>
               <Icon name="cog" size={navbarStyles.iconSize.width} color={textColor} />
             </TouchableOpacity>

@@ -7,7 +7,7 @@ import CalendarScreen from './screens/MainFlow/CalendarScreen';
 import ProfileScreen from './screens/MainFlow/ProfileScreen';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SettingsScreen from './screens/MainFlow/SettingsScreen';
-import { Image, View } from 'react-native';
+import { Image, View, StatusBar } from 'react-native';
 import { fetchImage } from './api';
 import { useSelector } from 'react-redux';
 
@@ -70,6 +70,7 @@ const MainFlow = () => {
   
           return (
             <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
+               <StatusBar backgroundColor="white" barStyle="dark-content"/>
               <Component {...iconProps} />
               {route.name === 'Messaging' && (
                 <View

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Text, StyleSheet, View, PanResponder, Animated, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, StyleSheet, View, PanResponder, Animated, Image, BackHandler, ActivityIndicator } from 'react-native';
 import Navbar from '../../components/Navbar';
 import { swipingStyles } from '../../components/styles2';
 import UserProfileCard from '../../components/UserProfileCard';
@@ -7,7 +7,7 @@ import NoUsersCard from '../../components/NoUsersCard';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { fetchUsersAndImages, handleNewSwipe, handleNewMatch } from '../../api';
 import { useSelector } from 'react-redux';
-// import moment from 'moment'; // To calculate age from birthdate
+import { useFocusEffect } from '@react-navigation/native';
 
 const SwipingScreen = ({ navigation }) => {
   const userId = useSelector(state => state.user);
@@ -97,6 +97,23 @@ const SwipingScreen = ({ navigation }) => {
     fetchData();
   }, [preferences, userId]); // Re-run the effect when preferences or userId change
 
+  useFocusEffect(
+    React.useCallback(() => {
+        const handleBackButtonClick = () => {
+            BackHandler.exitApp();
+            return true;
+        };
+
+        BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+        };
+    }, [])
+);
+
+
+
   // Handle card swipe to left or right
   const handleSwipe = (direction) => {
     if (direction === 'right' || direction === 'left' || direction === 'afterMatch') {
@@ -104,6 +121,8 @@ const SwipingScreen = ({ navigation }) => {
       if (direction === 'right') {
         // Record the swipe (regard)
         
+        console.log("users[0]")
+        console.log(users[0])
       
         if (users[0].swiped === true) {
           // If a match is made, ping the card back to its original position

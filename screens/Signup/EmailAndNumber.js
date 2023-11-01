@@ -22,22 +22,22 @@ const EmailAndNumber = ({ navigation, route }) => {
   };
 
   const handlePress = () => {
-    if (!email || !validateEmail(email)) {
-      Alert.alert('Validation error', 'Please enter a valid email address.');
-      return;
-    }
+    // if (!email || !validateEmail(email)) {
+    //   Alert.alert('Validation error', 'Please enter a valid email address.');
+    //   return;
+    // }
 
-    if (!phoneNumber || !validatePhoneNumber(phoneNumber)) {
-      Alert.alert('Validation error', 'Please enter a valid phone number.');
-      return;
-    }
+    // if (!phoneNumber || !validatePhoneNumber(phoneNumber)) {
+    //   Alert.alert('Validation error', 'Please enter a valid phone number.');
+    //   return;
+    // }
 
     navigation.navigate('SignUpPassword', { ...route.params, email, phoneNumber });
   };
 
   return (
     <View style={firstNameScreen.container}>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
+      <StatusBar backgroundColor="black" barStyle="light-content"/>
       <Navbar
         backgroundColor="#000000"
         textColor="#FFFFFF"

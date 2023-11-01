@@ -95,6 +95,7 @@ const handleImageTap = () => {
 
   if (matchMade) {
     // Display the match screen
+    console.log("lol")
     return (
       <CardContainer style={[swipingStyles.cardContainer, { transform: [{ translateX: pan.x }, { translateY: pan.y }, { rotate }] }]}>
   <TouchableOpacity activeOpacity={1} onPress={handleImageTap}>
@@ -111,12 +112,12 @@ const handleImageTap = () => {
 </View>
 
 
-  <TouchableOpacity style={swipingStyles.previewProfileButton}>
+  {/* <TouchableOpacity style={swipingStyles.previewProfileButton}>
   <Text style={swipingStyles.previewProfileText}>Preview Profile</Text>
 </TouchableOpacity>
   <TouchableOpacity style={swipingStyles.sendMessageContainer}>
   <Text style={swipingStyles.previewProfileText}>Send them a message</Text>
-</TouchableOpacity>
+</TouchableOpacity> */}
 
   <Text style={swipingStyles.keepSwipingText}>Keep Swiping?</Text>
 
@@ -131,7 +132,10 @@ const handleImageTap = () => {
 
     );
   } else {
-  return (
+  
+    console.log("No lol")
+        return (
+    
     <CardContainer style={[swipingStyles.cardContainer, animatedStyle]} {...(viewOnly ? {} : handlers)}>
 
 <ProgressBar progress={progress} isInsideCard={true} />
@@ -166,31 +170,31 @@ const handleImageTap = () => {
       {/* Icon Card */}
       <View style={swipingStyles.card1}>
         <View style={swipingStyles.iconContainer}>
-          <TouchableOpacity onPress={() => console.log('step-backward pressed')}>
+          {/* <TouchableOpacity onPress={() => console.log('step-backward pressed')}>
             <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: '#FF4D00', justifyContent: 'center', alignItems: 'center' }}>
               <Icon name="step-backward" size={30} color="#FF4D00" />
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity onPress={swipeLeft}>
             <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: '#FA3030', justifyContent: 'center', alignItems: 'center' }}>
               <Icon name="arrow-left" size={30} color="#FA3030" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => console.log('refresh pressed')}>
+          {/* <TouchableOpacity onPress={() => console.log('refresh pressed')}>
             <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: '#5D5FEF', justifyContent: 'center', alignItems: 'center' }}>
               <Icon name="refresh" size={30} color="#5D5FEF" />
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity onPress={swipeRight}>
             <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: '#8AFF9D', justifyContent: 'center', alignItems: 'center' }}>
               <Icon name="arrow-right" size={30} color="#8AFF9D" />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => console.log('step-forward pressed')}>
+          {/* <TouchableOpacity onPress={() => console.log('step-forward pressed')}>
             <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: '#FFB800', justifyContent: 'center', alignItems: 'center' }}>
               <Icon name="step-forward" size={30} color="#FFB800" />
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </CardContainer>
