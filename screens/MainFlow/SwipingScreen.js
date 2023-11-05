@@ -124,7 +124,7 @@ const SwipingScreen = ({ navigation }) => {
         console.log("users[0]")
         console.log(users[0])
       
-        if (users[0].swiped === true) {
+        if (users[0].swipedRightOnUser === true) {
           // If a match is made, ping the card back to its original position
           pan.setValue({ x: 0, y: 0 });
         
@@ -158,7 +158,9 @@ const SwipingScreen = ({ navigation }) => {
         setMatchMade(false);
       } 
       else if (direction === 'left') {
-        if (users[0].swiped === true) {
+        console.log("users[0]")
+        console.log(users[0])
+        if (users[0].swipedRightOnUser === true) {
           setShowMissedMatchAlert(true);
         }
         // Log a left swipe 

@@ -27,6 +27,7 @@ const EditProfileScreen = ({ navigation, route }) => {
   const [weightClass, setWeightClass] = useState('');
   const [fightingLevel, setFightingLevel] = useState(0);
   const [originalFightingLevel, setOriginalFightingLevel] = useState(0);
+  const [originalWeight, setOriginalWeight] = useState(0);
   const [fightingStyle, setFightingStyle] = useState('');
   const [value, onChangeText] = useState('');
   const [images, setImages] = useState(Array(6).fill(null));
@@ -389,15 +390,14 @@ const EditProfileScreen = ({ navigation, route }) => {
           setHeight(data.actualHeight);
         } else {
           setHeightFt(Math.floor(data.actualHeight / 12));
-          setHeightInch(data.actualHeight % 12);
+          console.log("data.actualHeight % 12");
+          console.log(data.actualHeight % 12);
+          setHeightInch(data.actualHeight % 12 || 0);
         }
 
-        console.log(data.actualHeight);
+        // console.log(data.actualHeight);
         setWeight(data.actualWeight);
-        // setFightingLevel([data.usersFightLevel]); // Wrap it in an array
-        // setOriginalFightingLevel([data.usersFightLevel]); // Wrap it in an array
-        // const styleNames = data.usersFightStyles.map(getFightingStyleName);
-        // setFightingStyle(styleNames);
+        setOriginalWeight(data.actualWeight);
 
         setFightingLevel(data.usersFightLevel);
         setOriginalFightingLevel(data.usersFightLevel);
@@ -435,6 +435,8 @@ const EditProfileScreen = ({ navigation, route }) => {
           originalFightingLevel,
           bio,
           weightUnit,
+          originalWeight,
+          userSex,
           weight,
           heightUnit,
           ...(heightUnit === "cm" ? { height } : { heightFt, heightInch }),
@@ -494,7 +496,7 @@ const EditProfileScreen = ({ navigation, route }) => {
               />
               <TextEditProf
                 title='Height (")'
-                value={heightInch} // You may want to pass the calculated inches value here
+                value={heightInch.toString()} // You may want to pass the calculated inches value here
                 isHeightFeet={true}
                 onHeightChange={handleHeightChange}
                 heightType="inch"

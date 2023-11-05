@@ -1,4 +1,4 @@
-import { SET_PREFERENCES, UPDATE_PREFERENCES, UPDATE_FIGHTING_LEVEL } from './actions';
+import { SET_PREFERENCES, UPDATE_PREFERENCES, UPDATE_FIGHTING_LEVEL, UPDATE_WEIGHT } from './actions';
 
 const initialState = {
   userId: null,
@@ -38,6 +38,14 @@ const userReducer = (state = initialState, action) => {
         preferences: {
           ...state.preferences,
           fightingLevel: action.payload
+        },
+      };
+    case UPDATE_WEIGHT:
+      return {
+        ...state,
+        preferences: {
+          ...state.preferences,
+          weight_range: action.weightClass
         },
       };
     case 'SET_WEBSOCKET_INSTANCE':

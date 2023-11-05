@@ -47,6 +47,15 @@ export const updateFightingLevelEdit = (fightingLevel) => ({
   payload: fightingLevel,
 });
 
+// JUST ADDED FOR WEIGHT //
+export const UPDATE_WEIGHT = 'UPDATE_WEIGHT';
+
+// JUST ADDED FOR WEIGHT //
+export const updateWeight = (weightClass) => ({
+  type: UPDATE_WEIGHT,
+  payload: weightClass,
+});
+
 export const sendMessage = (message, recipientId) => ({
   type: 'SEND_MESSAGE',
   payload: { message, recipientId },

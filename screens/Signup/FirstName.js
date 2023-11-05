@@ -12,20 +12,20 @@ const FirstName = ({ navigation }) => {
   const [lastName, setLastName] = useState('');
 
   const handlePress = () => {
-    // if (!firstName || firstName.trim() === '') {
-    //   Alert.alert('Validation error', 'First name cannot be empty.');
-    //   return;
-    // }
+    if (!firstName || firstName.trim() === '') {
+      Alert.alert('Validation error', 'First name cannot be empty.');
+      return;
+    }
 
-    // if (/\d/.test(firstName || lastName)) {
-    //   Alert.alert('Validation error', 'Your name cannot contain digits.');
-    //   return;
-    // }
+    if (/\d/.test(firstName || lastName)) {
+      Alert.alert('Validation error', 'Your name cannot contain digits.');
+      return;
+    }
 
-    // if (!lastName || lastName.trim() === '') {
-    //   Alert.alert('Validation error', 'Last name cannot be empty.');
-    //   return;
-    // }
+    if (!lastName || lastName.trim() === '') {
+      Alert.alert('Validation error', 'Last name cannot be empty.');
+      return;
+    }
 
     // navigation.navigate('Photos', { firstName, lastName });
     navigation.navigate('EmailAndNumber', { firstName, lastName });

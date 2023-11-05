@@ -101,6 +101,7 @@ const handleImageTap = () => {
   <TouchableOpacity activeOpacity={1} onPress={handleImageTap}>
     
   <Image
+  fadeDuration={0}
     source={{ uri: user.images[currentImageIndex].url }}
     style={swipingStyles.cardImage}
   />

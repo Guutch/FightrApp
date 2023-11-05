@@ -15,7 +15,7 @@ const websocketMiddleware = (store) => (next) => (action) => {
       }
 
       console.log("action.payload", action.payload)
-      ws = new WebSocket(`ws://172.16.2.242:3001?userID=${action.payload}`);
+      ws = new WebSocket(`ws://172.16.0.138:3001?userID=${action.payload}`);
 
       ws.onopen = () => {
         console.log('WebSocket connection established');

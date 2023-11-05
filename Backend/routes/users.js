@@ -11,6 +11,9 @@ const { S3Client, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/cl
 const bcrypt = require('bcrypt');
 const secret = process.env.JWT_SECRET;
 
+// Add more routes (e.g., login) here
+const jwt = require('jsonwebtoken');
+
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -84,34 +87,44 @@ const getDefaultWeightRange = (weightClass, userSex) => {
   }
 };
 
-// Written to populate Profile doc (weightClass)
 const getWeightClass = (weight, weightUnit, sex) => {
-  // Convert weight to lbs if it's in kg
-  if (weightUnit === 1) {
-    weight = weight * 2.20462; // 1 kg is approximately 2.20462 lbs
+  console.log("Original weight:", weight);
+  console.log("Weight unit (1 for kg, 0 for lbs):", weightUnit);
+  console.log("Sex (1 for male, 2 for female):", sex);
+
+  // Ensure weight is a number and convert weight to lbs if it's in kg
+  let weightInPounds = Number(weight);
+  if (weightUnit == 1) {
+    weightInPounds *= 2.20462; // 1 kg is approximately 2.20462 lbs
   }
+  console.log("Converted weight in pounds:", weightInPounds);
+
+  // Define weight class boundaries for males and females
+  const maleBoundaries = [115, 125, 135, 145, 155, 170, 185, 205];
+  const femaleBoundaries = [115, 125, 135];
 
   let weightClass = 0;
 
-  if (sex === 2) { // if sex is female
-    if (weight <= 115) weightClass = 1;
-    else if (weight <= 125) weightClass = 2;
-    else if (weight <= 135) weightClass = 3;
-    else weightClass = 4; // Featherweight for all women above 135lbs
-  } else { // if sex is male
-    if (weight <= 115) weightClass = 1;
-    else if (weight <= 125) weightClass = 2;
-    else if (weight <= 135) weightClass = 3;
-    else if (weight <= 145) weightClass = 4;
-    else if (weight <= 155) weightClass = 5;
-    else if (weight <= 170) weightClass = 6;
-    else if (weight <= 185) weightClass = 7;
-    else if (weight <= 205) weightClass = 8;
-    else weightClass = 9; // Heavyweight for all men above 205lbs
+  // Select the appropriate boundaries based on sex
+  const boundaries = sex === 2 ? femaleBoundaries : maleBoundaries;
+
+  // Determine the weight class based on the boundaries
+  for (let i = 0; i < boundaries.length; i++) {
+    if (weightInPounds <= boundaries[i]) {
+      weightClass = i + 1;
+      break;
+    }
   }
 
+  // Assign the last weight class if weight is above all boundaries
+  if (weightClass === 0) {
+    weightClass = sex === 2 ? 4 : 9; // Featherweight for all women above 135lbs, Heavyweight for all men above 205lbs
+  }
+
+  console.log("Assigned weight class:", weightClass);
   return weightClass;
 };
+
 
 // Get user image - needs updating to handle multiple
 router.get('/:id/image', async (req, res) => {
@@ -241,7 +254,27 @@ router.post('/:id/deleteImages', async (req, res) => {
   }
 });
 
+// Should move this to preferences 
+router.put('/:userId/weightPrefUpdate', async (req, res) => {
 
+  const { userId } = req.params;
+  const { weightClass, userSex } = req.body;
+
+  weight_range = getDefaultWeightRange(weightClass, userSex)
+
+  console.log("weight_range")
+  console.log(weight_range)
+
+  await Preference.updateOne({ user_id: userId }, { weight_range: weight_range });
+
+  try {
+res.status(200).send({ message: 'WEIGHT RPEF UPDATED CORRECTLY' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Server error during WEIGHT RPEF UPDATE' });
+  }
+
+});
 
 router.post('/register', upload, async (req, res) => {
   // Check if the email is already registered
@@ -287,10 +320,12 @@ router.post('/register', upload, async (req, res) => {
     const moment = require('moment');
     let age = moment().diff(user.birthday, 'years');
 
+    console.log(getDefaultWeightRange(userProfile.weightClass, user.sex))
+
     // Define default preferences
     let ageRange = [Math.max(age - 5, 18), Math.min(age + 5, 99)];
     let locationRange = 10; // default to 10 miles
-    let weightRange = getDefaultWeightRange(userProfile.weightClass, user.sex);;
+    let weightRange = getDefaultWeightRange(userProfile.weightClass, user.sex);
     // let weightRange = determineWeightRange(user.weight, user.weightUnit);
     let fightingStyle = userProfile.fightingStyle;
     let fightingLevel = userProfile.fightingLevel;
@@ -332,16 +367,18 @@ router.post('/register', upload, async (req, res) => {
       )
     );
 
+    // Generate JWT
+    const token = jwt.sign({ userId: user._id, email: req.body.email }, secret, { expiresIn: '365d' }); // 365 days
+
     console.log("Media saved successfully:", media); // added logging
-    res.send({ user: savedUser._id }); // Send the user ID as a response
+    res.send({ user: savedUser._id, token }); // Send the user ID as a response
   } catch (error) {
     console.error("Error during user registration:", error); // added logging
     res.status(400).send(error);
   }
 });
 
-// Add more routes (e.g., login) here
-const jwt = require('jsonwebtoken');
+
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;

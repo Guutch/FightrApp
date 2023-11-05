@@ -152,17 +152,17 @@ const matchedUserIds = getInvolvedUserIds(matches, user._id, 'match');
 const blockedUserIds = getInvolvedUserIds(blocks, user._id, 'block');
 const reportedUserIds = getInvolvedUserIds(reports, user._id, 'report');
 
-console.log("Matched User IDs:", matchedUserIds);
-console.log("Blocked User IDs:", blockedUserIds);
-console.log("Reported User IDs:", reportedUserIds);
+// console.log("Matched User IDs:", matchedUserIds);
+// console.log("Blocked User IDs:", blockedUserIds);
+// console.log("Reported User IDs:", reportedUserIds);
 
 // Combine all the ids
 const excludedUserIds = [...matchedUserIds, ...blockedUserIds, ...reportedUserIds];
-console.log("Excluded User IDs:", excludedUserIds);
+// console.log("Excluded User IDs:", excludedUserIds);
 
 // Filter out the matched, blocked, and reported users from allUsers
 allUsers = filterByExclusions(allUsers, excludedUserIds);
-console.log("Filtered Users:", allUsers);
+// console.log("Filtered Users:", allUsers);
 
 // Helper functions
 function getInvolvedUserIds(records, userId, type) {
@@ -230,24 +230,24 @@ function filterByExclusions(allUsers, excludedUserIds) {
 
   // Filter based on age
   const ageMatches = filterByAge(user, locationMatches, userPreferences);
-  console.log("ageMatches")
-  console.log(ageMatches)
+  // console.log("ageMatches")
+  // console.log(ageMatches)
 
   // Filter based on weight
   const weightMatches = filterByWeight(user, ageMatches, userPreferences);
-  console.log("weightMatches")
-  console.log(weightMatches)      
+  // console.log("weightMatches")
+  // console.log(weightMatches)      
 
   // Filter based on fighting style
   const styleMatches = filterByStyle(user, weightMatches, userPreferences);
-  console.log("styleMatches")
-  console.log(styleMatches)    
+  // console.log("styleMatches")
+  // console.log(styleMatches)    
 
   // Filter based on fighting level
   const levelMatches = filterByLevel(user, styleMatches, userPreferences);
 
-  console.log("levelMatches")    
-  console.log(levelMatches)
+  // console.log("levelMatches")    
+  // console.log(levelMatches)
 
 
   const filteredMatches = levelMatches.map(match => {
@@ -264,8 +264,8 @@ function filterByExclusions(allUsers, excludedUserIds) {
     };
   });
 
-  console.log("filteredMatches")
-  console.log(filteredMatches)
+  // console.log("filteredMatches")
+  // console.log(filteredMatches)
 
   // Return the matches
   res.send(filteredMatches);

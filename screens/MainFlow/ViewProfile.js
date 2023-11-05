@@ -142,10 +142,11 @@ const [progress, setProgress] = useState(1 / totalImages); // Initialize progres
       <ScrollView contentContainerStyle={settingsStyles.container}>
       
         {images &&
-          <TouchableOpacity onPress={handleImagePress}>
+          <TouchableOpacity onPress={handleImagePress} activeOpacity={1}>
             <ProgressBar progress={progress} isInsideCard={true} />
             <Image
               source={{ uri: images[currentImageIndex].url }}
+              fadeDuration={0}
               style={{
                 width: 371,
                 height: 361,
@@ -226,11 +227,11 @@ const [progress, setProgress] = useState(1 / totalImages); // Initialize progres
           </View>
 
           {/* Fourth Row */}
-          {!isOwnProfile && (
+          {/* {!isOwnProfile && (
             <View>
               <Text>Location: Loading...</Text>
             </View>
-          )}
+          )} */}
         </View>
         <Text style={{ ...settingsStyles.sectionTitle, marginTop: 10 }}>Bio</Text>
 
@@ -250,13 +251,13 @@ const [progress, setProgress] = useState(1 / totalImages); // Initialize progres
             <Text>{profileDataState ? profileDataState.bio : 'Loading...'}</Text>
           </View>
         </View>
-        {!isOwnProfile && (
+        {/* {!isOwnProfile && (
           <View style={ {marginTop: 10} }>
             <SettingSection settingButton={true} preference={"Share Profile"} />
             <SettingSection settingButton={true} preference={"Block Account"} />
             <SettingSection settingButton={true} preference={"Report Account"} />
           </View>
-        )}
+        )} */}
 
       </ScrollView>
     </View>

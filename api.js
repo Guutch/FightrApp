@@ -1,6 +1,9 @@
 // api.js
 import axios from 'axios';
 import * as Keychain from 'react-native-keychain';
+import { getWebSocketInstance } from './Backend/websocketInstance'
+
+
 
 const API_URL = 'http://10.0.2.2:3000';
 
@@ -34,10 +37,6 @@ export const createUser = async (userData) => {
   } else {
     data.append('weightUnit', 2);
   }
-
-  // data.append('sex', userData.sex);
-  // data.append('heightUnit', userData.heightUnit);
-  // data.append('weightUnit', userData.weightUnit);
 
   data.append('fightingStyle', JSON.stringify(userData.fightingStyle));
   data.append('fightingLevel', userData.fightingLevel);
@@ -78,6 +77,9 @@ export const createUser = async (userData) => {
       },
     });
 
+     // Store the token securely
+     await Keychain.setGenericPassword('userToken', response.data.token);
+
     // console.log('User created successfully:', response.data);
 
     // dispatch(userLoggedIn(response.data.user)); // dispatch the action here
@@ -111,10 +113,20 @@ export const handleTnCs = async (userId) => {
 export const handleWaiver = async (userId) => {
   try {
     const response = await axios.put(`${API_URL}/users/${userId}/waiver`);
-    // console.log(response.data)
+    ///console.log(response.data)
     return response.data;
   } catch (error) {  // <-- Add 'error' here
     console.error('[api.js] Error agreeing to waiver', error);
+  }
+}
+
+export const handleWeightChange = async (userId, weightClass, sex) => {
+  try {
+    const response = await axios.put(`${API_URL}/users/${userId}/weightPrefUpdate`, {weightClass, sex});
+    // console.log(response.data)
+    return response.data;
+  } catch (error) {  // <-- Add 'error' here
+    console.error('[api.js] Error updating weight preference ', error);
   }
 }
 
@@ -154,6 +166,12 @@ export const fetchImage = async (userId) => {
 
 
 export const fetchName = async (userId) => {
+ 
+  if (!userId) {
+    console.log('[api.js] User ID is not available. Skipping fetchName.');
+    return null;
+  }
+  
   try {
 
     const response = await axios.get(`${API_URL}/users/${userId}/getName`); // Note the template string
@@ -273,7 +291,7 @@ export const handlePhotos = async (userId, data) => {
       console.log(error.response.headers);
     } else if (error.request) {
       // The request was made but no response was received
-      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of 
       // http.ClientRequest in Node.js
       console.log(error.request);
     } else {
@@ -321,6 +339,10 @@ export const fetchMessages = async (user1Id, user2Id, lastOnly = false) => {
         lastOnly
       }
     });
+
+    console.log("response.data.messages")
+    console.log(response.data.messages)
+
     return response.data.messages;
   } catch (error) {
     console.error("Error while fetching messages", error);
@@ -452,6 +474,8 @@ export const fetchUsersAndImages = async (userId) => {
       return !userSwiped && !matchSwipedLeft;
     });
 
+    console.log("usersToDisplay", usersToDisplay)
+
     // Add property to indicate if a user has swiped right on the current user
     const enhancedUsersToDisplay = usersToDisplay.map(user => {
       const swipedRightOnUser = swipes.some(swipe =>
@@ -492,12 +516,13 @@ export const handleNewSwipe = async (swipeData) => {
 
 // Used SwipingScreen
 export const handleNewMatch = async (matchData) => {
+  // const ws = getWebSocketInstance();
   try {
     // Assume matchData contains all the relevant information about the match.
-    ws.send(JSON.stringify({
-      type: 'NEW_MATCH',
-      payload: matchData,  // You might want to send only the parts of matchData that are actually needed for the notification.
-    }));
+    // ws.send(JSON.stringify({ 
+    //     type: 'NEW_MATCH',
+    //   payload: matchData,  // You might want to send only the parts of matchData that are actually needed for the notification.
+    // }));
 
     const response = await axios.post(`${API_URL}/swipes/newMatch`, matchData);
     return response.data;

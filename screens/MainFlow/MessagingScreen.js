@@ -67,8 +67,9 @@ const MessagingScreen = ({ navigation }) => {
     // Fetch all matches for the current user
     console.log("THIS IS THE WEB SOCKET",ws)
     const matches = await fetchAllMatches(userId.userId);
-
-    // Extract the IDs of users that the current user has matched with
+    console.log("matches")
+    console.log(matches)
+    // Extract the IDs of users that the current user has matched with 
     const matchedUserIds = matches.map(match => {
       if (String(match.user1_id) === String(userId.userId)) {
         return String(match.user2_id);
@@ -89,17 +90,28 @@ const MessagingScreen = ({ navigation }) => {
       // Extract the first name from the full name
       const firstName = nameData.fullName.split(' ')[0];
 
-      console.log(lastMessage[0].read)
+      console.log("lastMessage")
+      console.log(lastMessage)
 
-      // Construct an object for each matched user
-      return {
-        id,
-        image: imageData.imageUrl,
-        name: firstName,
-        lastMessage: lastMessage[0]?.content || '',  // Use the content of the last message, if available
-        read: lastMessage[0].read,  // Use the read status of the last message, default to true
-      };
-    });
+// Check if a last message exists, and access its properties conditionally
+const lastMessageContent = lastMessage.length > 0 ? lastMessage[0].content : '';
+const lastMessageRead = lastMessage.length > 0 ? lastMessage[0].read : true;
+const lastMessageReceiverId = lastMessage.length > 0 ? lastMessage[0].receiver_id : null;
+
+console.log(lastMessageReceiverId === userId)
+console.log(lastMessageReceiverId)
+console.log(userId.userId)
+
+// Construct an object for each matched user
+return {
+  id,
+  image: imageData.imageUrl,
+  name: firstName,
+  lastMessage: lastMessageContent,  // Use the content of the last message, if available
+  read: lastMessageRead,  // Use the read status of the last message, default to true
+  receiver_id: lastMessageReceiverId, // Include the receiver_id of the last message
+};
+});
 
 
 
@@ -222,7 +234,8 @@ const MessagingScreen = ({ navigation }) => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                           <Image source={{ uri: item.image }} style={{ width: 50, height: 50, borderRadius: 25 }} />
                           {/* {!item.read && <View style={matchedUsersInterface.redDot}></View>} */}
-                          {!readChats[item.id] && !item.read && <View style={matchedUsersInterface.redDot}></View>}
+                          {/* {!readChats[item.id] && !item.read && <View style={matchedUsersInterface.redDot}></View>} */}
+                          {!readChats[item.id] && !item.read && item.receiver_id === userId.userId && <View style={matchedUsersInterface.redDot}></View>}
                         </View>
                         <View style={{ marginLeft: 10 }}>
                           <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.name}</Text>

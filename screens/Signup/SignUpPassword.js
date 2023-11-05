@@ -32,16 +32,16 @@ const SignUpPassword = ({ navigation, route }) => {
   };
 
   const handlePress = () => {
-    // if (password !== confirmPassword) {
-    //   alert('Passwords do not match!');
-    //   return;
-    // }
+    if (password !== confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
 
-    // const passwordError = validatePassword(password);
-    // if (passwordError) {
-    //   Alert.alert('Validation error', passwordError);
-    //   return;
-    // }
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      Alert.alert('Validation error', passwordError);
+      return;
+    }
 
     navigation.navigate('HeightAndWeight', { ...route.params, password });
   };

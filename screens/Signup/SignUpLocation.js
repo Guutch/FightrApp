@@ -45,8 +45,6 @@ let mydate = new Date(parts[2], parts[1] - 1, parts[0]);
                 coordinates: [position.coords.latitude, position.coords.longitude],
               }
             };
-
-            console.log(route.params.password)
             const returnedUserData = await createUser(userData);
 
             // Use dispatch to fire the userLoggedIn action with the returned user data
@@ -67,24 +65,6 @@ let mydate = new Date(parts[2], parts[1] - 1, parts[0]);
       console.warn(err);
     }
   }, [route.params, navigation]);
-
-  const handlePress = () => {
-    // console.log("route.params.firstName", route.params.firstName)
-    // console.log("route.params.lastName", route.params.lastName)
-    // console.log("route.params.email", route.params.email)
-    // console.log("route.params.phoneNumber", route.params.phoneNumber)
-    // console.log("route.params.height", route.params.height)
-    // console.log("route.params.weight", route.params.weight)
-    // console.log("route.params.sex", route.params.sex)
-    // console.log("route.params.heightUnit", route.params.heightUnit)
-    // console.log("route.params.weightUnit", route.params.weightUnit)
-    // console.log("route.params.birthday", route.params.birthday)
-    // console.log(route.params.images) 
-    console.log("route.params.checkedMartialArts", route.params.checkedMartialArts)
-    // console.log("route.params.checkedLevel", route.params.checkedLevel)
-    // console.log("route.params.password", route.params.password)
-    navigation.navigate('Welcome');
-  }
 
   return (
     <View style={signUpLocation.container}>
