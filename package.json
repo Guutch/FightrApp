@@ -3,13 +3,14 @@
   "version": "0.0.1",
   "private": true,
 "scripts": {
-  "start": "node backend/server.js",
+  "start": "node Backend/server.js",
   "android": "react-native run-android",
   "ios": "react-native run-ios",
   "lint": "eslint .",
   "test": "jest"
 },
   "dependencies": {
+  "express": "^4.17.1",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-community/datetimepicker": "^7.0.1",
     "@react-native-picker/picker": "^2.4.10",
