@@ -15,9 +15,12 @@ app.use(express.json());
 const url = require('url');
 
 // Initialize WebSocket server
-const wss = new WebSocket.Server({ port: 3001 });
+const wsPort = process.env.WS_PORT || 3001;
+const wss = new WebSocket.Server({ port: wsPort }, () => {
+  console.log(`WebSocket Server is running on port: ${wsPort}`);
+});
 
-console.log(`WebSocket server is running and listening on port 3001`);
+// console.log(`WebSocket server is running and listening on port 3001`);
 
 const connectedUsers = {};
 
