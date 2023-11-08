@@ -1,11 +1,11 @@
 // api.js
 import axios from 'axios';
 import * as Keychain from 'react-native-keychain';
-import { getWebSocketInstance } from './Backend/websocketInstance'
+import { getWebSocketInstance } from  './Backend/websocketInstance'
 
 
 
-const API_URL = 'http://10.0.2.2:3000';
+const API_URL = 'https://fytr-a7c0fafcc4ad.herokuapp.com';
 
 export const createUser = async (userData) => {
 

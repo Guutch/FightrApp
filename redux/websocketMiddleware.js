@@ -15,7 +15,8 @@ const websocketMiddleware = (store) => (next) => (action) => {
       }
 
       console.log("action.payload", action.payload)
-      ws = new WebSocket(`ws://172.16.1.95:3001?userID=${action.payload}`);
+      ws = new WebSocket(`wss://fytr-a7c0fafcc4ad.herokuapp.com?userID=${action.payload}`);
+
 
       ws.onopen = () => {
         console.log('WebSocket connection established');

@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const WebSocket = require('ws');
+const http = require('http');
 // const { saveMessageToDatabase } = require('../api');
 
 
@@ -15,10 +16,14 @@ app.use(express.json());
 const url = require('url');
 
 // Initialize WebSocket server
-const wsPort = process.env.WS_PORT || 3001;
-const wss = new WebSocket.Server({ port: wsPort }, () => {
-  console.log(`WebSocket Server is running on port: ${wsPort}`);
-});
+// const wsPort = process.env.WS_PORT || 3001;
+// const wss = new WebSocket.Server({ port: wsPort }, () => {
+//   console.log(`WebSocket Server is running on port: ${wsPort}`);
+// });
+
+const server = http.createServer(app);
+
+const wss = new WebSocket.Server({ server });
 
 // console.log(`WebSocket server is running and listening on port 3001`);
 
@@ -116,6 +121,6 @@ connection.once('open', () => {
 
 // Start the HTTP server
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
