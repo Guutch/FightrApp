@@ -514,7 +514,7 @@ export const handleNewSwipe = async (swipeData) => {
   }
 }
 
-// Used SwipingScreen
+/// Used SwipingScreen
 export const handleNewMatch = async (matchData) => {
   // const ws = getWebSocketInstance();
   try {
