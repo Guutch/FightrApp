@@ -12,6 +12,15 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>UIAppFonts</key>
+	<array>
+	<string>Inter-VariableFont_slnt,wght.ttf</string>
+	<string>FontAwesome.ttf</string>
+  	<string>FontAwesome5_Brands.ttf</string>
+  	<string>FontAwesome5_Regular.ttf</string>
+  	<string>FontAwesome5_Solid.ttf</string>
+	<!-- Add additional font files as needed -->
+	</array>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>

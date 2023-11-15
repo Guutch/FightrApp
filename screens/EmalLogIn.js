@@ -30,12 +30,6 @@ const EmailLogin = ({ navigation }) => {
       // console.log("lol")
     }
     
-    // dispatch(login(email, password, () => {
-    //   navigation.reset({
-    //     index: 0,
-    //     routes: [{ name: 'MainFlow' }],
-    //   });
-    // }));
 };
 
   return (

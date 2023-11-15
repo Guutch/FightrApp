@@ -14,6 +14,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-firstapp2-firstapp2Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-firstapp2-firstapp2Tests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		AEF5FF5F2B0506BE00878665 /* Inter-VariableFont_slnt,wght.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEF5FF5E2B0506BE00878665 /* Inter-VariableFont_slnt,wght.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,20 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-firstapp2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-firstapp2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = firstapp2/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-firstapp2-firstapp2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-firstapp2-firstapp2Tests.release.xcconfig"; path = "Target Support Files/Pods-firstapp2-firstapp2Tests/Pods-firstapp2-firstapp2Tests.release.xcconfig"; sourceTree = "<group>"; };
+		AE564AA32B050CCE00966BB8 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
+		AE564AA42B050CCE00966BB8 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
+		AE564AA52B050CCE00966BB8 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
+		AE564AA62B050CCE00966BB8 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
+		AE564AAB2B050F0600966BB8 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = ../assets/fonts/FontAwesome.ttf; sourceTree = "<group>"; };
+		AE564AAC2B050F0600966BB8 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Solid.ttf; path = ../assets/fonts/FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
+		AE564AAD2B050F0600966BB8 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Regular.ttf; path = ../assets/fonts/FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
+		AE564AAE2B050F0600966BB8 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Brands.ttf; path = ../assets/fonts/FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
+		AEF5FF5C2B05038900878665 /* Inter-VariableFont_slnt,wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-VariableFont_slnt,wght.ttf"; path = "../../../Downloads/Inter/Inter-VariableFont_slnt,wght.ttf"; sourceTree = "<group>"; };
+		AEF5FF5E2B0506BE00878665 /* Inter-VariableFont_slnt,wght.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter-VariableFont_slnt,wght.ttf"; path = "../../../Downloads/Inter/Inter-VariableFont_slnt,wght.ttf"; sourceTree = "<group>"; };
+		AEF5FF602B050A0A00878665 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Solid.ttf; path = ../../FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
+		AEF5FF612B050A0A00878665 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = ../../FontAwesome.ttf; sourceTree = "<group>"; };
+		AEF5FF622B050A0A00878665 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Brands.ttf; path = ../../FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
+		AEF5FF632B050A0A00878665 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Regular.ttf; path = ../../FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -99,6 +114,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AEF5FF5C2B05038900878665 /* Inter-VariableFont_slnt,wght.ttf */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				5DCACB8F33CDC322A6C60F78 /* libPods-firstapp2.a */,
 				19F6CBCC0A4E27FBF8BF4A61 /* libPods-firstapp2-firstapp2Tests.a */,
@@ -116,6 +132,19 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				AEF5FF612B050A0A00878665 /* FontAwesome.ttf */,
+				AEF5FF622B050A0A00878665 /* FontAwesome5_Brands.ttf */,
+				AE564AAE2B050F0600966BB8 /* FontAwesome5_Brands.ttf */,
+				AEF5FF632B050A0A00878665 /* FontAwesome5_Regular.ttf */,
+				AE564AA62B050CCE00966BB8 /* FontAwesome5_Regular.ttf */,
+				AE564AAD2B050F0600966BB8 /* FontAwesome5_Regular.ttf */,
+				AEF5FF602B050A0A00878665 /* FontAwesome5_Solid.ttf */,
+				AE564AA32B050CCE00966BB8 /* FontAwesome.ttf */,
+				AE564AA42B050CCE00966BB8 /* FontAwesome5_Brands.ttf */,
+				AE564AA52B050CCE00966BB8 /* FontAwesome5_Solid.ttf */,
+				AE564AAB2B050F0600966BB8 /* FontAwesome.ttf */,
+				AE564AAC2B050F0600966BB8 /* FontAwesome5_Solid.ttf */,
+				AEF5FF5E2B0506BE00878665 /* Inter-VariableFont_slnt,wght.ttf */,
 				13B07FAE1A68108700A75B9A /* firstapp2 */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* firstapp2Tests */,
@@ -242,6 +271,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AEF5FF5F2B0506BE00878665 /* Inter-VariableFont_slnt,wght.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
@@ -486,6 +516,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W7AB6TUTM5;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = firstapp2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -513,6 +544,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W7AB6TUTM5;
 				INFOPLIST_FILE = firstapp2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
