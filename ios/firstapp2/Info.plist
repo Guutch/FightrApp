@@ -21,6 +21,17 @@
   	<string>FontAwesome5_Solid.ttf</string>
 	<!-- Add additional font files as needed -->
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Your description for why you need access to the photo library</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Your description for why you need access to the camera</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Your description for why you need access to the microphone</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location to provide personalized content</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need your location to provide personalized content</string>
+
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>

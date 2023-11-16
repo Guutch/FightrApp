@@ -82,17 +82,17 @@ const EditProfileScreen = ({ navigation, route }) => {
   };
 
   const requestCameraRollPermissions = async () => {
-    try {
-      const result = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
-      if (result === RESULTS.GRANTED) {
-        return true;
-      } else {
-        alert('Sorry, we need camera roll permissions to make this work!');
+    if (Platform.OS === 'android') {
+      try {
+        const androidResult = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
+        return androidResult === RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
         return false;
       }
-    } catch (err) {
-      console.warn(err);
-      return false;
+    } else if (Platform.OS === 'ios') {
+      // For iOS, react-native-image-crop-picker handles permissions
+      return true;
     }
   };
 

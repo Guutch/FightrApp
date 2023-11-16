@@ -13,8 +13,17 @@ const SignUpLocation = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const requestLocationPermission = useCallback(async () => {
     try {
-      const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-      if (result === RESULTS.GRANTED) {
+      let permissionGranted = false;
+
+      if (Platform.OS === 'android') {
+        const result = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+        permissionGranted = result === RESULTS.GRANTED;
+      } else if (Platform.OS === 'ios') {
+        // Directly request authorization from react-native-geolocation-service
+        const response = await Geolocation.requestAuthorization('whenInUse');
+        permissionGranted = response === 'granted';
+      }
+      if (permissionGranted) {
         Geolocation.getCurrentPosition(
           async (position) => {
             // console.log('Data from previous steps, photos, martial arts, and fighting level:', route.params);
@@ -59,10 +68,13 @@ let mydate = new Date(parts[2], parts[1] - 1, parts[0]);
           { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
         );
       } else {
-        Alert.alert('Permission not granted', 'Location permission was not granted');
+        console.log(result)
+        Alert.alert('Permission not granted', 'Location permission was not granted', result);
       }
     } catch (err) {
+      console.log("lol")
       console.warn(err);
+      console.log("lol")
     }
   }, [route.params, navigation]);
 

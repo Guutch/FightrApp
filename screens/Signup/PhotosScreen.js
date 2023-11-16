@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Image, FlatList, Alert, StatusBar } from 
 import { Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-crop-picker';
+// import ImagePicker from 'react-native-image-picker';
 import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 import ProgressBar from '../../components/ProgressBar';
 import { photosScreen, firstNameScreen } from '../../components/styles2';
@@ -19,18 +20,42 @@ const Photos = ({ navigation, route }) => {
   const nextIndex = useRef(0);
   // const BounceFlatList = Animatable.createAnimatableComponent(FlatList);
 
+  // const requestCameraRollPermissions = async () => {
+  //   try {
+  //     // Check the platform
+  //     if (Platform.OS === 'android') {
+  //       const androidResult = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
+  //       if (androidResult === RESULTS.GRANTED) {
+  //         return true;
+  //       }
+  //     } else if (Platform.OS === 'ios') {
+  //       const iosResult = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+  //       console.log("iOS Result:", iosResult);  // Log to see the result
+  //       if (iosResult === RESULTS.GRANTED) {
+  //         return true;
+  //       }
+  //     }
+  //     // If we reach here, permissions were not granted
+  //     alert('Sorry, we need camera roll permissions to make this work!');
+  //     return false;
+  //   } catch (err) {
+  //     console.warn(err);
+  //     return false;
+  //   }
+  // };
+
   const requestCameraRollPermissions = async () => {
-    try {
-      const result = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
-      if (result === RESULTS.GRANTED) {
-        return true;
-      } else {
-        alert('Sorry, we need camera roll permissions to make this work!');
+    if (Platform.OS === 'android') {
+      try {
+        const androidResult = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
+        return androidResult === RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
         return false;
       }
-    } catch (err) {
-      console.warn(err);
-      return false;
+    } else if (Platform.OS === 'ios') {
+      // For iOS, react-native-image-crop-picker handles permissions
+      return true;
     }
   };
 

@@ -6,6 +6,8 @@ import { navbarStyles, matchedUsersInterface } from '../components/styles2';
 import { changeUserPreferences, changePhotoPositions, updateEditProfileData, updateFightingLevelPref, handlePhotos, handleWeightChange } from '../api'
 import { useDispatch } from 'react-redux';
 import { updateWeight } from '../redux/actions';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+
 
 const Navbar = ({
   navigation,
@@ -26,11 +28,12 @@ const Navbar = ({
   onBackPressCustom
 }) => {
 
+  const insets = useSafeAreaInsets();
   const dispatch = useDispatch();
 
   const validateHeight = () => {
     if (dataToUpdate.heightUnit === "cm") {
-      return dataToUpdate.height >= 140 && dataToUpdate.height <= 210;
+      return dataToUpdate.height >= 100 && dataToUpdate.height <= 210;
     } else {
       // const totalHeightInInches = (dataToUpdate.heightFt * 12) + dataToUpdate.heightInch;
       if (dataToUpdate.heightFt > 7 || dataToUpdate.heightFt < 4) {
@@ -150,7 +153,7 @@ const Navbar = ({
   };
 
   return (
-    <View style={[navbarStyles.banner, { backgroundColor }]}>
+    <View style={[navbarStyles.banner, { backgroundColor } ]}>
       {homeStyle ? (
         <>
           <Text
