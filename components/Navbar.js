@@ -1,6 +1,6 @@
 // Navbar.js
 import React from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { navbarStyles, matchedUsersInterface } from '../components/styles2';
 import { changeUserPreferences, changePhotoPositions, updateEditProfileData, updateFightingLevelPref, handlePhotos, handleWeightChange } from '../api'
@@ -17,7 +17,7 @@ const Navbar = ({
   homeStyle,
   backgroundColor,
   textColor,
-  title = "Fytr",
+  title,
   dataToUpdate,
   handleBackPressPrefSel,
   handleSavePreferences,
@@ -82,6 +82,7 @@ const Navbar = ({
 
 
   const handleBackPress = async () => {
+
     // Call the handleSavePreferences function to update preferences in the Redux store
     if (editProfile) {
       if (!validateWeight()) {
@@ -110,7 +111,7 @@ const Navbar = ({
         dispatch(updateWeight(dataToUpdate.userId, dataToUpdate.weightClass))
         // Need to update weight_range preference
         // Can call users.js
-        handleWeightChange(dataToUpdate.userId, dataToUpdate.weightClass, dataToUpdate.userSex) 
+        handleWeightChange(dataToUpdate.userId, dataToUpdate.weightClass, dataToUpdate.userSex)
       } else {
         console.log("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL")
       }
@@ -153,25 +154,29 @@ const Navbar = ({
   };
 
   return (
-    <View style={[navbarStyles.banner, { backgroundColor } ]}>
+    <View style={[navbarStyles.banner, { backgroundColor }]}>
       {homeStyle ? (
         <>
-          <Text
-            style={[navbarStyles.fightrText, navbarStyles.backButton, { color: textColor }]}>
-            {title}
-          </Text>
+          {title ? (
+            <Text style={[navbarStyles.fightrText, navbarStyles.backButton, { color: textColor }]}>
+              {title}
+            </Text>
+          ) : (
+            <Image
+              source={require('../assets/WhiteBack.png')} // Ensure this path is correct
+              style={[navbarStyles.logoStyle, navbarStyles.backButton]}
+            />
+          )}
           <View style={navbarStyles.iconContainer}>
             {/* Notification bell */}
             {/* <TouchableOpacity style={[navbarStyles.homeNextButton, { marginRight: 15 }]} onPress={() => navigation.navigate('NotificationScreen')}>
-              <Icon name="bell" size={navbarStyles.iconSize.width} color={textColor} />
-              <View style={matchedUsersInterface.redDot}></View>
-            </TouchableOpacity> */}
+          <Icon name="bell" size={navbarStyles.iconSize.width} color={textColor} />
+          <View style={matchedUsersInterface.redDot}></View>
+        </TouchableOpacity> */}
             <TouchableOpacity style={navbarStyles.homeNextButton} onPress={() => navigation.navigate('SettingsScreen')}>
               <Icon name="cog" size={navbarStyles.iconSize.width} color={textColor} />
             </TouchableOpacity>
           </View>
-
-
         </>
       ) : (
         <>
@@ -199,7 +204,18 @@ const Navbar = ({
               <Icon name="arrow-left" size={navbarStyles.iconSize.width} color={textColor} />
             </TouchableOpacity>
           )}
-          <Text style={[navbarStyles.fightrText, { color: textColor }]}>{title}</Text>
+          {
+            title ? (
+              <Text style={[navbarStyles.fightrText, { color: textColor }]}>
+                {title}
+              </Text>
+            ) : (
+              <Image
+                source={require('../assets/BlackBack.png')} // make sure this path is correct
+                style={navbarStyles.logoStyle}
+              />
+            )
+          }
           {showNextButton && (
             <TouchableOpacity style={navbarStyles.nextButton} onPress={onNext}>
               <Icon name="check" size={navbarStyles.iconSize.width} color={textColor} />

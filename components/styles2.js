@@ -1,5 +1,8 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
+
 const commonStyles = StyleSheet.create({
   absolutePosition: {
     position: 'absolute',
@@ -36,11 +39,10 @@ const loginScreen = StyleSheet.create({
     alignItems: 'center',
   }, 
   buttonContainer: {
-    width: '100%', // or set a specific width if needed
+    width: '100%',
     position: 'absolute',
-    justifyContent: 'center',
     alignItems: 'center',
-    bottom: 80/* height of terms and conditions + 30 + any additional space you want */,
+    bottom: 80, // Adjust this value to position the button above the terms text
   },
   title: {
     ...commonStyles.primaryText,
@@ -75,11 +77,15 @@ const loginScreen = StyleSheet.create({
     height: 60.779438,
   },
   bottomButton: {
-    ...commonStyles.buttonStyle,
+    // Inherits commonStyles.buttonStyle, if there's anything to add or override, do it here
     paddingHorizontal: 30,
     paddingVertical: 10,
-    width: 239.96269,
-    height: 40.857495,
+    width: '80%', // Width set to 80% of the screen width, adjust as needed
+    height: 50, // Adjust the height as needed
+    backgroundColor: 'white', // Set the button color
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 40, // Rounded corners
   },
   buttonText: {
     color: 'black',
@@ -88,14 +94,12 @@ const loginScreen = StyleSheet.create({
     textAlign: 'center',
   },
   termsAndConditions: {
+    fontSize: 12, // Adjust the font size as needed
     color: 'white',
-    fontSize: 10,
-    fontWeight: '700',
-    lineHeight: 18,
-    textAlign: 'center',
     position: 'absolute',
-    bottom: 30,
-    paddingHorizontal: 20,
+    bottom: 30, // Adjust this value to control the distance from the bottom of the screen
+    paddingHorizontal: 20, // Side padding for longer texts
+    textAlign: 'center',
   },
   linkText: {
     textDecorationLine: 'underline',
@@ -110,8 +114,7 @@ const loginScreen = StyleSheet.create({
   backgroundColor: 'transparent',
 });
 
-const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
+
 
 const navbarStyles = StyleSheet.create({
   banner: {
@@ -132,6 +135,13 @@ const navbarStyles = StyleSheet.create({
     fontSize: screenWidth * 0.1,
     lineHeight: screenHeight * 0.064,
     color: '#FFFFFF',
+  },
+  logoStyle: {
+    // transform: [{scale: 0.8}],
+    // position: 'absolute',
+  // left: screenWidth * 0.05, // You might need to adjust this value
+  // top: "50%", // Adjust this value to align it vertically
+  // marginTop: -25, // Half of your image height after scale to center it
   },
   backButton: {
     position: 'absolute',
@@ -299,18 +309,21 @@ const birthdayScreen = StyleSheet.create({
     paddingTop: screenHeight * 0.1,
   },
   birthdayTouchable: {
-    // backgroundColor: 'blue',
-    // top: screenHeight * 0.427,
+    // backgroundColor: 'red',
+    justifyContent: 'center', // This will center the text vertically within the touchable
+    alignItems: 'center', // This will center the text horizontally within the touchable
+    width: "80%", // Set the width of the button
+    height: screenHeight * 0.08, // You might need to adjust this value based on your design needs
+    top: screenHeight * 0.105, // Keep the touchable at the desired position from the top
+    alignSelf: 'center', // This will center the touchable horizontally within its parent
   },
+  
   birthdaydateText: {
     fontFamily: 'Inter',
     fontSize: screenWidth * 0.12,
     fontWeight: '700',
-    lineHeight: screenHeight * 0.08,
-    letterSpacing: 0,
-    textAlign: 'center',
     color: 'black',
-    top: screenHeight * 0.105,
+    textAlign: 'center', // Ensures the text is centered within the touchable
   },
   sexPicker: {
     color: "green"

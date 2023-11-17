@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StatusBar, ImageBackground, Image } from 'react-native'
+import { View, Text, TouchableOpacity, StatusBar, StyleSheet, Image, Dimensions } from 'react-native'
 import { loginScreen } from '../components/styles2';
 import { postmanTest } from '../api';
 import { useSelector } from 'react-redux';
 // import { useFocusEffect } from '@react-navigation/native';
 
+const { width, height } = Dimensions.get('window');
 
 const LoginScreen = ({ navigation }) => {
 
@@ -23,36 +24,40 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={loginScreen.container}>
-  <StatusBar backgroundColor="black" barStyle="light-content" />
-  
-  <ImageBackground source={require('../assets/Test2.png')} style={loginScreen.backgroundImage}>
-    {/* Uncomment the next line if you want to use a video background in the future */}
-    {/* <Video source={require('./assets/pexels.mp4')} style={loginScreen.video} repeat={true} resizeMode='cover' /> */}
-    
-    {/* <Text style={loginScreen.title}>Fytr</Text> */}
-    <Image source={require('../assets/logoBlackBck.png')} style={loginScreen.fytrImg}></Image>
+      <StatusBar backgroundColor="black" barStyle="light-content" />
+      
+      {/* Other components */}
+      <Image
+        // style={loginScreen.fytrImg}
+        source={require('../assets/LoginScreen.png')} // Make sure this path is correct
+      />
 
-    <Text style={loginScreen.subtitle}>The Game's The Game</Text>
-    
-    <View style={loginScreen.buttonContainer}>
-      <TouchableOpacity style={loginScreen.topButton} onPress={() => console.log('Continue with Apple')}>
-        <Text style={loginScreen.buttonText}>Continue with Apple</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={loginScreen.middleButton} onPress={() => console.log('Continue with Google')}>
-        <Text style={loginScreen.buttonText}>Continue with Google</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={loginScreen.bottomButton} onPress={() => navigation.navigate('EmailLogin')}>
-        <Text style={loginScreen.buttonText}>Continue with Email</Text>
-      </TouchableOpacity>
+      {/* Button container positioned at the bottom */}
+      <View style={loginScreen.buttonContainer}>
+        {/* CODE HERE FOR GOOGLE/APPLE SIGN UP/SIGN IN */}
+        {/* <TouchableOpacity
+          style={[loginScreen.bottomButton, {marginBottom: 5}]}
+          onPress={() => navigation.navigate('EmailLogin')} // Handle navigation
+        >
+          <Text style={loginScreen.buttonText}>Continue with Email</Text>
+        </TouchableOpacity> */}
+        <TouchableOpacity
+          style={loginScreen.bottomButton}
+          onPress={() => navigation.navigate('EmailLogin')} // Handle navigation
+        >
+          <Text style={loginScreen.buttonText}>Continue with Email</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Terms and conditions text */}
+      <Text style={loginScreen.termsAndConditions} onPress={() => navigation.navigate('TermsAndCond')}>
+        By proceeding, you consent to our terms and conditions. See 
+        <Text style={loginScreen.linkText}>
+          {' '}Terms and Conditions
+        </Text> here.
+      </Text>
     </View>
-    
-    <Text style={loginScreen.termsAndConditions}>
-      By proceeding, you consent to our terms and conditions. See <Text style={loginScreen.linkText}>Terms and Conditions</Text> here.
-    </Text>
-  </ImageBackground>
-</View>
-
-  )
+  );
 }
 
 export default LoginScreen

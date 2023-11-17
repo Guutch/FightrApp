@@ -102,9 +102,10 @@ const BirthdayScreen = ({ navigation, route }) => {
       />
       <ProgressBar progress={5 / 8} />
       <Text style={firstNameScreen.questionText}>When is your birthday?</Text>
-      <TouchableOpacity onPress={toggleDatePicker} activeOpacity={1} style={birthdayScreen.birthdayTouchable}>
-        <Text style={birthdayScreen.birthdaydateText}>{formatDate(date)}</Text>
-      </TouchableOpacity>
+      <TouchableOpacity onPress={toggleDatePicker} activeOpacity={0.5} style={birthdayScreen.birthdayTouchable}>
+  <Text style={birthdayScreen.birthdaydateText}>{formatDate(date)}</Text>
+</TouchableOpacity>
+
       {showDatePicker && (
         <DateTimePicker
           value={date || new Date()}
