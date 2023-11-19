@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
 import Navbar from '../../components/Navbar';
 import { settingsStyles, welcomeStyles } from '../../components/styles2';
 import SettingSection from '../../components/SettingSection'
@@ -132,12 +132,12 @@ const [progress, setProgress] = useState(1 / totalImages); // Initialize progres
 
   return (
     <View>
+      <StatusBar backgroundColor="black" barStyle="light-content"/>
       <Navbar
         backgroundColor="#000000"
         textColor="#FFFFFF"
         showBackButton={true}
         navigation={navigation}  // Here we pass navigation as a prop to Navbar
-        title="Fytr"  // Here's the custom title
       />
       <ScrollView contentContainerStyle={settingsStyles.container}>
       

@@ -37,11 +37,20 @@ const websocketMiddleware = (store) => (next) => (action) => {
         }
       };
       
+      // ws.on('ping', function incoming() {
+      //   ws.pong();  // Respond with a pong
+      // });
 
-      ws.onerror = (error) => {
-        console.log(error)
-        console.log(`WebSocket Error: ${error}`);
+      ws.onerror = (errorEvent) => {
+        // Log the entire event object
+        console.log('WebSocket Error Event:', errorEvent);
+      
+        // If there's a message property, log that
+        if (errorEvent.message) {
+          console.log('WebSocket Error Message:', errorEvent.message);
+        }
       };
+      
 
       ws.onclose = () => {
         console.log('WebSocket connection closed');

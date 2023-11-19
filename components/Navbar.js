@@ -1,6 +1,6 @@
 // Navbar.js
 import React from 'react';
-import { View, Text, TouchableOpacity, Alert, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, Image, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { navbarStyles, matchedUsersInterface } from '../components/styles2';
 import { changeUserPreferences, changePhotoPositions, updateEditProfileData, updateFightingLevelPref, handlePhotos, handleWeightChange } from '../api'
@@ -28,8 +28,10 @@ const Navbar = ({
   onBackPressCustom
 }) => {
 
+  const screenWidth = Dimensions.get('window').width;
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch();
+
 
   const validateHeight = () => {
     if (dataToUpdate.heightUnit === "cm") {
@@ -47,6 +49,8 @@ const Navbar = ({
   }
 
 
+
+
   const validateWeight = () => {
     if (dataToUpdate.weightUnit === "kg") {
       return dataToUpdate.weight <= 600;
@@ -55,12 +59,14 @@ const Navbar = ({
     }
   };
 
+
   const transformHeight = (data) => {
     if (data.heightUnit === "ft") {
       return parseInt(data.heightFt) * 12 + parseInt(data.heightInch);
     }
     return parseInt(data.height); // assuming height is in string format, if not, you can skip parseInt
   };
+
 
   const constructPayload = (data) => {
     return {
@@ -73,6 +79,7 @@ const Navbar = ({
     };
   };
 
+
   const constructImagesPayload = (data) => {
     return {
       newImages: data.newlyUploadedPhotos,
@@ -81,7 +88,10 @@ const Navbar = ({
   }
 
 
+
+
   const handleBackPress = async () => {
+
 
     // Call the handleSavePreferences function to update preferences in the Redux store
     if (editProfile) {
@@ -94,7 +104,9 @@ const Navbar = ({
         return;
       }
 
+
       console.log("Here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1")
+
 
       // fightingLevel: Number(dataToUpdate.fightingLevel)
       const hasFightingLevelChanged = Number(dataToUpdate.fightingLevel) !== dataToUpdate.originalFightingLevel;
@@ -103,6 +115,7 @@ const Navbar = ({
         handleSaveFightingLevel(Number(dataToUpdate.fightingLevel))
         updateFightingLevelPref(dataToUpdate.userId, dataToUpdate.fightingLevel);
       }
+
 
       const hasWeightChanged = Number(dataToUpdate.weight) !== dataToUpdate.originalWeight;
       if (hasWeightChanged) {
@@ -117,10 +130,15 @@ const Navbar = ({
       }
 
 
+
+
       const cleanedData = constructPayload(dataToUpdate);
 
 
+
+
       updateEditProfileData(dataToUpdate.userId, cleanedData);
+
 
       // console.log("Images", dataToUpdate.images)
       // console.log("changedPhotos", dataToUpdate.changedPhotos)
@@ -128,8 +146,11 @@ const Navbar = ({
       // console.log("Is changedPhotos an array?", Array.isArray(dataToUpdate.changedPhotos));
 
 
+
+
       // Gives the ID of the MongoDB record
       // console.log("Deleted From AWS", dataToUpdate.deletedPhotos)
+
 
       if (dataToUpdate.changedPhotos !== null) {
         console.log(dataToUpdate.changedPhotos.length)
@@ -137,13 +158,17 @@ const Navbar = ({
       }
 
 
+
+
       const cleanedPhotos = constructImagesPayload(dataToUpdate);
       // console.log("New Photo(s)", cleanedPhotos.newImages)
       handlePhotos(dataToUpdate.userId, cleanedPhotos)
 
+
     } else {
       console.log("lmaolmaolmao")
       handleSavePreferences(dataToUpdate);
+
 
       // // Update preferences in the backend
       await changeUserPreferences(dataToUpdate.userId, dataToUpdate);
@@ -153,26 +178,29 @@ const Navbar = ({
     navigation.goBack();
   };
 
+
   return (
-    <View style={[navbarStyles.banner, { backgroundColor }]}>
+    <View style={[navbarStyles.banner, { backgroundColor, paddingTop: insets.top }]}>
       {homeStyle ? (
         <>
           {title ? (
-            <Text style={[navbarStyles.fightrText, navbarStyles.backButton, { color: textColor }]}>
+            <Text style={[navbarStyles.fightrText, navbarStyles.backButton, { color: textColor, paddingTop: insets.top }]}>
               {title}
             </Text>
           ) : (
-            <Image
-              source={require('../assets/WhiteBack.png')} // Ensure this path is correct
-              style={[navbarStyles.logoStyle, navbarStyles.backButton]}
-            />
+            <View style={{ paddingTop: insets.top, position: 'absolute', left: screenWidth * 0.05 }}>
+              <Image
+                source={require('../assets/WhiteBack.png')} // Ensure this path is correct
+                style={[navbarStyles.logoStyle]}
+              />
+            </View>
           )}
-          <View style={navbarStyles.iconContainer}>
+          <View style={[navbarStyles.iconContainer, { paddingTop: insets.top }]}>
             {/* Notification bell */}
             {/* <TouchableOpacity style={[navbarStyles.homeNextButton, { marginRight: 15 }]} onPress={() => navigation.navigate('NotificationScreen')}>
-          <Icon name="bell" size={navbarStyles.iconSize.width} color={textColor} />
-          <View style={matchedUsersInterface.redDot}></View>
-        </TouchableOpacity> */}
+<Icon name="bell" size={navbarStyles.iconSize.width} color={textColor} />
+<View style={matchedUsersInterface.redDot}></View>
+</TouchableOpacity> */}
             <TouchableOpacity style={navbarStyles.homeNextButton} onPress={() => navigation.navigate('SettingsScreen')}>
               <Icon name="cog" size={navbarStyles.iconSize.width} color={textColor} />
             </TouchableOpacity>
@@ -182,7 +210,7 @@ const Navbar = ({
         <>
           {showBackButton && !dataToUpdate && !onBackPressCustom && (
             <TouchableOpacity
-              style={navbarStyles.backButton}
+              style={[navbarStyles.backButton, { paddingTop: insets.top }]}
               onPress={handleBackPressPrefSel || (() => navigation.goBack())} // Use the custom handler if provided, otherwise use the default behavior
             >
               <Icon name="arrow-left" size={navbarStyles.iconSize.width} color={textColor} />
@@ -190,7 +218,7 @@ const Navbar = ({
           )}
           {showBackButton && !dataToUpdate && onBackPressCustom && (
             <TouchableOpacity
-              style={navbarStyles.backButton}
+              style={[navbarStyles.backButton, { paddingTop: insets.top }]}
               onPress={onBackPressCustom}
             >
               <Icon name="arrow-left" size={navbarStyles.iconSize.width} color={textColor} />
@@ -198,7 +226,7 @@ const Navbar = ({
           )}
           {showBackButton && dataToUpdate && (
             <TouchableOpacity
-              style={navbarStyles.backButton}
+              style={[navbarStyles.backButton, { paddingTop: insets.top }]}
               onPress={handleBackPress}
             >
               <Icon name="arrow-left" size={navbarStyles.iconSize.width} color={textColor} />
@@ -217,12 +245,18 @@ const Navbar = ({
             )
           }
           {showNextButton && (
-            <TouchableOpacity style={navbarStyles.nextButton} onPress={onNext}>
+            <TouchableOpacity
+              style={[navbarStyles.nextButton, { paddingTop: insets.top }]}
+              onPress={onNext}
+            >
               <Icon name="check" size={navbarStyles.iconSize.width} color={textColor} />
             </TouchableOpacity>
           )}
           {showLockIcon && (
-            <TouchableOpacity style={navbarStyles.nextButton} onPress={onLockPress}>
+            <TouchableOpacity
+              style={[navbarStyles.nextButton, { paddingTop: insets.top }]}
+              onPress={onLockPress}
+            >
               <Icon name="lock" size={navbarStyles.iconSize.width} color={textColor} />
             </TouchableOpacity>
           )}

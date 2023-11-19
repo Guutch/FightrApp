@@ -33,19 +33,21 @@ const LoginScreen = ({ navigation }) => {
       />
 
       {/* Button container positioned at the bottom */}
+      
       <View style={loginScreen.buttonContainer}>
+      <Text style={{color: 'white', marginBottom: 10}} onPress={() => navigation.navigate('EmailLogin')}>Aready have an account? <Text style={loginScreen.linkText}>Sign in</Text></Text>
         {/* CODE HERE FOR GOOGLE/APPLE SIGN UP/SIGN IN */}
-        {/* <TouchableOpacity
+        {/* <TouchableOpacity   EmailLogin
           style={[loginScreen.bottomButton, {marginBottom: 5}]}
           onPress={() => navigation.navigate('EmailLogin')} // Handle navigation
-        >
+        > 
           <Text style={loginScreen.buttonText}>Continue with Email</Text>
         </TouchableOpacity> */}
         <TouchableOpacity
           style={loginScreen.bottomButton}
-          onPress={() => navigation.navigate('EmailLogin')} // Handle navigation
+          onPress={() => navigation.navigate('SignUpFlow')} // Handle navigation
         >
-          <Text style={loginScreen.buttonText}>Continue with Email</Text>
+          <Text style={loginScreen.buttonText}>Sign up with Email</Text>
         </TouchableOpacity>
       </View>
 

@@ -5,7 +5,6 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const WebSocket = require('ws');
 const http = require('http');
-// const { saveMessageToDatabase } = require('../api');
 
 
 // Initialize Express app
@@ -29,9 +28,15 @@ const wss = new WebSocket.Server({ server });
 
 const connectedUsers = {};
 
+function heartbeat() {
+  this.isAlive = true;
+}
+
 wss.on('connection', (ws, req) => {
   const params = url.parse(req.url, true).query;
   const userId = params.userID;
+  ws.isAlive = true;
+  ws.on('pong', heartbeat);
 
   console.log("Params in connection", params)
 
@@ -92,6 +97,14 @@ wss.on('error', (error) => {
   console.error(`WebSocket Error: ${error}`);
 });
 
+const interval = setInterval(function ping() {
+  wss.clients.forEach(function each(ws) {
+    if (ws.isAlive === false) return ws.terminate();
+
+    ws.isAlive = false;
+    ws.ping();  // Sending a ping to the client
+  });
+}, 30000);  // Ping interval, e.g., 30 seconds
 
 // Your existing routes
 const usersRoute = require('./routes/users');

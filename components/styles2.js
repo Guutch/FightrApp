@@ -132,7 +132,7 @@ const navbarStyles = StyleSheet.create({
   },
   fightrText: {
     ...commonStyles.primaryText,
-    fontSize: screenWidth * 0.1,
+    fontSize: screenWidth * 0.075,
     lineHeight: screenHeight * 0.064,
     color: '#FFFFFF',
   },
@@ -422,6 +422,8 @@ const photosScreen = StyleSheet.create({
   },
   extendedPhotosRectangle: {
     height: screenHeight * 0.2,
+    width: screenWidth * 0.35, // Updated width property
+    borderRadius: 20,
   },
   photosbutton: {
     backgroundColor: '#000000',
@@ -559,11 +561,14 @@ const fightingStyleScreen = StyleSheet.create({
     paddingTop: screenHeight * 0.02,
     // paddingTop: screenHeight * 0.02,
   },
-
   list: {
     alignItems: "center",
-    paddingTop: screenHeight * 0.07,
+    paddingTop: screenHeight * 0.06,
   },
+  listLevel: {
+    paddingTop: screenHeight * 0.03, // Overwrites or adds properties
+  },
+  
   listPrefSel: {
     alignItems: "center",
     paddingTop: screenHeight * 0.07,
@@ -1027,13 +1032,14 @@ const swipingStyles = StyleSheet.create({
     width: screenWidth * 0.92,
     height: screenHeight * 0.82,
     resizeMode: "cover",
+    borderRadius: 20,
   },
   cardContainer: {
     position: 'absolute',
     paddingTop: screenHeight * 0.03,
     // width: screenWidth * 0.92,
     height: screenHeight * 0.82,
-    borderRadius: 10,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: screenHeight * 0.02,
@@ -1416,6 +1422,10 @@ const matchedUsersInterface = StyleSheet.create({
     position: 'absolute',
     bottom: 15,
     alignSelf: 'center'
+  },
+  matchesAndMessages: {
+    fontSize: 20,
+    marginLeft: screenWidth * 0.025
   },
   textInput: {
     flex: 0.8,

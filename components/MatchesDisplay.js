@@ -4,8 +4,8 @@ import { settingsStyles, matchedUsersInterface, photosScreen } from '../componen
 
 const MatchesDisplay = ({ matches, navigateToChat }) => {
   return (
-    <View style={{ flex: 0.3 }}>
-      <Text style={settingsStyles.sectionTitle}>Matches</Text>
+    <View style={{ flex: 0.35 }}>
+      <Text style={[settingsStyles.sectionTitle, matchedUsersInterface.matchesAndMessages, {paddingBottom: 8}]}>Matches</Text>
       <ScrollView horizontal>
         {matches.map(match => (
           <TouchableOpacity key={match.id} onPress={() => navigateToChat(match)}>

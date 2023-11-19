@@ -65,7 +65,7 @@ const MessagingScreen = ({ navigation }) => {
   // First UseEffect called - Asynchronous function to fetch all necessary data
   const fetchData = async () => {
     // Fetch all matches for the current user
-    console.log("THIS IS THE WEB SOCKET",ws)
+    console.log("THIS IS THE WEB SOCKET", ws)
     const matches = await fetchAllMatches(userId.userId);
     console.log("matches")
     console.log(matches)
@@ -93,25 +93,25 @@ const MessagingScreen = ({ navigation }) => {
       console.log("lastMessage")
       console.log(lastMessage)
 
-// Check if a last message exists, and access its properties conditionally
-const lastMessageContent = lastMessage.length > 0 ? lastMessage[0].content : '';
-const lastMessageRead = lastMessage.length > 0 ? lastMessage[0].read : true;
-const lastMessageReceiverId = lastMessage.length > 0 ? lastMessage[0].receiver_id : null;
+      // Check if a last message exists, and access its properties conditionally
+      const lastMessageContent = lastMessage.length > 0 ? lastMessage[0].content : '';
+      const lastMessageRead = lastMessage.length > 0 ? lastMessage[0].read : true;
+      const lastMessageReceiverId = lastMessage.length > 0 ? lastMessage[0].receiver_id : null;
 
-console.log(lastMessageReceiverId === userId)
-console.log(lastMessageReceiverId)
-console.log(userId.userId)
+      console.log(lastMessageReceiverId === userId)
+      console.log(lastMessageReceiverId)
+      console.log(userId.userId)
 
-// Construct an object for each matched user
-return {
-  id,
-  image: imageData.imageUrl,
-  name: firstName,
-  lastMessage: lastMessageContent,  // Use the content of the last message, if available
-  read: lastMessageRead,  // Use the read status of the last message, default to true
-  receiver_id: lastMessageReceiverId, // Include the receiver_id of the last message
-};
-});
+      // Construct an object for each matched user
+      return {
+        id,
+        image: imageData.imageUrl,
+        name: firstName,
+        lastMessage: lastMessageContent,  // Use the content of the last message, if available
+        read: lastMessageRead,  // Use the read status of the last message, default to true
+        receiver_id: lastMessageReceiverId, // Include the receiver_id of the last message
+      };
+    });
 
 
 
@@ -216,8 +216,9 @@ return {
             <MatchesDisplay matches={matches} navigateToChat={(selectedUser) => navigateToChat(selectedUser, userId.userId)} />
 
             <View style={{ flex: 0.7, paddingTop: 10 }}>
-              <Text style={settingsStyles.sectionTitle}>Messages</Text>
+              <Text style={[settingsStyles.sectionTitle, matchedUsersInterface.matchesAndMessages]}>Messages</Text>
               <FlatList
+                // style={{ backgroundColor: 'red' }}
                 data={matches}
                 renderItem={({ item }) => (
                   item.lastMessage ? (
@@ -226,11 +227,13 @@ return {
                         flexDirection: 'row',
                         alignItems: 'center',
                         padding: 16,
-                        borderBottomColor: '#ccc',
+                        borderBottomColor: '#000',
                         borderBottomWidth: 1,
                         width: '95%',
-                        alignSelf: 'center'  // This will center the View
+                        alignSelf: 'center',
+                        marginBottom: 1, // This ensures that the border is not covered by the next item
                       }}>
+
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                           <Image source={{ uri: item.image }} style={{ width: 50, height: 50, borderRadius: 25 }} />
                           {/* {!item.read && <View style={matchedUsersInterface.redDot}></View>} */}
@@ -238,9 +241,9 @@ return {
                           {!readChats[item.id] && !item.read && item.receiver_id === userId.userId && <View style={matchedUsersInterface.redDot}></View>}
                         </View>
                         <View style={{ marginLeft: 10 }}>
-                          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.name}</Text>
+                          <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#000' }}>{item.name}</Text>
 
-                          <Text>
+                          <Text style={{ fontSize: 14, color: '#000' }}>
                             {item.lastMessage.length > 40 ? `${item.lastMessage.substring(0, 40)}...` : item.lastMessage}
                           </Text>
                         </View>

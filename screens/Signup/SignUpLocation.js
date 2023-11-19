@@ -27,7 +27,7 @@ const SignUpLocation = ({ navigation, route }) => {
         Geolocation.getCurrentPosition(
           async (position) => {
             // console.log('Data from previous steps, photos, martial arts, and fighting level:', route.params);
-            Alert.alert('Location granted', `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
+            // Alert.alert('Location granted', `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
 
             let parts = route.params.birthday.split('/');
 let mydate = new Date(parts[2], parts[1] - 1, parts[0]);
@@ -87,7 +87,6 @@ let mydate = new Date(parts[2], parts[1] - 1, parts[0]);
         navigation={navigation}
         showBackButton={true}
         showNextButton={false}
-      // onNext={handlePress}
       />
       <View style={signUpLocation.iconContainer}>
         <Icon name="map-marker" size={150} color="#FFFFFF" />

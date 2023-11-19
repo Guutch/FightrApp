@@ -19,23 +19,23 @@ const EmailLogin = ({ navigation }) => {
 
   const handleSignIn = async () => {
     const result = await dispatch(login(email, password)); // login is now an async action
-    
+
     console.log(result);
     console.log(result)
-    
+
     if (result) {
       navigation.navigate('MainFlow');
     } else {
       // handle unsuccessful login
       // console.log("lol")
     }
-    
-};
+
+  };
 
   return (
     <View style={firstNameScreen.container}>
-     <StatusBar backgroundColor="black" barStyle="light-content" />
-      <Navbar navigation={navigation} backgroundColor="#000000" textColor="#FFFFFF" showBackButton={true}/>
+      <StatusBar backgroundColor="black" barStyle="light-content" />
+      <Navbar navigation={navigation} backgroundColor="#000000" textColor="#FFFFFF" showBackButton={true} />
 
       <Text style={firstNameScreen.questionText}>Email address</Text>
       <TextInput
@@ -62,18 +62,8 @@ const EmailLogin = ({ navigation }) => {
       </TouchableOpacity>
 
       <TouchableOpacity style={emailLogin.signInButton} onPress={handleSignIn}>
-    <Text style={emailLogin.signInButtonText}>Sign in</Text>
-</TouchableOpacity>
-
-
-<View style={{...emailLogin.signUpContainer, position: 'absolute', bottom: 20, width: '100%'}}>
-        <Text>
-          New Here?{' '}
-          <Text style={emailLogin.signUpText} onPress={() => navigation.navigate('SignUpFlow')}>
-            Sign Up!
-          </Text>
-        </Text>
-      </View>
+        <Text style={emailLogin.signInButtonText}>Sign in</Text>
+      </TouchableOpacity>
     </View>
   );
 };

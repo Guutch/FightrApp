@@ -6,30 +6,46 @@ import { firstNameScreen, lastNameScreen } from '../../components/styles2';
 import Navbar from '../../components/Navbar';
 import ProgressBar from '../../components/ProgressBar';
 import InfoComponent from '../../components/InfoComponent';
+import PopUp from '../../components/PopUp';
+// import {togglePopup} from '../../PopupState'
 
 const FirstName = ({ navigation }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  
+  const togglePopup = () => {
+    setPopupVisible(!isPopupVisible);
+  }; 
 
   const handlePress = () => {
+   
     if (!firstName || firstName.trim() === '') {
-      Alert.alert('Validation error', 'First name cannot be empty.');
+      setErrorMessage('First name cannot be empty.'); // Set the error message
+      togglePopup(); // Show the popup
       return;
     }
-
+    // ... other conditions where you set different error messages
+    
     if (/\d/.test(firstName || lastName)) {
-      Alert.alert('Validation error', 'Your name cannot contain digits.');
+      setErrorMessage('Your name cannot contain digits.'); // Set the error message
+      togglePopup(); // Show the popup
       return;
     }
 
     if (!lastName || lastName.trim() === '') {
-      Alert.alert('Validation error', 'Last name cannot be empty.');
+      setErrorMessage('Last name cannot be empty.'); // Set the error message
+      togglePopup(); // Show the popup
       return;
     }
 
     // navigation.navigate('Photos', { firstName, lastName });
     navigation.navigate('EmailAndNumber', { firstName, lastName });
   };
+
+
 
   return (
     <View style={firstNameScreen.container}>
@@ -43,6 +59,11 @@ const FirstName = ({ navigation }) => {
         onNext={handlePress}
       />
       <ProgressBar progress={1 / 8} />
+      <PopUp
+  isVisible={isPopupVisible}
+  onClose={togglePopup}
+  errorMessage={errorMessage}
+/>
 
       <Text style={firstNameScreen.questionText}>What's your first name?</Text>
       <TextInput
