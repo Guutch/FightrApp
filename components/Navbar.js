@@ -104,10 +104,6 @@ const Navbar = ({
         return;
       }
 
-
-      console.log("Here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1")
-
-
       // fightingLevel: Number(dataToUpdate.fightingLevel)
       const hasFightingLevelChanged = Number(dataToUpdate.fightingLevel) !== dataToUpdate.originalFightingLevel;
       if (hasFightingLevelChanged) {
@@ -119,46 +115,20 @@ const Navbar = ({
 
       const hasWeightChanged = Number(dataToUpdate.weight) !== dataToUpdate.originalWeight;
       if (hasWeightChanged) {
-        console.log("BIG BOSHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
         // Need to dispatch the change
         dispatch(updateWeight(dataToUpdate.userId, dataToUpdate.weightClass))
         // Need to update weight_range preference
         // Can call users.js
         handleWeightChange(dataToUpdate.userId, dataToUpdate.weightClass, dataToUpdate.userSex)
-      } else {
-        console.log("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL")
-      }
-
-
-
+      } 
 
       const cleanedData = constructPayload(dataToUpdate);
-
-
-
-
       updateEditProfileData(dataToUpdate.userId, cleanedData);
-
-
-      // console.log("Images", dataToUpdate.images)
-      // console.log("changedPhotos", dataToUpdate.changedPhotos)
-      // console.log("Type of changedPhotos:", typeof (dataToUpdate.changedPhotos));
-      // console.log("Is changedPhotos an array?", Array.isArray(dataToUpdate.changedPhotos));
-
-
-
-
-      // Gives the ID of the MongoDB record
-      // console.log("Deleted From AWS", dataToUpdate.deletedPhotos)
-
 
       if (dataToUpdate.changedPhotos !== null) {
         console.log(dataToUpdate.changedPhotos.length)
         await changePhotoPositions(dataToUpdate.changedPhotos)
       }
-
-
-
 
       const cleanedPhotos = constructImagesPayload(dataToUpdate);
       // console.log("New Photo(s)", cleanedPhotos.newImages)

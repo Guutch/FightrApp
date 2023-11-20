@@ -120,7 +120,8 @@ const navbarStyles = StyleSheet.create({
   banner: {
     position: 'absolute',
     width: screenWidth,
-    height: screenHeight * 0.1,
+    paddingTop: screenHeight * 0.01,
+    // height: screenHeight * 0.1, // Need to fiddle with this. Doesn't work for islands
     top: 0,
     left: 0,
     right: 0,
