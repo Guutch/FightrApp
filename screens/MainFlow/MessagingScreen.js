@@ -184,7 +184,7 @@ const MessagingScreen = ({ navigation }) => {
   // console.log("Current matches state before render: ", matches);
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+    <View style={matchedUsersInterface.matchedMainContainer}>
       <Navbar navigation={navigation} backgroundColor="#FFFFFF" textColor="#000000" homeStyle={true} />
       <View style={matchedUsersInterface.mainContainer}>
         {/* Scenario 1: No matches & No messages */}
@@ -200,7 +200,7 @@ const MessagingScreen = ({ navigation }) => {
           <View style={{ flex: 1 }}>
             <MatchesDisplay matches={matches} navigateToChat={(selectedUser) => navigateToChat(selectedUser, userId.userId)} />
 
-            <View style={{ flex: 0.7 }}>
+            <View style={matchedUsersInterface.matchedMessagesSection}>
               <Text style={settingsStyles.sectionTitle}>Messages</Text>
               <View style={matchedUsersInterface.centeredTextContainer}>
                 <Text style={matchedUsersInterface.mainText}>No Messages</Text>
@@ -215,7 +215,7 @@ const MessagingScreen = ({ navigation }) => {
           <View style={{ flex: 1 }}>
             <MatchesDisplay matches={matches} navigateToChat={(selectedUser) => navigateToChat(selectedUser, userId.userId)} />
 
-            <View style={{ flex: 0.7, paddingTop: 10 }}>
+            <View style={matchedUsersInterface.matchedMessagesSection}>
               <Text style={[settingsStyles.sectionTitle, matchedUsersInterface.matchesAndMessages]}>Messages</Text>
               <FlatList
                 // style={{ backgroundColor: 'red' }}
@@ -223,27 +223,16 @@ const MessagingScreen = ({ navigation }) => {
                 renderItem={({ item }) => (
                   item.lastMessage ? (
                     <TouchableOpacity onPress={() => navigateToChat(item, userId.userId)}>
-                      <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        padding: 16,
-                        borderBottomColor: '#000',
-                        borderBottomWidth: 1,
-                        width: '95%',
-                        alignSelf: 'center',
-                        marginBottom: 1, // This ensures that the border is not covered by the next item
-                      }}>
-
+                      <View style={matchedUsersInterface.matchedMessageItemContainer}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                          <Image source={{ uri: item.image }} style={{ width: 50, height: 50, borderRadius: 25 }} />
+                        <Image source={{ uri: item.image }} style={matchedUsersInterface.matchedMessageItemImage} />
                           {/* {!item.read && <View style={matchedUsersInterface.redDot}></View>} */}
                           {/* {!readChats[item.id] && !item.read && <View style={matchedUsersInterface.redDot}></View>} */}
                           {!readChats[item.id] && !item.read && item.receiver_id === userId.userId && <View style={matchedUsersInterface.redDot}></View>}
                         </View>
-                        <View style={{ marginLeft: 10 }}>
-                          <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#000' }}>{item.name}</Text>
-
-                          <Text style={{ fontSize: 14, color: '#000' }}>
+                        <View style={matchedUsersInterface.matchedMessageItemTextContainer}>
+                        <Text style={matchedUsersInterface.matchedMessageItemName}>{item.name}</Text>
+                          <Text style={matchedUsersInterface.matchedMessageItemText}>
                             {item.lastMessage.length > 40 ? `${item.lastMessage.substring(0, 40)}...` : item.lastMessage}
                           </Text>
                         </View>

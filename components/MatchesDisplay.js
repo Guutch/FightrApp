@@ -6,7 +6,7 @@ const MatchesDisplay = ({ matches, navigateToChat }) => {
   return (
     <View style={{ flex: 0.35 }}>
       <Text style={[settingsStyles.sectionTitle, matchedUsersInterface.matchesAndMessages, {paddingBottom: 8}]}>Matches</Text>
-      <ScrollView horizontal>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {matches.map(match => (
           <TouchableOpacity key={match.id} onPress={() => navigateToChat(match)}>
             <Image

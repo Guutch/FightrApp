@@ -149,18 +149,18 @@ const Photos = ({ navigation, route }) => {
   const handlePress = () => {
 
     // Must enter 1 photo validation
-    // if (images[0]===null) {
-    //   Alert.alert('Validation error', 'You must upload at least one photo.');
-    //   return;
-    // }
+    if (images[0]===null) {
+      Alert.alert('Validation error', 'You must upload at least one photo.');
+      return;
+    }
 
-    // images.forEach((image, index) => {
-    //   if (image) {
-    //     console.log(`Image at index ${index} has position ${image.position}`);
-    //   } else {
-    //     console.log(`No image at index ${index}`);
-    //   }
-    // });
+    images.forEach((image, index) => {
+      if (image) {
+        console.log(`Image at index ${index} has position ${image.position}`);
+      } else {
+        console.log(`No image at index ${index}`);
+      }
+    });
     
     
     

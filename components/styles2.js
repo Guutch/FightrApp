@@ -262,7 +262,7 @@ const firstNameScreen = StyleSheet.create({
     borderRadius: 40,
     position: 'absolute',
     left: screenWidth * 0.1,
-    top: screenHeight * 0.227,
+    top: screenHeight * 0.205,
     paddingLeft: screenWidth * 0.04,
     fontSize: screenWidth * 0.04,
     color: 'white',
@@ -276,7 +276,7 @@ const lastNameScreen = StyleSheet.create({
     color: 'black',
     position: 'absolute',
     left: screenWidth * 0.037,
-    top: screenHeight * 0.357,
+    top: screenHeight * 0.325,
   },
   rectangle: {
     backgroundColor: 'black',
@@ -285,7 +285,7 @@ const lastNameScreen = StyleSheet.create({
     borderRadius: 40,
     position: 'absolute',
     left: screenWidth * 0.1,
-    top: screenHeight * 0.427,
+    top: screenHeight * 0.38,
     paddingLeft: screenWidth * 0.04,
     fontSize: screenWidth * 0.04,
     color: 'white',
@@ -313,8 +313,8 @@ const birthdayScreen = StyleSheet.create({
     justifyContent: 'center', // This will center the text vertically within the touchable
     alignItems: 'center', // This will center the text horizontally within the touchable
     width: "80%", // Set the width of the button
-    height: screenHeight * 0.08, // You might need to adjust this value based on your design needs
-    top: screenHeight * 0.105, // Keep the touchable at the desired position from the top
+    height: screenHeight * 0.075, // You might need to adjust this value based on your design needs
+    top: screenHeight * 0.08, // Keep the touchable at the desired position from the top
     alignSelf: 'center', // This will center the touchable horizontally within its parent
   },
   
@@ -483,13 +483,13 @@ const heightWeightScreen = StyleSheet.create({
   heightUnitToggle: {
     position: 'absolute',
     right: screenWidth * 0.1,
-    top: screenHeight * 0.33,
+    top: screenHeight * 0.31,
     flexDirection: 'row',
   },
   weightUnitToggle: {
     position: 'absolute',
     right: screenWidth * 0.1,
-    top: screenHeight * 0.53,
+    top: screenHeight * 0.49,
     flexDirection: 'row',
   },
   unitText: {
@@ -1159,15 +1159,23 @@ const swipingStyles = StyleSheet.create({
     fontWeight: '700',
     lineHeight: 40,
     textAlign: 'center',
+    textShadowColor: 'black', // Shadow color
+    textShadowOffset: { width: -2, height: 2 },
+    textShadowRadius: 1
   },
+  
   matchText: {
     color: '#fff',
     fontFamily: 'Inter',
     fontSize: 40,
-    fontWeight: '400', // make this less than the fontWeight in gameOnText to make the text thinner
+    fontWeight: '400', // Less weight for thinner text
     lineHeight: 40,
     textAlign: 'center',
+    textShadowColor: 'black', // Shadow color
+    textShadowOffset: { width: -2, height: 2 },
+    textShadowRadius: 1
   },
+  
   keepSwipingText: {
     fontFamily: 'Inter',
     fontSize: 20,
@@ -1309,12 +1317,12 @@ const progressBarStyles = StyleSheet.create({
   progressBarContainerInsideCard: {
     position: 'absolute',
     top: 0,
-    width: screenWidth * 0.9,
+    width: screenWidth * 0.85,
     height: 4,
     backgroundColor: '#D9D9D9',
     borderRadius: 2,
     alignSelf: 'center',
-    marginTop: 10,
+    marginTop: 11,
     zIndex: 2,
   },
   progressBar: {
@@ -1392,78 +1400,114 @@ const photoSelector = StyleSheet.create({
 const matchedUsersInterface = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    paddingTop: screenHeight * 0.11,  // Replace 'screenHeight' with the actual value
+    paddingTop: screenHeight * 0.11,
     marginBottom: screenHeight * 0.08,
-    // paddingVertical: screenHeight * 0.11
   },
   centeredTextContainer: {
     flex: 1,
     height: "100%",
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: 'red' // For visibility
   },
   mainText: {
-    fontSize: 24
+    fontSize: screenHeight * 0.03, // Responsive font size
   },
   subText: {
-    fontSize: 18
+    fontSize: screenHeight * 0.0225, // Responsive font size
   },
   textInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '95%',
-    height: 40,
-    borderRadius: 40,
+    height: screenHeight * 0.05, // Responsive height
+    borderRadius: screenHeight * 0.05, // Responsive border radius
     backgroundColor: '#D9D9D9',
     borderColor: '#FAF4F4',
     borderWidth: 1,
     position: 'absolute',
-    bottom: 15,
+    bottom: screenHeight * 0.02, // Responsive position
     alignSelf: 'center'
   },
   matchesAndMessages: {
-    fontSize: 20,
+    fontSize: screenHeight * 0.025, // Responsive font size
     marginLeft: screenWidth * 0.025
   },
   textInput: {
     flex: 0.8,
-    paddingLeft: 15,
+    paddingLeft: screenWidth * 0.04, // Responsive padding
   },
   sendText: {
     flex: 0.2,
     textAlign: 'center',
-    color: '#000'
+    color: '#000',
+    fontSize: screenHeight * 0.02, // Responsive font size
   },
   messageItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    padding: screenHeight * 0.01, // Responsive padding
   },
   profilePicture: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
+    width: screenWidth * 0.12, // Responsive width
+    height: screenWidth * 0.12, // Responsive height, keeping aspect ratio
+    borderRadius: screenWidth * 0.06, // Responsive border radius
+    marginRight: screenWidth * 0.025,
   },
   senderName: {
     fontWeight: 'bold',
+    fontSize: screenHeight * 0.02, // Responsive font size
   },
   lastMessage: {
-    maxWidth: 200, // You can adjust this value
+    maxWidth: screenWidth * 0.5, // Responsive max width
   },
   redDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: screenWidth * 0.025, // Responsive width
+    height: screenWidth * 0.025, // Responsive height
+    borderRadius: 50,
     backgroundColor: 'red',
     position: 'absolute',
-    left: 2,
-    top: 0,
-  }
-
+    left: screenWidth * 0.015,
+    top: screenHeight * 0.001,
+  },
+  matchedMainContainer: {
+    flex: 1, 
+    backgroundColor: '#fff'
+  },
+  matchedMessageItemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: screenHeight * 0.02, // Responsive padding
+    borderBottomColor: '#000',
+    borderBottomWidth: 1,
+    width: '95%',
+    alignSelf: 'center',
+    marginBottom: screenHeight * 0.005, // Responsive margin
+  },
+  matchedMessageItemImage: {
+    width: screenWidth * 0.175, // Responsive width
+    height: screenWidth * 0.175, // Responsive height, keeping aspect ratio
+    borderRadius: screenWidth * 0.0875, // Responsive border radius
+  },
+  matchedMessageItemTextContainer: {
+    marginLeft: screenWidth * 0.025,
+  },
+  matchedMessageItemName: {
+    fontSize: screenHeight * 0.025, // Responsive font size
+    fontWeight: 'bold', 
+    color: '#000'
+  },
+  matchedMessageItemText: {
+    fontSize: screenHeight * 0.0175, // Responsive font size
+    color: '#000'
+  },
+  matchedMessagesSection: {
+    flex: 0.7, 
+    paddingTop: screenHeight * 0.0125, // Responsive padding
+  },
 });
+
+
 
 const popUpStyles = StyleSheet.create({
   overlay: {

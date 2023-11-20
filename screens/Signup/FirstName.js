@@ -15,20 +15,20 @@ const FirstName = ({ navigation }) => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  
+
   const togglePopup = () => {
     setPopupVisible(!isPopupVisible);
-  }; 
+  };
 
   const handlePress = () => {
-   
+
     if (!firstName || firstName.trim() === '') {
       setErrorMessage('First name cannot be empty.'); // Set the error message
       togglePopup(); // Show the popup
       return;
     }
     // ... other conditions where you set different error messages
-    
+
     if (/\d/.test(firstName || lastName)) {
       setErrorMessage('Your name cannot contain digits.'); // Set the error message
       togglePopup(); // Show the popup
@@ -49,7 +49,7 @@ const FirstName = ({ navigation }) => {
 
   return (
     <View style={firstNameScreen.container}>
-      <StatusBar backgroundColor="black" barStyle="light-content"/>
+      <StatusBar backgroundColor="black" barStyle="light-content" />
       <Navbar
         backgroundColor="#000000"
         textColor="#FFFFFF"
@@ -60,10 +60,10 @@ const FirstName = ({ navigation }) => {
       />
       <ProgressBar progress={1 / 8} />
       <PopUp
-  isVisible={isPopupVisible}
-  onClose={togglePopup}
-  errorMessage={errorMessage}
-/>
+        isVisible={isPopupVisible}
+        onClose={togglePopup}
+        errorMessage={errorMessage}
+      />
 
       <Text style={firstNameScreen.questionText}>What's your first name?</Text>
       <TextInput

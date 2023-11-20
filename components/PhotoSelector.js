@@ -12,11 +12,11 @@ const PhotoSelector = ({ images, selectPhoto, removePhoto, isEditProfile, useUrl
         onPress={() => selectPhoto(0)}
       >
         {images[0] && (
-         <Image
-         source={{ uri: images[0].path }} // Always use 'path'
-         style={isEditProfile ? photoSelector.imageEdit : photoSelector.image}
-       />
-       
+          <Image
+            source={{ uri: images[0].path }} // Always use 'path'
+            style={isEditProfile ? photoSelector.imageEdit : photoSelector.image}
+          />
+
         )}
         {images[0] && (
           <TouchableOpacity
@@ -36,47 +36,48 @@ const PhotoSelector = ({ images, selectPhoto, removePhoto, isEditProfile, useUrl
         </View>
       </TouchableOpacity>
       <View style={photosScreen.flatListStyle}>
-      <FlatList
-  data={images.slice(1)}
-  horizontal
-  bounces={true}
-  keyExtractor={(item, index) => index.toString()}
-  renderItem={({ item, index }) => (
-    <View
-      style={item ? photosScreen.selectedPhotoContainer : photosScreen.photosrectangle}
-    >
-      <TouchableOpacity
-        onPress={() => (item ? null : selectPhoto(index + 1))}
-        style={{ flex: 1 }}
-      >
-        {item ? (
-          <View>
-           <Image
-  source={{ uri: item.path }} // Always use 'path'
-  style={photosScreen.photosrectangle}
-/>
-
-            <TouchableOpacity
-              onPress={() => removePhoto(index + 1)}
-              style={photosScreen.deleteIcon}
+        <FlatList
+        showsHorizontalScrollIndicator={false}
+          data={images.slice(1)}
+          horizontal
+          bounces={true}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <View
+              style={item ? photosScreen.selectedPhotoContainer : photosScreen.photosrectangle}
             >
-              <Icon name="times-circle" size={35} color="#000" />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={photosScreen.icon}>
-            <Icon name="plus" size={35} color="#000" />
-          </View>
-        )}
-      </TouchableOpacity>
-    </View>
-  )}
-/>
+              <TouchableOpacity
+                onPress={() => (item ? null : selectPhoto(index + 1))}
+                style={{ flex: 1 }}
+              >
+                {item ? (
+                  <View>
+                    <Image
+                      source={{ uri: item.path }} // Always use 'path'
+                      style={photosScreen.photosrectangle}
+                    />
+
+                    <TouchableOpacity
+                      onPress={() => removePhoto(index + 1)}
+                      style={photosScreen.deleteIcon}
+                    >
+                      <Icon name="times-circle" size={35} color="#000" />
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View style={photosScreen.icon}>
+                    <Icon name="plus" size={35} color="#000" />
+                  </View>
+                )}
+              </TouchableOpacity>
+            </View>
+          )}
+        />
 
       </View>
     </View>
   );
-  
+
 };
 
 // const styles = StyleSheet.create({
