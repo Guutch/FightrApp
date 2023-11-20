@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import SettingSection from './SettingSection'; // Assuming it's in the same folder
 import { popUpStyles, navbarStyles } from '../components/styles2';
 
-const PopUp = ({ isVisible, onClose, options, selectedPreference, onPreferenceClick, userId, selectedUserId, actionCompleted, resetAndNavigate, sexSelector, onPreferenceChange, errorMessage }) => {
+const PopUp = ({ isVisible, onClose, options, selectedPreference, onPreferenceClick, userId, selectedUserId, actionCompleted, resetAndNavigate, sexSelector, onPreferenceChange, errorMessage, screen, navigateToChat, match, navigateToViewProfile }) => {
   const titleMap = {
     'Unmatch user': 'Are you sure you want to unmatch this user?',
     'Report user': 'Are you sure you want to report this user?',
@@ -38,12 +38,25 @@ const PopUp = ({ isVisible, onClose, options, selectedPreference, onPreferenceCl
   }, [isVisible]);
 
   const handleRoute = (option) => {
-    if (sexSelector = true) {
-      console.log(option)
-      onPreferenceChange(option);
+    if (screen === "Msg") {
+      console.log("Selected option:", option);
+
+      // Now you can use the match object
+      if (option === "Message") {
+        navigateToChat(match);
+      } else {
+        // Need to add the code in here
+        navigateToViewProfile(match)
+      }
     } else {
-      onPreferenceClick(option, userId, selectedUserId)
+      if (sexSelector = true) {
+        console.log(option)
+        onPreferenceChange(option);
+      } else {
+        onPreferenceClick(option, userId, selectedUserId)
+      }
     }
+
   }
 
   return (
@@ -72,27 +85,30 @@ const PopUp = ({ isVisible, onClose, options, selectedPreference, onPreferenceCl
                 ) : selectedPreference ? (
                   // Display message based on selected preference
                   <Text>{titleMap[selectedPreference]}</Text>
+                ) : screen === 'Msg' ? (
+                  // Conditionally display the handshake icon for the 'Msg' screen
+                  <Icon name="handshake-o" size={navbarStyles.iconSize.width} color={"#000"} />
                 ) : (
                   // Default icon to display when no specific condition is met
                   <Icon name="lock" size={navbarStyles.iconSize.width} color={"#000"} />
                 )}
               </View>
-              {                actionCompleted ? (
-                  // Display a simple "OK" section for action completed, with resetAndNavigate as onPress
-                  <SettingSection preference="OK" onPress={resetAndNavigate} />
-                ) : errorMessage ? (
-                  // Display a simple "OK" section for an error message, with onClose as onPress
-                  <SettingSection preference="OK" onPress={onClose} />
-                ) : (
-                  // Map through options and create a SettingSection for each if no message or error
-                  options && options.map((option, index) => (
-                    <SettingSection
-                      key={index}
-                      preference={option.preference}
-                      onPress={() => handleRoute(option.preference)}
-                    />
-                  ))
-                )
+              {actionCompleted ? (
+                // Display a simple "OK" section for action completed, with resetAndNavigate as onPress
+                <SettingSection preference="OK" onPress={resetAndNavigate} />
+              ) : errorMessage ? (
+                // Display a simple "OK" section for an error message, with onClose as onPress
+                <SettingSection preference="OK" onPress={onClose} />
+              ) : (
+                // Map through options and create a SettingSection for each if no message or error
+                options && options.map((option, index) => (
+                  <SettingSection
+                    key={index}
+                    preference={option.preference}
+                    onPress={() => handleRoute(option.preference)}
+                  />
+                ))
+              )
               }
 
             </Animated.View>

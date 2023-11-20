@@ -152,6 +152,7 @@ export const fetchImage = async (userId) => {
   }
 
   try {
+    
     console.log("This is the user's ID in fetchImage", userId);
     const response = await axios.get(`${API_URL}/users/${userId}/image`); // Note the template string
     if (response.data) {
@@ -187,6 +188,10 @@ export const fetchName = async (userId) => {
 };
 
 export const fetchImages = async (userId) => {
+  if (!userId) {
+    console.log('[api.js] User ID is not available. Skipping fetchImage.');
+    return null;
+  }
   try {
     const response = await axios.get(`${API_URL}/medias/${userId}/getAllimages`); // Note the template string
     if (response.data) {
@@ -378,11 +383,8 @@ export const fetchUserPreferences = async (userId) => {
       ...preferenceResponse.data,
       ...metricsResponse.data,
       ...weightResponse.data,
-      // actualWeight: weightResponseActual.data.weight,
-      // ...heightResponseActual.data,
       actualWeight: weightResponseActual.data.weight,
       actualHeight: heightResponseActual.data.height,
-      // weightUnit: 'lbs', // The weight unit is now always lbs
       usersFightLevel: fightLevelResponse.data.fightingLevel
     };
 

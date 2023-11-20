@@ -4,7 +4,7 @@ import Navbar from '../../components/Navbar';
 import { swipingStyles } from '../../components/styles2';
 import UserProfileCard from '../../components/UserProfileCard';
 import NoUsersCard from '../../components/NoUsersCard';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { setshouldRefreshMatches } from '../../sharedState'
 import { fetchUsersAndImages, handleNewSwipe, handleNewMatch } from '../../api';
 import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
@@ -58,7 +58,7 @@ const SwipingScreen = ({ navigation }) => {
     8: 'Light Heavyweight',
     9: 'Heavyweight',
   };
-  
+
 
   const getWeightClass = (classNumber) => {
     return weightClasses[classNumber] || 'Unknown';
@@ -86,9 +86,9 @@ const SwipingScreen = ({ navigation }) => {
       // Sort each user's images array by the 'position' attribute
       foundUsers.forEach((user) => {
         user.images.sort((a, b) => a.position - b.position);
-    //     console.log(`User ${user.userId} has ${user.images.length} images.`);
-    //     console.log("HERES THE USER")
-    // console.log(user)
+        //     console.log(`User ${user.userId} has ${user.images.length} images.`);
+        //     console.log("HERES THE USER")
+        // console.log(user)
       });
 
       setUsers(foundUsers);
@@ -99,18 +99,18 @@ const SwipingScreen = ({ navigation }) => {
 
   useFocusEffect(
     React.useCallback(() => {
-        const handleBackButtonClick = () => {
-            BackHandler.exitApp();
-            return true;
-        };
+      const handleBackButtonClick = () => {
+        BackHandler.exitApp();
+        return true;
+      };
 
-        BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+      BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
 
-        return () => {
-            BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
-        };
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+      };
     }, [])
-);
+  );
 
 
 
@@ -120,26 +120,28 @@ const SwipingScreen = ({ navigation }) => {
       //For now I am assuming there is always a match
       if (direction === 'right') {
         // Record the swipe (regard)
-        
+
         console.log("users[0]")
         console.log(users[0])
-      
+
         if (users[0].swipedRightOnUser === true) {
           // If a match is made, ping the card back to its original position
           pan.setValue({ x: 0, y: 0 });
-        
+
           // Set matchMade to true
           setMatchMade(true);
-        
+
+          setshouldRefreshMatches(true)
+
           // Create a match in the backend
           handleNewMatch({
             user1_id: userId.userId,
             user2_id: users[0].userId,
           });
-        
+
           // Stop the function execution
           return;
-        }else {
+        } else {
           // Log a right swipe
           handleNewSwipe({
             swiper_id: userId.userId,
@@ -148,15 +150,15 @@ const SwipingScreen = ({ navigation }) => {
           });
         }
         // If a match is not made, continue with the rest of the code
-      } 
-      
+      }
+
       else if (direction === 'afterMatch') {
         // If afterMatch is triggered, animate the card back to the center
         Animated.spring(pan, { toValue: { x: 0, y: 0 }, useNativeDriver: false }).start();
-      
+
         // Set matchMade to false
         setMatchMade(false);
-      } 
+      }
       else if (direction === 'left') {
         console.log("users[0]")
         console.log(users[0])
@@ -173,13 +175,13 @@ const SwipingScreen = ({ navigation }) => {
       // If a match is not made, remove the current user from the users array immediately
       setUsers(prevUsers => prevUsers.slice(1));
       setCurrentImageIndex(0); // reset image index for next user
-  
+
       // Reset the position of the card after the swipe
       pan.setValue({ x: 0, y: 0 });
     }
   };
-  
-  
+
+
 
 
 
@@ -216,9 +218,8 @@ const SwipingScreen = ({ navigation }) => {
     },
   });
   return (
-    <View style={[swipingStyles.firstContainer, {backgroundColor: "white"}]}>
+    <View style={[swipingStyles.firstContainer, { backgroundColor: "white" }]}>
       <Navbar
-        backgroundColor="#FFFFFF"
         textColor="#000000"
         homeStyle={true}
         navigation={navigation}  // Here we pass navigation as a prop to Navbar
@@ -255,7 +256,7 @@ const SwipingScreen = ({ navigation }) => {
                 setCurrentImageIndex={setCurrentImageIndex}
                 handleImagePress={handleImageTap}
                 style={getFightingStyles(users[0]?.fightingStyle)}
-                fightingStyleDict ={fightingStyles}
+                fightingStyleDict={fightingStyles}
                 level={getFightingLevel(users[0]?.fightingLevel)}
                 weightClass={getWeightClass(users[0]?.weightClass)}
                 showMissedMatchAlert={showMissedMatchAlert}
@@ -267,8 +268,8 @@ const SwipingScreen = ({ navigation }) => {
       </View>
     </View>
   );
-  
-  
+
+
 
 };
 

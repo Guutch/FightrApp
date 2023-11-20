@@ -162,8 +162,9 @@ const RealTimeMessaging = ({ route, navigation }) => {
       actionCompleted={actionCompleted}
       resetAndNavigate={resetAndNavigate}
       />
-      <View style={[matchedUsersInterface.mainContainer, { justifyContent: 'flex-end' }]}>
+      <View style={matchedUsersInterface.rtMsgCont}>
       <FlatList
+      // style={{}}
       ref={flatListRef}
       data={chatMessages}
       renderItem={({ item }) => <ChatMessage message={item.message} isSent={item.isSent} />}

@@ -81,7 +81,7 @@ const FirstName = ({ navigation }) => {
         placeholder="Last Name"
         placeholderTextColor="white"
       />
-      <InfoComponent infoText="Both fields need to be completed. We don't accept numbers." />
+      <InfoComponent infoText="Please don't include numbers." />
     </View>
   );
 };

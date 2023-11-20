@@ -32,6 +32,19 @@ const MessagingScreen = ({ navigation }) => {
     navigation.navigate('RealTimeMessaging', { selectedUser: selectedUser, userId });
   };
 
+  const navigateToViewProfile = async (match) => {
+    try {
+      console.log(match)
+    navigation.navigate('ViewProfileScreen', { 
+      matchId: match.id,
+      firstName: match.name
+    });
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+      // Handle errors (e.g., show an alert or a message)
+    }
+  };
+  
 
   ws.onmessage = async (event) => {
     // Parse the received WebSocket message
@@ -198,10 +211,10 @@ const MessagingScreen = ({ navigation }) => {
         {/* Scenario 2: Match(es) & No messages */}
         {matches.length > 0 && !matches.some(match => match.lastMessage) && (
           <View style={{ flex: 1 }}>
-            <MatchesDisplay matches={matches} navigateToChat={(selectedUser) => navigateToChat(selectedUser, userId.userId)} />
+            <MatchesDisplay matches={matches} navigateToViewProfile={navigateToViewProfile} navigation={navigation} navigateToChat={(selectedUser) => navigateToChat(selectedUser, userId.userId)} />
 
             <View style={matchedUsersInterface.matchedMessagesSection}>
-              <Text style={settingsStyles.sectionTitle}>Messages</Text>
+            <Text style={[settingsStyles.sectionTitle, matchedUsersInterface.matchesAndMessages]}>Messages</Text>
               <View style={matchedUsersInterface.centeredTextContainer}>
                 <Text style={matchedUsersInterface.mainText}>No Messages</Text>
                 <Text style={matchedUsersInterface.subText}>Start a conversation</Text>
@@ -212,13 +225,13 @@ const MessagingScreen = ({ navigation }) => {
 
         {/* Scenario 3: Match(es) & message(s) */}
         {matches.length > 0 && matches.some(match => match.lastMessage) && (
-          <View style={{ flex: 1 }}>
-            <MatchesDisplay matches={matches} navigateToChat={(selectedUser) => navigateToChat(selectedUser, userId.userId)} />
+          <View style={{ flex: 1}}>
+            <MatchesDisplay matches={matches} navigateToViewProfile={navigateToViewProfile} navigation={navigation} navigateToChat={(selectedUser) => navigateToChat(selectedUser, userId.userId)} />
 
             <View style={matchedUsersInterface.matchedMessagesSection}>
               <Text style={[settingsStyles.sectionTitle, matchedUsersInterface.matchesAndMessages]}>Messages</Text>
               <FlatList
-                // style={{ backgroundColor: 'red' }}
+                style={{ flex: 1 }}
                 data={matches}
                 renderItem={({ item }) => (
                   item.lastMessage ? (

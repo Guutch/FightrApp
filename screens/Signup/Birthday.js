@@ -49,8 +49,6 @@ const BirthdayScreen = ({ navigation, route }) => {
 
   const togglePopup = () => {
     setPopupVisible(!isPopupVisible);
-    // Need to do something here with selectedPreference
-    // setSelectedPreference(null);  // Reset to original state   
   };
 
   const handlePreferenceChange = (newPreference) => {
@@ -94,11 +92,6 @@ const BirthdayScreen = ({ navigation, route }) => {
         selectedPreference={selectedPreference}
         sexSelector={true}
         onPreferenceChange={handlePreferenceChange}
-      //   onPreferenceClick={handlePreferenceClick}
-        // userId={"test"}
-      // selectedUserId={selectedUser.id}
-      // actionCompleted={actionCompleted}
-      // resetAndNavigate={resetAndNavigate}
       />
       <ProgressBar progress={5 / 8} />
       <Text style={firstNameScreen.questionText}>When is your birthday?</Text>

@@ -102,6 +102,7 @@ const SettingsScreen = ({ navigation }) => {
 
   // Fight Level function
   const generateLevels = (currentValue, type) => {
+    console.log("usersFightLevel", usersFightLevel)
     console.log('Current Value:', currentValue); // Debugging
     console.log('Type:', type); // Debugging
 
@@ -249,7 +250,7 @@ const SettingsScreen = ({ navigation }) => {
         setFightingLevelPreference(levelNames.join(', '));
       }
       if (data && data.usersFightLevel) {
-        setusersFightLevel(data.fightingLevel);
+        setusersFightLevel(data.usersFightLevel);
       }
       // Need to calculate the user's weight class pref from weight_range
       if (data && data.weight_range) {

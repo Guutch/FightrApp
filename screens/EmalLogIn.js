@@ -57,9 +57,9 @@ const EmailLogin = ({ navigation }) => {
         secureTextEntry={true}
       />
 
-      <TouchableOpacity onPress={() => navigation.navigate('ForgottenPassword')}>
+      {/* <TouchableOpacity onPress={() => navigation.navigate('ForgottenPassword')}>
         <Text style={emailLogin.forgottenPasswordText}>Forgotten Password?</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <TouchableOpacity style={emailLogin.signInButton} onPress={handleSignIn}>
         <Text style={emailLogin.signInButtonText}>Sign in</Text>

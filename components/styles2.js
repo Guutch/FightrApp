@@ -120,8 +120,8 @@ const navbarStyles = StyleSheet.create({
   banner: {
     position: 'absolute',
     width: screenWidth,
-    paddingTop: screenHeight * 0.01,
-    // height: screenHeight * 0.1, // Need to fiddle with this. Doesn't work for islands
+    // paddingTop: screenHeight * 0.01,
+    height: screenHeight * 0.1, // Need to fiddle with this. Doesn't work for islands
     top: 0,
     left: 0,
     right: 0,
@@ -232,7 +232,7 @@ const emailLogin = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     left: screenWidth * 0.278,
-    top: screenHeight * 0.56,
+    top: screenHeight * 0.5,
   },
   signInButtonText: {
     color: 'white',
@@ -1402,7 +1402,13 @@ const matchedUsersInterface = StyleSheet.create({
   mainContainer: {
     flex: 1,
     paddingTop: screenHeight * 0.11,
+    
+  },
+  rtMsgCont: {
+    flex: 1,
+    paddingTop: 0,
     marginBottom: screenHeight * 0.08,
+    justifyContent: 'flex-end'
   },
   centeredTextContainer: {
     flex: 1,

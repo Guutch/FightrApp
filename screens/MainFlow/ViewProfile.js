@@ -19,14 +19,7 @@ const ViewProfileScreen = ({ navigation, route }) => {
   const [profileDataState, setProfileDataState] = useState(null);
 
   const totalImages = route.params.totalImages; // Since totalImages is static, we can just take it from route.params
-const [progress, setProgress] = useState(1 / totalImages); // Initialize progress
-
-  // 1. When looking at another user's profile,
-  // you need to get that user's height, weight, and bio information,
-  // as well as both the heightUnit and weightUnit for the logged-in user
-  // and the other user.
-  // 2. When looking at their own profile, a user only needs
-  // their own height, weight, bio, heightUnit, and weightUnit.
+  const [progress, setProgress] = useState(1 / totalImages); // Initialize progress
 
   const weightUnitMapping = {
     1: 'kg',
@@ -47,92 +40,122 @@ const [progress, setProgress] = useState(1 / totalImages); // Initialize progres
 
   useEffect(() => {
     const fetchData = async () => {
-      let targetUserId, profileData;
-      const { user: passedUser, weightClass: passedWeightClass, level: passedLevel, fightingStyleDict: fightingStyleDict, totalImages } = route.params;
+      let targetUserId;
+      let profileData;
+      const {
+        user: passedUser,
+        weightClass: passedWeightClass,
+        level: passedLevel,
+        fightingStyleDict,
+        totalImages,
+        matchId,
+        firstName
+      } = route.params;
   
-      console.log(totalImages)
       setProgress((currentImageIndex + 1) / totalImages);
-
-      if (isOwnProfile) {
-        targetUserId = userId.userId;
-        profileData = await fetchEditProfileData(targetUserId);
-      } else {
-        targetUserId = passedUser.userId;
-        const loggedInMetrics = await fetchMetrics(userId.userId); // Logged in user
-        let additionalData = await fetchAdditionalUserData(targetUserId); // Other user
-        const styleNames = passedUser.fightingStyle.map(styleId => fightingStyleDict[styleId]);
   
-        if (loggedInMetrics && additionalData) {
-          // Conversion if needed
-          if (loggedInMetrics.heightUnit !== additionalData.heightUnit) {
-            if (loggedInMetrics.heightUnit === 1 && additionalData.heightUnit === 2) {
-              // Convert height from inches to cm
-              additionalData.height = Math.round(additionalData.height * 2.54);
-              additionalData.heightUnit = 1;
-            } else if (loggedInMetrics.heightUnit === 2 && additionalData.heightUnit === 1) {
-              // Convert height from cm to inches
-              additionalData.height = Math.round(additionalData.height * 0.393701);
-              additionalData.heightUnit = 2;
+      try {
+        if (isOwnProfile) {
+          targetUserId = userId.userId;
+          profileData = await fetchEditProfileData(targetUserId);
+        } else if (matchId) {
+          targetUserId = matchId;
+          profileData = await fetchEditProfileData(matchId);
+          const loggedInMetrics = await fetchMetrics(userId.userId);
+          let additionalData = await fetchAdditionalUserData(matchId);
+          const styleNames = []; // Replace with actual logic to retrieve style names
+  
+          // Handle unit conversion for height and weight
+          // Your existing unit conversion logic here...
+  
+          // Merge profile data
+          profileData = {
+            firstName,
+            ...profileData,
+            ...additionalData,
+            weightClass: passedWeightClass, // You need to define where this comes from
+            style: styleNames.join(', '), // Join style names into a string
+            level: passedLevel // You need to define where this comes from
+          };
+        } else {
+          targetUserId = passedUser.userId;
+          profileData = await fetchEditProfileData(targetUserId);
+          const loggedInMetrics = await fetchMetrics(userId.userId);
+          let additionalData = await fetchAdditionalUserData(targetUserId);
+          const styleNames = passedUser.fightingStyle.map(styleId => fightingStyleDict[styleId]);
+  
+          // Handle unit conversion for height and weight
+          if (loggedInMetrics && additionalData) {
+            if (loggedInMetrics.heightUnit !== additionalData.heightUnit) {
+              additionalData.height = loggedInMetrics.heightUnit === 1
+                ? Math.round(additionalData.height * 2.54) // inches to cm
+                : Math.round(additionalData.height * 0.393701); // cm to inches
+              additionalData.heightUnit = loggedInMetrics.heightUnit;
+            }
+  
+            if (loggedInMetrics.weightUnit !== additionalData.weightUnit) {
+              additionalData.weight = loggedInMetrics.weightUnit === 1
+                ? Math.round(additionalData.weight * 0.453592) // lbs to kg
+                : Math.round(additionalData.weight * 2.20462); // kg to lbs
+              additionalData.weightUnit = loggedInMetrics.weightUnit;
             }
           }
   
-          if (loggedInMetrics.weightUnit !== additionalData.weightUnit) {
-            if (loggedInMetrics.weightUnit === 1 && additionalData.weightUnit === 2) {
-              // Convert weight from lbs to kg
-              additionalData.weight = Math.round(additionalData.weight * 0.453592);
-              additionalData.weightUnit = 1;
-            } else if (loggedInMetrics.weightUnit === 2 && additionalData.weightUnit === 1) {
-              // Convert weight from kg to lbs
-              additionalData.weight = Math.round(additionalData.weight * 2.20462);
-              additionalData.weightUnit = 2;
-            }
+          // Merge profile data
+          profileData = {
+            ...passedUser,
+            ...additionalData,
+            weightClass: passedWeightClass,
+            style: styleNames.join(', '),
+            level: passedLevel
+          };
+        }
+  
+        // Fetch and sort images, if targetUserId is set
+        if (targetUserId) {
+          const imageData = await fetchImages(targetUserId);
+          if (imageData) {
+            const sortedImageData = imageData.sort((a, b) => a.position - b.position);
+            setImages(sortedImageData);
           }
         }
   
-        profileData = {
-          ...passedUser,
-          ...additionalData,
-          weightClass: passedWeightClass,
-          style: styleNames.join(', '),
-          level: passedLevel
-        };
+        // Finally, set the profile data state
+        setProfileDataState(profileData);
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+        // Handle errors appropriately in your UI
       }
-  
-      const imageData = await fetchImages(targetUserId);
-      if (imageData) {
-        const sortedImageData = imageData.sort((a, b) => a.position - b.position);
-        setImages(sortedImageData);
-      }
-      setProfileDataState(profileData);
     };
   
     fetchData();
-  }, [userId, passedUser, isOwnProfile]);
+  }, [userId, route.params, isOwnProfile]);
   
+
 
 
 
 
   const handleImagePress = () => {
     setCurrentImageIndex(prevIndex => {
-        let newIndex;
-        if (prevIndex < images.length - 1) {
-            newIndex = prevIndex + 1;
-        } else {
-            newIndex = 0;
-        }
-        
-        // Update progress here
-        console.log(progress)
-        setProgress((newIndex + 1) / totalImages);
+      let newIndex;
+      if (prevIndex < images.length - 1) {
+        newIndex = prevIndex + 1;
+      } else {
+        newIndex = 0;
+      }
 
-        return newIndex;
+      // Update progress here
+      console.log(progress)
+      setProgress((newIndex + 1) / totalImages);
+
+      return newIndex;
     });
-};
+  };
 
   return (
     <View>
-      <StatusBar backgroundColor="black" barStyle="light-content"/>
+      <StatusBar backgroundColor="black" barStyle="light-content" />
       <Navbar
         backgroundColor="#000000"
         textColor="#FFFFFF"
@@ -140,7 +163,7 @@ const [progress, setProgress] = useState(1 / totalImages); // Initialize progres
         navigation={navigation}  // Here we pass navigation as a prop to Navbar
       />
       <ScrollView contentContainerStyle={settingsStyles.container}>
-      
+
         {images &&
           <TouchableOpacity onPress={handleImagePress} activeOpacity={1}>
             <ProgressBar progress={progress} isInsideCard={true} />

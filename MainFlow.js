@@ -21,6 +21,10 @@ const MainFlow = () => {
   // Get's users photo for the navbar
   useEffect(() => {
     const fetchAndSetImage = async () => {
+      if (!userId.userId) {
+        console.log('[api.js] User ID is not available. Skipping fetchImage.');
+        return null;
+      }
       try {
         const data = await fetchImage(userId.userId);
         if (data) {
@@ -52,7 +56,7 @@ const MainFlow = () => {
           } else if (route.name === 'Swiping') {
             iconName = focused ? 'hand-rock-o' : 'hand-rock-o';
           } else if (route.name === 'Messaging') {
-            iconName = focused ? 'comment' : 'comment';
+            iconName = focused ? 'comment' : 'comment-o';
           } else if (route.name === 'Calendar') {
             iconName = focused ? 'calendar' : 'calendar';
           } else if (route.name === 'Profile') {
