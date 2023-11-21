@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Alert, Image, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { navbarStyles, matchedUsersInterface } from '../components/styles2';
+import { navbarStyles } from '../components/styles2';
 import { changeUserPreferences, changePhotoPositions, updateEditProfileData, updateFightingLevelPref, handlePhotos, handleWeightChange } from '../api'
 import { useDispatch } from 'react-redux';
 import { updateWeight } from '../redux/actions';
@@ -150,7 +150,7 @@ const Navbar = ({
 
 
   return (
-    <View style={[navbarStyles.banner, { backgroundColor, paddingTop: insets.top }]}>
+    <View style={[navbarStyles.banner,  Platform.OS === 'ios' ? navbarStyles.banneriPhone : {},  { backgroundColor, paddingTop: insets.top }]}>
       {homeStyle ? (
         <>
           {title ? (

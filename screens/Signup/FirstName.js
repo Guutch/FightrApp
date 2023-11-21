@@ -58,6 +58,8 @@ const FirstName = ({ navigation }) => {
         showNextButton={true}
         onNext={handlePress}
       />
+      {/* The margintop below works for iPhone 11. Need to test with the 14/15 */}
+      <View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}>
       <ProgressBar progress={1 / 8} />
       <PopUp
         isVisible={isPopupVisible}
@@ -81,8 +83,11 @@ const FirstName = ({ navigation }) => {
         placeholder="Last Name"
         placeholderTextColor="white"
       />
-      <InfoComponent infoText="Please don't include numbers." />
+      
     </View>
+    <InfoComponent infoText="Please don't include numbers." />
+      </View>
+      
   );
 };
 

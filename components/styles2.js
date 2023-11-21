@@ -131,6 +131,9 @@ const navbarStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  banneriPhone: {
+    height: screenHeight * 0.13
+  },
   fightrText: {
     ...commonStyles.primaryText,
     fontSize: screenWidth * 0.075,
@@ -246,6 +249,9 @@ const firstNameScreen = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  iPhone: {
+    marginTop: 25
   },
   questionText: {
     fontSize: screenWidth * 0.06,
@@ -1021,6 +1027,10 @@ const swipingStyles = StyleSheet.create({
     paddingTop: screenHeight * 0.1,
     // backgroundColor: '#000' // black background
   },
+  firstiPhoneContainer: {
+    // height: '70%',
+    // paddingTop: screenHeight * 0.35,
+  },
   container: {
     position: 'relative',
     justifyContent: 'center',
@@ -1031,6 +1041,7 @@ const swipingStyles = StyleSheet.create({
   },
   cardImage: {
     width: screenWidth * 0.92,
+    // height: screenHeight * 0.78, looks nice on iPhone (15)
     height: screenHeight * 0.82,
     resizeMode: "cover",
     borderRadius: 20,
@@ -1519,6 +1530,7 @@ const matchedUsersInterface = StyleSheet.create({
 const popUpStyles = StyleSheet.create({
   overlay: {
     position: 'absolute',
+    // marginTop: 15,    
     top: 0,
     left: 0,
     right: 0,

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Text, StyleSheet, View, PanResponder, Animated, Image, BackHandler, ActivityIndicator } from 'react-native';
+import { Text, Platform, View, PanResponder, Animated, Image, BackHandler, ActivityIndicator } from 'react-native';
 import Navbar from '../../components/Navbar';
 import { swipingStyles } from '../../components/styles2';
 import UserProfileCard from '../../components/UserProfileCard';
@@ -218,7 +218,9 @@ const SwipingScreen = ({ navigation }) => {
     },
   });
   return (
-    <View style={[swipingStyles.firstContainer, { backgroundColor: "white" }]}>
+    <View style={[ swipingStyles.firstContainer, Platform.OS === 'ios' ? swipingStyles.firstiPhoneContainer : {},
+      { backgroundColor: "white" }
+  ]}>
       <Navbar
         textColor="#000000"
         homeStyle={true}

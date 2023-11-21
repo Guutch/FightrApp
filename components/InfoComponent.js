@@ -9,8 +9,8 @@ const InfoComponent = ({ infoText }) => {
         <Icon name="info-circle" style={styles.icon} size={30}/>
       </View>
       <View style={styles.textContainer}>
-  <Text style={styles.text}>{infoText}</Text>
-</View>
+        <Text style={styles.text}>{infoText}</Text>
+      </View>
 
     </View>
   );
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     bottom: 5,
     left: 0,
     padding: 8,
+    // marginBottom: 15
   },
   iconContainer: {
     // backgroundColor: 'red',
