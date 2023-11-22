@@ -57,6 +57,7 @@ const SignUpPassword = ({ navigation, route }) => {
         showNextButton={true}
         onNext={handlePress}
       />
+      <View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}>
       <ProgressBar progress={3 / 8} />
       <Text style={firstNameScreen.questionText}>Create your password</Text>
       <TextInput
@@ -78,6 +79,7 @@ const SignUpPassword = ({ navigation, route }) => {
   secureTextEntry={true}
   autoCapitalize="none"
 />
+</View>
 <InfoComponent infoText="Your password has to be at least 8 characters long, have one lower case letter, an upper case letter, and a special character" />
 
     </View>

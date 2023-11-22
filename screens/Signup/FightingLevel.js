@@ -75,6 +75,8 @@ const FightingLevelScreen = ({ navigation, route }) => {
         showNextButton={true}
         onNext={handlePress}
       />
+<View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}>
+
       <ProgressBar progress={8 / 8} />
       <ScrollView contentContainerStyle={[fightingStyleScreen.list, fightingStyleScreen.listLevel]}>
         <Text style={fightingStyleScreen.questionText}>
@@ -82,6 +84,7 @@ const FightingLevelScreen = ({ navigation, route }) => {
         </Text>
         {Object.keys(levels).map(renderItem)}
       </ScrollView>
+      </View>
       {/* <NextButton onPress={handleNextPress} /> */}
     </View>
   );

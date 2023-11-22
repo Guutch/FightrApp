@@ -46,10 +46,10 @@ const MatchesDisplay = ({ matches, navigateToViewProfile, navigateToChat, naviga
         navigateToViewProfile={navigateToViewProfile}
         match={selectedMatch} // Pass the selected match
       />
-      <Text style={[settingsStyles.sectionTitle, matchedUsersInterface.matchesAndMessages, { paddingBottom: 8 }]}>Matches</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <Text style={[settingsStyles.sectionTitle, matchedUsersInterface.matchesAndMessages, { paddingVertical: 8 }]}>Matches</Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} > 
         {matches.map(match => (
-          <TouchableOpacity key={match.id} onPress={() => togglePopup(match)}>
+          <TouchableOpacity key={match.id} onPress={() => togglePopup(match)} >
             {/* <TouchableOpacity key={match.id} onPress={() => navigateToChat(match)}> */}
             <Image
               source={{ uri: match.image }}

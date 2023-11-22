@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import Navbar from '../../components/Navbar';
 import boxingIcon from '../../assets/boxing-glove-icon2.png';
-import { welcomeStyles, waiverStyles } from '../../components/styles2';
+import { welcomeStyles, waiverStyles, firstNameScreen } from '../../components/styles2';
 import { handleWaiver } from '../../api';
 import { useSelector } from 'react-redux';
 
@@ -29,8 +29,15 @@ const WaiverScreen = ({ navigation }) => {
         showNextButton={false}
       />
 
-      <Image source={boxingIcon} style={waiverStyles.boxingIcon} />
       
+<Image 
+  source={boxingIcon} 
+  style={[
+    waiverStyles.boxingIcon, 
+    Platform.OS === 'ios' ? firstNameScreen.iPhone : {}
+  ]} 
+/>
+<View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}>
       <Text style={waiverStyles.welcomeText}>A little waiver before getting started...</Text>
 
       <View style={waiverStyles.waiverBox}>
@@ -72,7 +79,7 @@ ________________________ [Date]
           </Text>
         </ScrollView>
       </View>
-
+      </View>
       <Text style={waiverStyles.termsAndConditions}>By pressing I agree, we will use your provided details to agree to the above waiver..</Text>
 
       <TouchableOpacity style={waiverStyles.agreeButton} onPress={handleAgreement}>

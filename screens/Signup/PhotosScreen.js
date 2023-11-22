@@ -183,6 +183,7 @@ const Photos = ({ navigation, route }) => {
         showNextButton={true}
         onNext={handlePress}
       />
+      <View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}>
       <ProgressBar progress={6 / 8} />
       <View style={photosScreen.headerContainer}>
         <Text style={photosScreen.questionText}>
@@ -259,7 +260,7 @@ const Photos = ({ navigation, route }) => {
           )}
         />
       </View> */}
-
+</View>
       <InfoComponent infoText="Do not upload any rude or nude photos. Also, don't upload a photo that can cause a feud." />
 
     </View>

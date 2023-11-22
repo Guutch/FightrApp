@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'rea
 import Navbar from '../../components/Navbar';
 import boxingIcon from '../../assets/boxing-glove-icon2.png';
 import tickIcon from '../../assets/FightrTick.png';
-import { welcomeStyles, settingsStyles } from '../../components/styles2';
+import { firstNameScreen, settingsStyles } from '../../components/styles2';
 import { useSelector } from 'react-redux';
 
 const styles = StyleSheet.create({
@@ -52,6 +52,7 @@ const TermsAndCond = ({ navigation }) => {
         showNextButton={false}
         homeStyle={false}
       />
+      <View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}>
       <Text style={styles.title}>TERMS OF USE</Text>
       <Text style={styles.subtitle}>Last revised 24 April 2023</Text>
       <ScrollView style={styles.scrollContainer}>
@@ -149,6 +150,8 @@ const TermsAndCond = ({ navigation }) => {
 </Text>
 
       </ScrollView>
+      
+ </View>
     </View>
   );
 };

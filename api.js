@@ -125,7 +125,7 @@ export const handleWeightChange = async (userId, weightClass, sex) => {
     const response = await axios.put(`${API_URL}/users/${userId}/weightPrefUpdate`, {weightClass, sex});
     // console.log(response.data)
     return response.data;
-  } catch (error) {  // <-- Add 'error' here
+  } catch (error) {
     console.error('[api.js] Error updating weight preference ', error);
   }
 }

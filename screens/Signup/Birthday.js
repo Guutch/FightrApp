@@ -85,6 +85,7 @@ const BirthdayScreen = ({ navigation, route }) => {
         showNextButton={true}
         onNext={handlePress}
       />
+<View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}>
       <PopUp
         isVisible={isPopupVisible}
         onClose={togglePopup}
@@ -114,6 +115,7 @@ const BirthdayScreen = ({ navigation, route }) => {
       <Text style={lastNameScreen.rectangleText}>{selectedPreference}</Text>
 </TouchableOpacity>
       {/* Bottom of view */}
+      </View>
       <InfoComponent infoText="You have to be at least 18 years old to use Fytr!" />
     </View>
   );

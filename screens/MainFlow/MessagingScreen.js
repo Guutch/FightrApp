@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
+import { View, Text, Platform, TouchableOpacity, Image, FlatList } from 'react-native';
 import Navbar from '../../components/Navbar';
 import MatchesDisplay from '../../components/MatchesDisplay';
-import { settingsStyles, matchedUsersInterface, photosScreen } from '../../components/styles2';
+import { settingsStyles, matchedUsersInterface, firstNameScreen } from '../../components/styles2';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllMatches, fetchImage, fetchName, fetchMessages, markMessagesAsRead } from '../../api'
 import { getWebSocketInstance } from '../../Backend/websocketInstance'
@@ -199,7 +199,7 @@ const MessagingScreen = ({ navigation }) => {
   return (
     <View style={matchedUsersInterface.matchedMainContainer}>
       <Navbar navigation={navigation} backgroundColor="#FFFFFF" textColor="#000000" homeStyle={true} />
-      <View style={matchedUsersInterface.mainContainer}>
+      <View style={[matchedUsersInterface.mainContainer, Platform.OS === 'ios' ? firstNameScreen.iPhone : {}]}>
         {/* Scenario 1: No matches & No messages */}
         {matches.length === 0 && (
           <View style={matchedUsersInterface.centeredTextContainer}>
@@ -214,7 +214,7 @@ const MessagingScreen = ({ navigation }) => {
             <MatchesDisplay matches={matches} navigateToViewProfile={navigateToViewProfile} navigation={navigation} navigateToChat={(selectedUser) => navigateToChat(selectedUser, userId.userId)} />
 
             <View style={matchedUsersInterface.matchedMessagesSection}>
-            <Text style={[settingsStyles.sectionTitle, matchedUsersInterface.matchesAndMessages]}>Messages</Text>
+            <Text style={[settingsStyles.sectionTitle, matchedUsersInterface.matchesAndMessages, {paddingTop: 8}]}>Messages</Text>
               <View style={matchedUsersInterface.centeredTextContainer}>
                 <Text style={matchedUsersInterface.mainText}>No Messages</Text>
                 <Text style={matchedUsersInterface.subText}>Start a conversation</Text>
@@ -229,7 +229,7 @@ const MessagingScreen = ({ navigation }) => {
             <MatchesDisplay matches={matches} navigateToViewProfile={navigateToViewProfile} navigation={navigation} navigateToChat={(selectedUser) => navigateToChat(selectedUser, userId.userId)} />
 
             <View style={matchedUsersInterface.matchedMessagesSection}>
-              <Text style={[settingsStyles.sectionTitle, matchedUsersInterface.matchesAndMessages]}>Messages</Text>
+              <Text style={[settingsStyles.sectionTitle, matchedUsersInterface.matchesAndMessages, {paddingTop: 8}]}>Messages</Text>
               <FlatList
                 style={{ flex: 1 }}
                 data={matches}

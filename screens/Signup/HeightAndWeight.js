@@ -95,6 +95,7 @@ const HeightAndWeight = ({ navigation, route }) => {
         showNextButton={true}
         onNext={handlePress}
       />
+<View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}>
       <ProgressBar progress={4 / 8} />
       <Text style={firstNameScreen.questionText}>How tall are you?</Text>
 
@@ -156,6 +157,7 @@ const HeightAndWeight = ({ navigation, route }) => {
         <Text style={heightWeightScreen.separator}>/</Text>
         <Text style={[heightWeightScreen.unitText, weightUnit === 'lbs' && heightWeightScreen.activeUnit]}>lbs</Text>
       </TouchableOpacity>
+     </View>
       <InfoComponent infoText="Your height cannot be more than 300cm/10ft. Inches cannot exceed 13. Your weight cannot be more than 600kg/1323lbs." />
 
     </View>

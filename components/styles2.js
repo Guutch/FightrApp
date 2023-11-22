@@ -428,7 +428,7 @@ const photosScreen = StyleSheet.create({
     marginLeft: screenWidth * 0.015, // Added marginLeft property
   },
   extendedPhotosRectangle: {
-    height: screenHeight * 0.2,
+    height: screenHeight * 0.18,
     width: screenWidth * 0.35, // Updated width property
     borderRadius: 20,
   },
@@ -742,8 +742,8 @@ const waiverStyles = StyleSheet.create({
     position: 'absolute',
     top: screenHeight * 0.12,  // responsive top position
     // left: screenWidth * 0.435,  // responsive left position
-    height: screenHeight * 0.06,  // responsive height
-    width: screenWidth * 0.12,  // responsive width
+    // height: screenHeight * 0.06,  // responsive height
+    // width: screenWidth * 0.12,  // responsive width
   },
   welcomeText: {
     marginTop: screenHeight * 0.185,
@@ -798,11 +798,12 @@ const welcomeStyles = StyleSheet.create({
     position: 'absolute',
     top: screenHeight * 0.15,  // responsive top position
     // left: screenWidth * 0.435,  // responsive left position
-    height: screenHeight * 0.06,  // responsive height
-    width: screenWidth * 0.12,  // responsive width
+    // height: screenHeight * 0.06,  // responsive height
+    // width: screenWidth * 0.12,  // responsive width
   },
   welcomeText: {
     marginTop: screenHeight * 0.205,
+    alignItems: 'center',
     fontSize: 24,
     fontWeight: '700',
     color: '#000',
@@ -835,10 +836,10 @@ const welcomeStyles = StyleSheet.create({
   },
   tickIcon: {
     marginRight: screenWidth * 0.03,
-    height: screenHeight * 0.042,  // responsive height
-    width: screenWidth * 0.08,  // responsive width
-    // height: 30,
-    // width: 30,
+    // height: screenHeight * 0.042,  // responsive height
+    // width: screenWidth * 0.08,  // responsive width
+    height: 30,
+    width: 30,
   },
   ruleTitle: {
     fontSize: 14,
@@ -1041,8 +1042,8 @@ const swipingStyles = StyleSheet.create({
   },
   cardImage: {
     width: screenWidth * 0.92,
-    // height: screenHeight * 0.78, looks nice on iPhone (15)
-    height: screenHeight * 0.82,
+    marginTop: Platform.OS === 'ios' ? 15 : 0,
+    height: Platform.OS === 'ios' ? screenHeight * 0.77 : screenHeight * 0.82,
     resizeMode: "cover",
     borderRadius: 20,
   },
@@ -1271,6 +1272,9 @@ const noUsersStyles = StyleSheet.create({
     backgroundColor: 'red',
     // marginBottom: 40,
   },
+  // cardIphone: {
+  //   // height: "80%",
+  // },
   noUsersText: {
     fontFamily: 'Inter',
     fontSize: 36,
@@ -1334,7 +1338,7 @@ const progressBarStyles = StyleSheet.create({
     backgroundColor: '#D9D9D9',
     borderRadius: 2,
     alignSelf: 'center',
-    marginTop: 11,
+    marginTop: Platform.OS === 'ios' ? 46 : 11,
     zIndex: 2,
   },
   progressBar: {

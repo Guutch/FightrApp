@@ -3,7 +3,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Navbar from '../../components/Navbar';
-import { settingsStyles, fightingStyleScreen } from '../../components/styles2'
+import { settingsStyles, firstNameScreen } from '../../components/styles2'
 import SettingSection from '../../components/SettingSection'
 import { fetchUserPreferences } from '../../api';  // update the path according to your project structure
 import { useDispatch, useSelector } from 'react-redux';
@@ -306,7 +306,7 @@ const SettingsScreen = ({ navigation }) => {
         }}
         editProfile={false}
       />
-      <ScrollView contentContainerStyle={settingsStyles.container}>
+      <ScrollView contentContainerStyle={[settingsStyles.container, Platform.OS === 'ios' ? firstNameScreen.iPhone : {}]}>
 
         <Text style={settingsStyles.fytrPlus}>Match unlimited Fytrs and elevate your fighting game with Fytr+</Text>
 
@@ -404,7 +404,7 @@ const SettingsScreen = ({ navigation }) => {
         {/* Weight and Height is connected, just need to do Distance */}
         <MetricsSection title="Height" option1="cm" option2="ft" selected={heightUnit} onSelect={setHeightUnit} />
         <MetricsSection title="Weight" option1="kg" option2="lbs" selected={weightUnit} onSelect={setWeightUnit} />
-        <MetricsSection title="Distance" option1="mi" option2="km" selected={distanceUnit} onSelect={setDistanceUnit} />
+        <MetricsSection title="Distance" option1="mi" option2="km" selected={distanceUnit} onSelect={setDistanceUnit}/>
 
 
 

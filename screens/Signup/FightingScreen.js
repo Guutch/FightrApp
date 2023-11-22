@@ -95,13 +95,16 @@ const FightingScreen = ({ navigation, route }) => {
         showNextButton={true}
         onNext={handlePress}
       />
+<View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}>
       <ProgressBar progress={7/8} />
+      </View>
       <ScrollView style={{flex: 1}} contentContainerStyle={fightingStyleScreen.list} >
         <Text style={fightingStyleScreen.questionText}>
           What fighting styles are you interested in? Tick at least one.
         </Text>
         {Object.keys(martialArts).map(renderItem)}
       </ScrollView>
+      
       {/* <NextButton onPress={handleNextPress} /> */}
     </View>
   );

@@ -46,7 +46,7 @@ const EmailAndNumber = ({ navigation, route }) => {
         showNextButton={true}
         onNext={handlePress}
       />
-      <View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}></View>
+      <View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}>
       <ProgressBar progress={2 / 8} />
       <Text style={firstNameScreen.questionText}>What's your email address?</Text>
       <TextInput
@@ -67,7 +67,7 @@ const EmailAndNumber = ({ navigation, route }) => {
         placeholderTextColor="white"
         keyboardType="phone-pad"
       />
-      <View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}></View>
+      </View>
       <InfoComponent infoText="Please enter a valid email address and phone number." />
 
     </View>
