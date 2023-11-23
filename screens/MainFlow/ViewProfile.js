@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
 import Navbar from '../../components/Navbar';
-import { settingsStyles, welcomeStyles } from '../../components/styles2';
+import { settingsStyles, firstNameScreen } from '../../components/styles2';
 import SettingSection from '../../components/SettingSection'
 import ProgressBar from '../../components/ProgressBar'
 import { fetchEditProfileData, fetchImages, fetchAdditionalUserData, fetchMetrics } from '../../api';
@@ -162,11 +162,14 @@ const ViewProfileScreen = ({ navigation, route }) => {
         showBackButton={true}
         navigation={navigation}  // Here we pass navigation as a prop to Navbar
       />
+      <View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}>
+
+      
       <ScrollView contentContainerStyle={settingsStyles.container}>
 
         {images &&
           <TouchableOpacity onPress={handleImagePress} activeOpacity={1}>
-            <ProgressBar progress={progress} isInsideCard={true} />
+            <ProgressBar progress={progress} isInsideCard={true} viewProfile={true} />
             <Image
               source={{ uri: images[currentImageIndex].url }}
               fadeDuration={0}
@@ -283,6 +286,7 @@ const ViewProfileScreen = ({ navigation, route }) => {
         )} */}
 
       </ScrollView>
+      </View>
     </View>
   );
 };

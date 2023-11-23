@@ -17,9 +17,13 @@ const DividerTitle = ({ title }) => {
 };
 
 
-const MetricsSection = ({ title, option1, option2, selected, onSelect }) => {
+const MetricsSection = ({ title, option1, option2, selected, onSelect, iPhone=false }) => {
   return (
-    <View style={settingsStyles.metricsMargin}>
+    <View style={[
+      settingsStyles.metricsMargin,
+      iPhone === true ? { marginBottom: 35 } : null
+    ]}>
+    
       <StatusBar backgroundColor="black" barStyle="light-content" />
 
       <View style={settingsStyles.titleAndValueContainer}>
@@ -76,29 +80,29 @@ const SettingsScreen = ({ navigation }) => {
 
   // Need to use this when selecting weight preference. Need to look at changing to enum instead for time being
   // Will need brain power
-  const getUserWeightClasses = (userWeight) => {
-    let primaryClassIndex = null;
+  // const getUserWeightClasses = (userWeight) => {
+  //   let primaryClassIndex = null;
 
-    // Identify the primary weight class
-    for (let i = 0; i < weightClasses.length; i++) {
-      if (weightClasses[i].range[0] <= userWeight && userWeight <= weightClasses[i].range[1]) {
-        primaryClassIndex = i;
-        break;
-      }
-    }
+  //   // Identify the primary weight class
+  //   for (let i = 0; i < weightClasses.length; i++) {
+  //     if (weightClasses[i].range[0] <= userWeight && userWeight <= weightClasses[i].range[1]) {
+  //       primaryClassIndex = i;
+  //       break;
+  //     }
+  //   }
 
-    // Check for edge cases: User's weight is at the lower or upper limit of weight classes
-    if (primaryClassIndex === 0) {
-      // User's weight is at the lowest limit, can only go up
-      return [weightClasses[0].name, weightClasses[1].name];
-    } else if (primaryClassIndex === weightClasses.length - 1) {
-      // User's weight is at the upper limit, can only go down
-      return [weightClasses[weightClasses.length - 2].name, weightClasses[weightClasses.length - 1].name];
-    } else {
-      // User's weight is in the middle, can go either up or down
-      return [weightClasses[primaryClassIndex - 1].name, weightClasses[primaryClassIndex].name, weightClasses[primaryClassIndex + 1].name];
-    }
-  }
+  //   // Check for edge cases: User's weight is at the lower or upper limit of weight classes
+  //   if (primaryClassIndex === 0) {
+  //     // User's weight is at the lowest limit, can only go up
+  //     return [weightClasses[0].name, weightClasses[1].name];
+  //   } else if (primaryClassIndex === weightClasses.length - 1) {
+  //     // User's weight is at the upper limit, can only go down
+  //     return [weightClasses[weightClasses.length - 2].name, weightClasses[weightClasses.length - 1].name];
+  //   } else {
+  //     // User's weight is in the middle, can go either up or down
+  //     return [weightClasses[primaryClassIndex - 1].name, weightClasses[primaryClassIndex].name, weightClasses[primaryClassIndex + 1].name];
+  //   }
+  // }
 
   // Fight Level function
   const generateLevels = (currentValue, type) => {
@@ -316,7 +320,7 @@ const SettingsScreen = ({ navigation }) => {
           title="Fighting Style Preference(s)"
           onPress={() => navigation.navigate('PreferenceSel', {
             preferences: ['Boxing', 'Brazilian Jiu-Jitsu', 'Muay Thai', 'Wrestling', 'Kickboxing', 'Jiu-Jitsu', 'Judo', 'Karate', 'Kung Fu', 'Taekwondo'],
-            title: 'What fighting styles do you want to match with',
+            title: 'What styles do you want to match with',
             type: 'fightingStyle', // Pass the type
             currentPref: fightingStylePreference,
             updateFightingStylePreference: updateFightingStylePreference // Pass the function
@@ -339,7 +343,7 @@ const SettingsScreen = ({ navigation }) => {
 
         <SettingSection title="Weight Class Preference(s)" onPress={() => navigation.navigate('PreferenceSel', {
           preferences: generateLevels(weightClass, 'weightClass'),
-          title: 'What weight classes do you want to match with',
+          title: 'What weight classes do you want to search for',
           // updatePreferences,
           type: 'weightClass', // Pass the type
           currentPref: weightRange,
@@ -404,7 +408,7 @@ const SettingsScreen = ({ navigation }) => {
         {/* Weight and Height is connected, just need to do Distance */}
         <MetricsSection title="Height" option1="cm" option2="ft" selected={heightUnit} onSelect={setHeightUnit} />
         <MetricsSection title="Weight" option1="kg" option2="lbs" selected={weightUnit} onSelect={setWeightUnit} />
-        <MetricsSection title="Distance" option1="mi" option2="km" selected={distanceUnit} onSelect={setDistanceUnit}/>
+        <MetricsSection title="Distance" option1="mi" option2="km" selected={distanceUnit} onSelect={setDistanceUnit} iPhone={true}/>
 
 
 

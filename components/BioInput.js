@@ -17,7 +17,11 @@ const BioInput = ({ bio, onBioChange }) => {
   };
   
     return (
-      <View style={styles.sectionContainer}>
+      <View style={[
+        styles.sectionContainer,
+        Platform.OS === 'ios' ? { marginBottom: 60 } : {}
+      ]}>
+      
         <TextInput
           editable
           multiline

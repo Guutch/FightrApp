@@ -64,14 +64,16 @@ const SwipingScreen = ({ navigation }) => {
     return weightClasses[classNumber] || 'Unknown';
   };
 
-
   const getFightingStyles = (styleNumbers) => {
     return styleNumbers.map(styleNumber => (
-      <Text style={swipingStyles.fightingStyleText} key={styleNumber}>
-        {fightingStyles[styleNumber]}
-      </Text>
+      <View style={swipingStyles.fightingStyleTextContainer} key={styleNumber}>
+        <Text style={swipingStyles.fightingStyleText}>
+          {fightingStyles[styleNumber]}
+        </Text>
+      </View>
     ));
   };
+  
 
 
   const getFightingLevel = (levelNumber) => {
@@ -222,7 +224,8 @@ const SwipingScreen = ({ navigation }) => {
       { backgroundColor: "white" }
   ]}>
       <Navbar
-        textColor="#000000"
+        textColor="#000"
+        // backgroundColor="#fff"
         homeStyle={true}
         navigation={navigation}  // Here we pass navigation as a prop to Navbar
       />

@@ -40,12 +40,13 @@ const BirthdayScreen = ({ navigation, route }) => {
   };
 
   const onChange = (event, selectedDate) => {
-    setShowDatePicker(Platform.OS === 'ios');
+    setShowDatePicker(false); // Hide the date picker
     if (selectedDate) {
       setDate(selectedDate);
       console.log('Selected date:', selectedDate);
     }
   };
+  
 
   const togglePopup = () => {
     setPopupVisible(!isPopupVisible);
@@ -101,13 +102,15 @@ const BirthdayScreen = ({ navigation, route }) => {
 </TouchableOpacity>
 
       {showDatePicker && (
-        <DateTimePicker
-          value={date || new Date()}
-          mode="date"
-          display="default"
-          onChange={onChange}
-          maximumDate={new Date()}
-        />
+        <View style={{ backgroundColor: 'white', padding: 20, zIndex: 1000 }}>
+  <DateTimePicker
+    value={date || new Date()}
+    mode="date"
+    display="inline"
+    onChange={onChange}
+    maximumDate={new Date()}
+  />
+</View>
       )}
       <Text style={lastNameScreen.questionText}>What's your biological sex?</Text>
       {/* Top of view */}

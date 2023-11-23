@@ -58,7 +58,7 @@ const PreferenceSel = ({ navigation, route }) => {
     if (type === 'fightingLevelEdit') {
       setCheckedItems(item); // Single selection
     } else {
-      if (title === 'What fighting styles do you want to match with' || title==='What are your combat sports' ) {
+      if (title === 'What do you want to match with' || title==='What are your combat sports' ) {
         // Show an alert or some other indication to the user
         if (checkedItems.length >= 3 && !checkedItems.includes(item)) {
           console.log("BIG BOSH")

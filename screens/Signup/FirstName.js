@@ -41,8 +41,8 @@ const FirstName = ({ navigation }) => {
       return;
     }
 
-    navigation.navigate('Waiver', { firstName, lastName });
-    // navigation.navigate('EmailAndNumber', { firstName, lastName });
+    // navigation.navigate('Waiver', { firstName, lastName });
+    navigation.navigate('EmailAndNumber', { firstName, lastName });
   };
 
 

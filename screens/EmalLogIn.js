@@ -3,19 +3,20 @@ import { View, Text, TextInput, TouchableOpacity, StatusBar } from 'react-native
 import { useDispatch, useSelector } from 'react-redux'; // import useSelector
 import { login } from '../redux/actions';
 import { useNavigation } from '@react-navigation/native';
-
 import { firstNameScreen, lastNameScreen, emailLogin } from '../components/styles2';
 import Navbar from '../components/Navbar';
-
+import PopUp from '../components/PopUp';
 
 const EmailLogin = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-  // const navigation = useNavigation();
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  // Get the userId from the Redux state
-  const userId = useSelector(state => state.user);
+  const togglePopup = () => {
+    setPopupVisible(!isPopupVisible);
+  };
 
   const handleSignIn = async () => {
     const result = await dispatch(login(email, password)); // login is now an async action
@@ -27,7 +28,8 @@ const EmailLogin = ({ navigation }) => {
       navigation.navigate('MainFlow');
     } else {
       // handle unsuccessful login
-      // console.log("lol")
+      setErrorMessage('Incorrect Email/Password.'); // Set the error message
+      togglePopup(); // Show the popup
     }
 
   };
@@ -36,7 +38,11 @@ const EmailLogin = ({ navigation }) => {
     <View style={firstNameScreen.container}>
       <StatusBar backgroundColor="black" barStyle="light-content" />
       <Navbar navigation={navigation} backgroundColor="#000000" textColor="#FFFFFF" showBackButton={true} />
-
+      <PopUp
+        isVisible={isPopupVisible}
+        onClose={togglePopup}
+        errorMessage={errorMessage}
+      />
       <Text style={firstNameScreen.questionText}>Email address</Text>
       <TextInput
         style={firstNameScreen.rectangle}

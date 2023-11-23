@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Alert, Image, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
+import { View, Text, Alert, Keyboard, Platform, ScrollView, StatusBar } from 'react-native';
 import Navbar from '../../components/Navbar';
-import { settingsStyles, welcomeStyles, fightingStyleScreen } from '../../components/styles2';
+import { settingsStyles, firstNameScreen, fightingStyleScreen } from '../../components/styles2';
 import SettingSection from '../../components/SettingSection';
 import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -34,6 +34,10 @@ const EditProfileScreen = ({ navigation, route }) => {
   const [newlyUploadedPhotos, setNewlyUploadedPhotos] = useState([]);
   const [deletedPhotos, setDeletedPhotos] = useState([]);
   const [changedPhotosState, setChangedPhotosState] = useState([]);
+  const [keyboardPadding, setKeyboardPadding] = useState(0);
+  const containerStyle = Platform.OS === 'ios' ? { paddingBottom: 70 } : {};
+
+
 
   const nextIndex = useRef(0);
 
@@ -46,6 +50,33 @@ const EditProfileScreen = ({ navigation, route }) => {
   const handleBioChange = (newBio) => {
     setBio(newBio);
   };
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      _keyboardDidShow,
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      _keyboardDidHide,
+    );
+  
+    // Cleanup
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+  
+  const _keyboardDidShow = (e) => {
+    const keyboardHeight = e.endCoordinates.height+20;
+    setKeyboardPadding(keyboardHeight);
+  };
+  
+  const _keyboardDidHide = () => {
+    setKeyboardPadding(0);
+  };
+  
 
   const handleHeightChange = (value, type) => {
     if (heightUnit === "cm") {
@@ -447,7 +478,7 @@ const EditProfileScreen = ({ navigation, route }) => {
           changedPhotos: changedPhotosState
         }}
       />
-      <ScrollView contentContainerStyle={settingsStyles.container}>
+      <ScrollView contentContainerStyle={[settingsStyles.container, Platform.OS === 'ios' ? firstNameScreen.iPhone : {}, containerStyle, { paddingBottom: keyboardPadding }]}>
 
         <Text style={[settingsStyles.sectionTitle, { marginVertical: 10 }]}>Photos</Text>
 

@@ -327,7 +327,7 @@ const birthdayScreen = StyleSheet.create({
   
   birthdaydateText: {
     fontFamily: 'Inter',
-    fontSize: screenWidth * 0.12,
+    fontSize: screenWidth * 0.115,
     fontWeight: '700',
     color: 'black',
     textAlign: 'center', // Ensures the text is centered within the touchable
@@ -1063,7 +1063,7 @@ const swipingStyles = StyleSheet.create({
     height: '10%', // Adjust as per your requirement
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // 50% opaque black
     borderRadius: 10,
-    bottom: 0, // Makes the card hug the bottom of the cardContainer
+    bottom: Platform.OS === 'ios' ? "2%" : 0,
     alignSelf: 'center', // This will center the card horizontally
     backgroundColor: 'rgba(0, 0, 0, 0.5)', // 50% opaque black
   },
@@ -1074,7 +1074,7 @@ const swipingStyles = StyleSheet.create({
     backgroundColor: 'rgba(137, 137, 137, 0.5)', // 50% opaque gray
     borderRadius: 10,
     // marginBotton: 20,
-    bottom: '10%', // Position from the bottom of the cardContainer. Adjust this to position card2 above card1
+    bottom: Platform.OS === 'ios' ? "12%" : "10%",
     alignSelf: 'center', // This will center the card horizontally
   },
 
@@ -1101,19 +1101,20 @@ const swipingStyles = StyleSheet.create({
     flexWrap: 'wrap', // allow wrapping to the next line
   },
   fightingStyleText: {
-    borderWidth: 1,
-    borderRadius: 5,
     padding: 5,
     paddingVertical: 2,
-    marginRight: 5,
-    marginTop: 5,
-    color: '#fff', // white
-    backgroundColor: '#000', // black background
-    borderRadius: 15, // rounded corners
+    color: '#fff', // white text
     fontWeight: 'bold', // bold text
     fontSize: 18,
   },
-
+  fightingStyleTextContainer: {
+    borderWidth: 1,
+    borderRadius: 15, // This will ensure the borderRadius is applied
+    overflow: 'hidden', // This is crucial for iOS to clip the view
+    marginRight: 5,
+    marginTop: 5,
+    backgroundColor: '#000', // black background
+  },
   xxxText: {
     color: '#000', // black
     fontSize: 16,
@@ -1340,6 +1341,9 @@ const progressBarStyles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: Platform.OS === 'ios' ? 46 : 11,
     zIndex: 2,
+  },
+  progressBarViewProfile: {
+
   },
   progressBar: {
     height: '100%',

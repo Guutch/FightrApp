@@ -56,7 +56,7 @@ const PopUp = ({ isVisible, onClose, options, selectedPreference, onPreferenceCl
         onPreferenceClick(option, userId, selectedUserId)
       }
     }
-
+    onClose(); // This should close the popup
   }
 
   return (

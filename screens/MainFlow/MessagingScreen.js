@@ -231,6 +231,7 @@ const MessagingScreen = ({ navigation }) => {
             <View style={matchedUsersInterface.matchedMessagesSection}>
               <Text style={[settingsStyles.sectionTitle, matchedUsersInterface.matchesAndMessages, {paddingTop: 8}]}>Messages</Text>
               <FlatList
+              showsVerticalScrollIndicator={false}
                 style={{ flex: 1 }}
                 data={matches}
                 renderItem={({ item }) => (

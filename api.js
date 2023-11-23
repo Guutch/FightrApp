@@ -141,7 +141,7 @@ export const loginUser = async (email, password) => {
 
     return response.data;
   } catch (error) {
-    console.error('[api.js] Error logging in:', error);
+    console.log('[api.js] Error logging in:', error);
   }
 };
 

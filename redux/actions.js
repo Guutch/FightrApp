@@ -17,7 +17,7 @@ export const login = (email, password, callback) => async (dispatch) => {
     }
     return user;
   } catch (error) {
-    console.error('[actions.js] Error logging in:', error);
+    console.log('[actions.js] Error logging in lol:', error);
   }
 };
 

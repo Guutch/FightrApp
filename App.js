@@ -60,7 +60,7 @@ const MyStack = () => {
     console.log("Loaded")
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false }}>
   {/* All screens are now here, regardless of authentication state */}
   <Stack.Screen name="LoginScreen">
             {(props) => <LoginScreen {...props} />}
