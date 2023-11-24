@@ -86,7 +86,6 @@ const BirthdayScreen = ({ navigation, route }) => {
         showNextButton={true}
         onNext={handlePress}
       />
-<View style={Platform.OS === 'ios' ? firstNameScreen.iPhone : {}}>
       <PopUp
         isVisible={isPopupVisible}
         onClose={togglePopup}
@@ -102,15 +101,13 @@ const BirthdayScreen = ({ navigation, route }) => {
 </TouchableOpacity>
 
       {showDatePicker && (
-        <View style={{ backgroundColor: 'white', padding: 20, zIndex: 1000 }}>
-  <DateTimePicker
-    value={date || new Date()}
-    mode="date"
-    display="inline"
-    onChange={onChange}
-    maximumDate={new Date()}
-  />
-</View>
+        <DateTimePicker
+          value={date || new Date()}
+          mode="date"
+          display="default"
+          onChange={onChange}
+          maximumDate={new Date()}
+        />
       )}
       <Text style={lastNameScreen.questionText}>What's your biological sex?</Text>
       {/* Top of view */}
@@ -118,7 +115,6 @@ const BirthdayScreen = ({ navigation, route }) => {
       <Text style={lastNameScreen.rectangleText}>{selectedPreference}</Text>
 </TouchableOpacity>
       {/* Bottom of view */}
-      </View>
       <InfoComponent infoText="You have to be at least 18 years old to use Fytr!" />
     </View>
   );

@@ -519,6 +519,7 @@
 				DEVELOPMENT_TEAM = W7AB6TUTM5;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = firstapp2/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Fytr;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -546,6 +547,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = W7AB6TUTM5;
 				INFOPLIST_FILE = firstapp2/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Fytr;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

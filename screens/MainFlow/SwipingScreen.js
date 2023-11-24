@@ -225,7 +225,7 @@ const SwipingScreen = ({ navigation }) => {
   ]}>
       <Navbar
         textColor="#000"
-        // backgroundColor="#fff"
+        swipingScreen={true}
         homeStyle={true}
         navigation={navigation}  // Here we pass navigation as a prop to Navbar
       />

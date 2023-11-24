@@ -276,6 +276,22 @@ res.status(200).send({ message: 'WEIGHT RPEF UPDATED CORRECTLY' });
 
 });
 
+router.put('/:userId/findEmail', async (req, res) => {
+  try {
+    const userExists = await User.findOne({ email: req.body.email.toLowerCase() });
+    if (userExists) {
+      // If the user exists, return false since the email is taken
+      res.status(200).json({ emailTaken: true });
+    } else {
+      // If the user does not exist, return true since the email is not taken
+      res.status(200).json({ emailTaken: false });
+    }
+  } catch (error) {
+    res.status(500).send('An error occurred');
+  }
+});
+
+
 router.post('/register', upload, async (req, res) => {
   // Check if the email is already registered
   const userExists = await User.findOne({ email: req.body.email });

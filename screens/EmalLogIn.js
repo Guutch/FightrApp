@@ -19,7 +19,10 @@ const EmailLogin = ({ navigation }) => {
   };
 
   const handleSignIn = async () => {
-    const result = await dispatch(login(email, password)); // login is now an async action
+    // Make the email lowercase
+    const lowerCaseEmail = email.toLowerCase();
+
+    const result = await dispatch(login(lowerCaseEmail, password)); // login is now an async action
 
     console.log(result);
     console.log(result)

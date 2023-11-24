@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import Navbar from '../../components/Navbar';
 import boxingIcon from '../../assets/boxing-glove-icon2.png';
 import { styles,settingsStyles  } from '../../components/styles2';
@@ -8,7 +8,7 @@ import { fetchImage, fetchName } from '../../api';
 import { getWebSocketInstance } from './../../Backend/websocketInstance'
 import { useDispatch, useSelector } from 'react-redux';
 import * as Keychain from 'react-native-keychain';
-import { CommonActions } from '@react-navigation/native';
+import DatePicker from 'react-native-date-picker'
 import { userLoggedOut } from '../../redux/actions'
 
 
@@ -18,7 +18,8 @@ const [imageUrl, setImageUrl] = useState(null);
 const [name, setName] = useState(null);
 const dispatch = useDispatch();
 const isAuthenticated = useSelector(state => state.isAuthenticated);
-  // const dispatch = useDispatch();
+const [date, setDate] = useState(new Date())
+const [open, setOpen] = useState(false)
 
 const handleLogout = async () => {
   // Clear JWT from secure storage
@@ -53,6 +54,14 @@ const handleLogout = async () => {
 
 };
 
+const handleBirthday = () => {
+  return (
+    <View style={styles.container}>
+      <DatePicker date={chosenDate} onDateChange={setChosenDate} />
+    </View>
+  );
+};
+
   useEffect(() => {
     const fetchData = async () => {
       console.log("Here")
@@ -74,9 +83,23 @@ const handleLogout = async () => {
         homeStyle={true} 
         navigation={navigation}  // Here we pass navigation as a prop to Navbar
       />
+      <DatePicker
+  modal
+  open={open}
+  date={date}
+  mode="date" // Set the mode to 'date' to show only the month, day, and year
+  onConfirm={(date) => {
+    setOpen(false)
+    setDate(date)
+  }}
+  onCancel={() => {
+    setOpen(false)
+  }}
+/>
+
       <View style={settingsStyles.container}> 
       <Image source={{ uri: imageUrl }} style={styles.image} />
-      <Text style={styles.text}>{name}</Text>
+      <Text style={styles.text}>{name} </Text>
       <SettingSection
       preference={"Edit Profile"}
       onPress={() => navigation.navigate('EditProfileScreen', {
@@ -84,6 +107,8 @@ const handleLogout = async () => {
       })}
       />
       <SettingSection preference={"Logout"} onPress={handleLogout} />
+      <SettingSection preference={"Birthday"} onPress={() => setOpen(true)} />
+
 
       </View>
       

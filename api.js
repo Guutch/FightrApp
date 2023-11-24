@@ -120,6 +120,24 @@ export const handleWaiver = async (userId) => {
   }
 }
 
+export const emailTaken = async (email) => {
+  try {
+    const response = await fetch(`${API_URL}/users/findEmail`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email.toLowerCase() }),
+    });
+    const data = await response.json();
+    return data.emailTaken;
+  } catch (error) {
+    console.log('error with emailTaken', error);
+    return true; // Assume true (email taken) if there's an error, for safety.
+  }
+}
+
+
 export const handleWeightChange = async (userId, weightClass, sex) => {
   try {
     const response = await axios.put(`${API_URL}/users/${userId}/weightPrefUpdate`, {weightClass, sex});
@@ -134,7 +152,7 @@ export const handleWeightChange = async (userId, weightClass, sex) => {
 export const loginUser = async (email, password) => {
   try {
     const response = await axios.post(`${API_URL}/users/login`, { email, password });
-    console.log(response.data);
+    // console.log(response.data);
 
     // Store the token securely
     await Keychain.setGenericPassword('userToken', response.data.token);

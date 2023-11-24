@@ -25,7 +25,8 @@ const Navbar = ({
   editProfile,
   showLockIcon = false,
   onLockPress,
-  onBackPressCustom
+  onBackPressCustom,
+  swipingScreen
 }) => {
 
   const screenWidth = Dimensions.get('window').width;
@@ -150,7 +151,7 @@ const Navbar = ({
 
 
   return (
-    <View style={[navbarStyles.banner,  Platform.OS === 'ios' ? navbarStyles.banneriPhone : {},  { backgroundColor, paddingTop: insets.top }]}>
+    <View style={[navbarStyles.banner,  Platform.OS === 'ios' ? navbarStyles.banneriPhone : {}, swipingScreen === true ? {zIndex: -1} : {}, { backgroundColor, paddingTop: insets.top }]}>
       {homeStyle ? (
         <>
           {title ? (

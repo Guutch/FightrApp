@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StatusBar, Alert } from 'react-native';
 import { firstNameScreen, lastNameScreen } from '../../components/styles2';
-
+import { emailTaken } from '../../api'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Navbar from '../../components/Navbar';
 import InfoComponent from '../../components/InfoComponent';
 import ProgressBar from '../../components/ProgressBar';
+import { set } from 'mongoose';
 
 const EmailAndNumber = ({ navigation, route }) => {
   const [email, setEmail] = useState('');
@@ -21,19 +22,36 @@ const EmailAndNumber = ({ navigation, route }) => {
     return re.test(phoneNumber);
   };
 
-  const handlePress = () => {
+  const handlePress = async () => { // Make this an async function
+    // Validate email
     if (!email || !validateEmail(email)) {
       Alert.alert('Validation error', 'Please enter a valid email address.');
       return;
     }
-
+  
+    // Make the email lowercase
+    const lowerCaseEmail = email.toLowerCase();
+    setEmail(lowerCaseEmail);
+  
+    // Validate phone number
     if (!phoneNumber || !validatePhoneNumber(phoneNumber)) {
       Alert.alert('Validation error', 'Please enter a valid phone number.');
       return;
     }
-
-    navigation.navigate('SignUpPassword', { ...route.params, email, phoneNumber });
+  
+    // Check if the email is taken
+    const emailIsTaken = await emailTaken(lowerCaseEmail);
+    if (emailIsTaken) {
+      Alert.alert('Email Taken', 'This email address has already been taken.');
+      return;
+    }
+  
+    // If both email and phone number are valid and the email is not taken, navigate to the next screen
+    navigation.navigate('SignUpPassword', { ...route.params, email: lowerCaseEmail, phoneNumber });
   };
+  
+  // Ensure that emailTaken function is defined and accessible in this context
+  
 
   return (
     <View style={firstNameScreen.container}>
