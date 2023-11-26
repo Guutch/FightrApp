@@ -59,6 +59,7 @@ const ViewProfileScreen = ({ navigation, route }) => {
           targetUserId = userId.userId;
           profileData = await fetchEditProfileData(targetUserId);
         } else if (matchId) {
+          // This code is for when you navigate from Messaging screen
           targetUserId = matchId;
           profileData = await fetchEditProfileData(matchId);
           const loggedInMetrics = await fetchMetrics(userId.userId);

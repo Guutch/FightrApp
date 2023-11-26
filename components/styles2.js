@@ -143,6 +143,8 @@ const navbarStyles = StyleSheet.create({
   logoStyle: {
     // transform: [{scale: 0.8}],
     // position: 'absolute',
+    width: 108,
+    height: 32,
   // left: screenWidth * 0.05, // You might need to adjust this value
   // top: "50%", // Adjust this value to align it vertically
   // marginTop: -25, // Half of your image height after scale to center it

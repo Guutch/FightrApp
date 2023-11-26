@@ -121,14 +121,9 @@ export const handleWaiver = async (userId) => {
 }
 
 export const emailTaken = async (email) => {
+  console.log("Email in api.js", email)
   try {
-    const response = await fetch(`${API_URL}/users/findEmail`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: email.toLowerCase() }),
-    });
+    const response = await axios.put(`${API_URL}/users/findEmail`, {email});
     const data = await response.json();
     return data.emailTaken;
   } catch (error) {
