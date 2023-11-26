@@ -6,7 +6,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Navbar from '../../components/Navbar';
 import InfoComponent from '../../components/InfoComponent';
 import ProgressBar from '../../components/ProgressBar';
-import { set } from 'mongoose';
 
 const EmailAndNumber = ({ navigation, route }) => {
   const [email, setEmail] = useState('');
@@ -40,8 +39,9 @@ const EmailAndNumber = ({ navigation, route }) => {
     }
   
     // Check if the email is taken
-    const emailIsTaken = await emailTaken(lowerCaseEmail);
-    if (emailIsTaken) {
+    const emailIsNotTaken = await emailTaken(lowerCaseEmail);
+    console.log("emailIsNotTaken", emailIsNotTaken)
+    if (emailIsNotTaken) {
       Alert.alert('Email Taken', 'This email address has already been taken.');
       return;
     }

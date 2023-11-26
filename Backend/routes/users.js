@@ -286,7 +286,7 @@ router.put('/findEmail', async (req, res) => {
     } else {
       // If the user does not exist, return true since the email is not taken
       console.log("user does not exist")
-      res.status(400).json({ emailTaken: false });
+      res.status(200).json({ emailTaken: false });
     }
   } catch (error) {
     res.status(500).send('An error occurred');
