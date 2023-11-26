@@ -124,6 +124,7 @@ export const emailTaken = async (email) => {
   console.log("Email in api.js", email)
   try {
     const response = await axios.put(`${API_URL}/users/findEmail`, {email});
+    console.log(response)
     const data = await response.json();
     return data.emailTaken;
   } catch (error) {
