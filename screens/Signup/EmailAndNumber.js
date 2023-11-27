@@ -30,7 +30,6 @@ const EmailAndNumber = ({ navigation, route }) => {
   
     // Make the email lowercase
     const lowerCaseEmail = email.toLowerCase();
-    setEmail(lowerCaseEmail);
   
     // Validate phone number
     if (!phoneNumber || !validatePhoneNumber(phoneNumber)) {

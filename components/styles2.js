@@ -53,9 +53,12 @@ const loginScreen = StyleSheet.create({
     top: 63,
   },
   fytrImg: {
-    position: 'absolute',
-    top: 43,
-    resizeMode: 'contain',
+    // position: 'absolute',
+    // top: 43,
+    // resizeMode: 'contain',
+    // height: "30%",
+     transform: [{scale: 0.9}]
+    // width: "30%"
 },
 
   subtitle: {

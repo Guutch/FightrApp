@@ -31,6 +31,40 @@ const ViewProfileScreen = ({ navigation, route }) => {
     2: 'in'
   };
 
+  const fightingStyles = {
+    1: 'Boxing',
+    2: 'Brazilian Jiu-Jitsu',
+    3: 'Muay Thai',
+    4: 'Wrestling',
+    5: 'Kickboxing',
+    6: 'Jiu-Jitsu',
+    7: 'Judo',
+    8: 'Karate',
+    9: 'Kung Fu',
+    10: 'Taekwondo',
+  };
+
+  const fightingLevels = {
+    1: 'Professional',
+    2: 'Amateur Competitor',
+    3: 'Advanced',
+    4: 'Intermediate',
+    5: 'Beginner',
+    6: 'Novice',
+  };
+
+  const weightClasses = {
+    1: 'Strawweight',
+    2: 'Flyweight',
+    3: 'Bantamweight',
+    4: 'Featherweight',
+    5: 'Lightweight',
+    6: 'Welterweight',
+    7: 'Middleweight',
+    8: 'Light Heavyweight',
+    9: 'Heavyweight',
+  };
+
   const inchesToFeetAndInches = (inches) => {
     const feet = Math.floor(inches / 12);
     const remainingInches = inches % 12;
@@ -62,22 +96,34 @@ const ViewProfileScreen = ({ navigation, route }) => {
           // This code is for when you navigate from Messaging screen
           targetUserId = matchId;
           profileData = await fetchEditProfileData(matchId);
+
+          console.log("Plz", profileData)
           const loggedInMetrics = await fetchMetrics(userId.userId);
           let additionalData = await fetchAdditionalUserData(matchId);
-          const styleNames = []; // Replace with actual logic to retrieve style names
-  
+          const styleNames = profileData.usersFightStyles.map(styleId => fightingStyles[styleId]);
+          
           // Handle unit conversion for height and weight
           // Your existing unit conversion logic here...
   
+          const weightClassNumber = profileData.weightClass;
+
+// Map the weight class number to its string representation
+const weightClassName = weightClasses[weightClassNumber];
+
           // Merge profile data
           profileData = {
             firstName,
             ...profileData,
             ...additionalData,
-            weightClass: passedWeightClass, // You need to define where this comes from
+            weightClass: weightClassName, // You need to define where this comes from
             style: styleNames.join(', '), // Join style names into a string
             level: passedLevel // You need to define where this comes from
           };
+
+          profileData.level = fightingLevels[profileData.usersFightLevel];
+
+
+          console.log("profileData", profileData)
         } else {
           targetUserId = passedUser.userId;
           profileData = await fetchEditProfileData(targetUserId);
@@ -110,6 +156,7 @@ const ViewProfileScreen = ({ navigation, route }) => {
             style: styleNames.join(', '),
             level: passedLevel
           };
+          console.log("profileData", profileData)
         }
   
         // Fetch and sort images, if targetUserId is set
@@ -207,7 +254,7 @@ const ViewProfileScreen = ({ navigation, route }) => {
         {/* <DividerTitle title={profileDataState ? profileDataState.firstName : 'Loading...'} /> */}
 
 
-        <Text style={settingsStyles.sectionTitle}>Fighter Details</Text>
+        <Text style={settingsStyles.sectionTitle}>Details</Text>
         <View style={{
           width: 371,
           backgroundColor: '#D9D9D9',

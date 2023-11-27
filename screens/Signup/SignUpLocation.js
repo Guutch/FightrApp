@@ -51,7 +51,8 @@ let mydate = new Date(parts[2], parts[1] - 1, parts[0]);
               password: route.params.password,
               location: {
                 type: 'Point',
-                coordinates: [position.coords.latitude, position.coords.longitude],
+                coordinates: [37.421998333333335, -122.084], // Forcing people to same location for testing
+                // coordinates: [position.coords.latitude, position.coords.longitude],
               }
             };
             const returnedUserData = await createUser(userData);

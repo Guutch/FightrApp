@@ -317,7 +317,7 @@ const SettingsScreen = ({ navigation }) => {
         <DividerTitle title="Preferences" />
 
         <SettingSection
-          title="Fighting Style Preference(s)"
+          title="Combat Sport Preference(s)"
           onPress={() => navigation.navigate('PreferenceSel', {
             preferences: ['Boxing', 'Brazilian Jiu-Jitsu', 'Muay Thai', 'Wrestling', 'Kickboxing', 'Jiu-Jitsu', 'Judo', 'Karate', 'Kung Fu', 'Taekwondo'],
             title: 'What styles do you want to match with',
@@ -329,7 +329,7 @@ const SettingsScreen = ({ navigation }) => {
           showChevron={true}
         />
         <SettingSection
-          title="Fighting Level Preference(s)"
+          title="Skill Level Preference(s)"
           onPress={() => navigation.navigate('PreferenceSel', {
             preferences: generateLevels(usersFightLevel, 'fightingLevel'),
             title: 'What fighting levels do you want to match with',

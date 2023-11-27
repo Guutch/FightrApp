@@ -28,7 +28,7 @@ const LoginScreen = ({ navigation }) => {
       
       {/* Other components */}
       <Image
-        // style={loginScreen.fytrImg}
+        style={loginScreen.fytrImg}
         source={require('../assets/LoginScreen.png')} // Make sure this path is correct
       />
 

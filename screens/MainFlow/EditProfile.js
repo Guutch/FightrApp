@@ -492,7 +492,7 @@ const EditProfileScreen = ({ navigation, route }) => {
         />
 
         <SettingSection title="Name" onPress={() => navigation.navigate('SomeScreen')} preference={usersName} />
-        <SettingSection title="Fighting Style(s)"
+        <SettingSection title="Combat Sport(s)"
           onPress={() => navigation.navigate('PreferenceSel', {
             preferences: Object.values(fightingStyles),
             title: 'What are your combat sports',
@@ -504,7 +504,7 @@ const EditProfileScreen = ({ navigation, route }) => {
           // Use the fightingStyle state directly, as it's already a joined string
           showChevron={true}
         />
-        <SettingSection title="Fighting Level"
+        <SettingSection title="Skill Level"
           onPress={() => navigation.navigate('PreferenceSel', {
             preferences: Object.values(fightingLevels),
             title: 'What is your combat sport proficiency',

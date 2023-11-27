@@ -100,7 +100,7 @@ const FightingScreen = ({ navigation, route }) => {
       </View>
       <ScrollView style={{flex: 1}} contentContainerStyle={fightingStyleScreen.list} >
         <Text style={fightingStyleScreen.questionText}>
-          What fighting styles are you interested in? Tick at least one.
+          What combat sports are you interested in? Tick at least one.
         </Text>
         {Object.keys(martialArts).map(renderItem)}
       </ScrollView>
