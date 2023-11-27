@@ -103,7 +103,7 @@ const PreferenceSel = ({ navigation, route }) => {
       />
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={fightingStyleScreen.listPrefSel}>
-        <Text style={fightingStyleScreen.questionText}>
+        <Text style={[fightingStyleScreen.questionText, {paddingTop: 30}]}>
           {title}
         </Text>
         {preferences.map(renderItem)}

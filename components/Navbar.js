@@ -150,8 +150,8 @@ const Navbar = ({
   };
 
 
-  return (
-    <View style={[navbarStyles.banner,  Platform.OS === 'ios' ? navbarStyles.banneriPhone : {}, swipingScreen === true ? {zIndex: -1} : {}, { backgroundColor, paddingTop: insets.top }]}>
+  return ( // zIndex to be set to -1 when swiping pan handler fixed -> , swipingScreen === true ? {} : {},
+    <View style={[navbarStyles.banner,  Platform.OS === 'ios' ? navbarStyles.banneriPhone : {}, { backgroundColor, paddingTop: insets.top }]}>
       {homeStyle ? (
         <>
           {title ? (
@@ -195,6 +195,7 @@ const Navbar = ({
               <Icon name="arrow-left" size={navbarStyles.iconSize.width} color={textColor} />
             </TouchableOpacity>
           )}
+          {/* This state is for the settings screen */}
           {showBackButton && dataToUpdate && (
             <TouchableOpacity
               style={[navbarStyles.backButton, { paddingTop: insets.top }]}

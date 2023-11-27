@@ -220,13 +220,14 @@ const SwipingScreen = ({ navigation }) => {
     },
   });
   return (
-    <View style={[ swipingStyles.firstContainer, Platform.OS === 'ios' ? swipingStyles.firstiPhoneContainer : {},
+    <View style={[ swipingStyles.firstContainer,
       { backgroundColor: "white" }
   ]}>
       <Navbar
         textColor="#000"
         swipingScreen={true}
         homeStyle={true}
+        backgroundColor={'white'}
         navigation={navigation}  // Here we pass navigation as a prop to Navbar
       />
       <View style={swipingStyles.container}>

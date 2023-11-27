@@ -1033,10 +1033,10 @@ const swipingStyles = StyleSheet.create({
     paddingTop: screenHeight * 0.1,
     // backgroundColor: '#000' // black background
   },
-  firstiPhoneContainer: {
-    // height: '70%',
-    // paddingTop: screenHeight * 0.35,
-  },
+  // firstiPhoneContainer: {
+  //   height: '70%',
+  //   paddingTop: screenHeight * 0.35,
+  // },
   container: {
     position: 'relative',
     justifyContent: 'center',
@@ -1047,7 +1047,7 @@ const swipingStyles = StyleSheet.create({
   },
   cardImage: {
     width: screenWidth * 0.92,
-    marginTop: Platform.OS === 'ios' ? 15 : 0,
+    marginTop: Platform.OS === 'ios' ? 16 : 0,
     height: Platform.OS === 'ios' ? screenHeight * 0.77 : screenHeight * 0.82,
     resizeMode: "cover",
     borderRadius: 20,
@@ -1056,6 +1056,7 @@ const swipingStyles = StyleSheet.create({
     position: 'absolute',
     paddingTop: screenHeight * 0.03,
     // width: screenWidth * 0.92,
+    // backgroundCOlor: 'red',
     height: screenHeight * 0.82,
     borderRadius: 20,
     justifyContent: 'center',
@@ -1275,7 +1276,7 @@ const noUsersStyles = StyleSheet.create({
     justifyContent: 'space-around', // Change this to space-around
     alignItems: 'center',
     paddingVertical: 100, // Add some padding
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
     // marginBottom: 40,
   },
   // cardIphone: {

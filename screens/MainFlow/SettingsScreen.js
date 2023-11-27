@@ -291,6 +291,7 @@ const SettingsScreen = ({ navigation }) => {
         backgroundColor="#000000"
         textColor="#FFFFFF"
         showBackButton={true}
+        // showNextButton={true}
         navigation={navigation}
         title="Settings"
         dataToUpdate={{
@@ -332,7 +333,7 @@ const SettingsScreen = ({ navigation }) => {
           title="Skill Level Preference(s)"
           onPress={() => navigation.navigate('PreferenceSel', {
             preferences: generateLevels(usersFightLevel, 'fightingLevel'),
-            title: 'What fighting levels do you want to match with',
+            title: 'What skill levels do you want to match with',
             type: 'fightingLevel', // Pass the type
             currentPref: fightingLevelPreference,
             updateFightingLevelPreference: updateFightingLevelPreference

@@ -8,7 +8,7 @@ import { fetchImage, fetchName } from '../../api';
 import { getWebSocketInstance } from './../../Backend/websocketInstance'
 import { useDispatch, useSelector } from 'react-redux';
 import * as Keychain from 'react-native-keychain';
-// import DatePicker from 'react-native-date-picker'
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { userLoggedOut } from '../../redux/actions'
 
 
@@ -18,8 +18,8 @@ const ProfileScreen = ({ navigation }) => {
   const [name, setName] = useState(null);
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(state => state.isAuthenticated);
-  const [date, setDate] = useState(new Date())
-  const [open, setOpen] = useState(false)
+  const [date, setDate] = useState(new Date());
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const handleLogout = async () => {
     // Clear JWT from secure storage
@@ -54,13 +54,18 @@ const ProfileScreen = ({ navigation }) => {
 
   };
 
-  // const handleBirthday = () => {
-  //   return (
-  //     <View style={styles.container}>
-  //       <DatePicker date={chosenDate} onDateChange={setChosenDate} />
-  //     </View>
-  //   );
-  // };
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (selectedDate) => {
+    setDate(selectedDate);
+    hideDatePicker();
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,19 +88,7 @@ const ProfileScreen = ({ navigation }) => {
         homeStyle={true}
         navigation={navigation}  // Here we pass navigation as a prop to Navbar
       />
-      {/* <DatePicker
-        modal
-        open={open}
-        date={date}
-        mode="date" // Set the mode to 'date' to show only the month, day, and year
-        onConfirm={(date) => {
-          setOpen(false)
-          setDate(date)
-        }}
-        onCancel={() => {
-          setOpen(false)
-        }}
-      /> */}
+
 
       <View style={settingsStyles.container}>
         <Image source={{ uri: imageUrl }} style={styles.image} />
@@ -106,9 +99,8 @@ const ProfileScreen = ({ navigation }) => {
             usersName: name
           })}
         />
-        <SettingSection preference={"Logout"} onPress={handleLogout} />
-        {/* <SettingSection preference={"Birthday"} onPress={() => setOpen(true)} /> */}
 
+        <SettingSection preference={"Logout"} onPress={handleLogout} />
 
       </View>
 
