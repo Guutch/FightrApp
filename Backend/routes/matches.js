@@ -127,42 +127,42 @@ router.get('/:userId', async (req, res) => {
   
   // Fetch all other users
   let allUsers = await User.find({ _id: { $ne: user._id } }).select('-password');
-console.log("All Users:", allUsers);
+// console.log("All Users:", allUsers);
 
 // Fetch all matches where the user is involved
 const matches = await Match.find({
   $or: [{ user1_id: user._id }, { user2_id: user._id }]
 });
-console.log("Matches:", matches);
+// console.log("Matches:", matches);
 
 // Fetch all blocks where the user is involved
 const blocks = await Block.find({
   $or: [{ blocker: user._id }, { blocked: user._id }]
 });
-console.log("Blocks:", blocks);
+// console.log("Blocks:", blocks);
 
 // Fetch all reports where the user is involved
 const reports = await Report.find({
   $or: [{ reporting_id: user._id }, { reported_id: user._id }]
 });
-console.log("Reports:", reports);
+// console.log("Reports:", reports);
 
 // Get the ids of the matched, blocked, and reported users
 const matchedUserIds = getInvolvedUserIds(matches, user._id, 'match');
 const blockedUserIds = getInvolvedUserIds(blocks, user._id, 'block');
 const reportedUserIds = getInvolvedUserIds(reports, user._id, 'report');
 
-// console.log("Matched User IDs:", matchedUserIds);
-// console.log("Blocked User IDs:", blockedUserIds);
-// console.log("Reported User IDs:", reportedUserIds);
+console.log("Matched User IDs:", matchedUserIds);
+console.log("Blocked User IDs:", blockedUserIds);
+console.log("Reported User IDs:", reportedUserIds);
 
 // Combine all the ids
 const excludedUserIds = [...matchedUserIds, ...blockedUserIds, ...reportedUserIds];
-// console.log("Excluded User IDs:", excludedUserIds);
+console.log("Excluded User IDs:", excludedUserIds);
 
 // Filter out the matched, blocked, and reported users from allUsers
 allUsers = filterByExclusions(allUsers, excludedUserIds);
-// console.log("Filtered Users:", allUsers);
+console.log("Filtered Users:", allUsers);
 
 // Helper functions
 function getInvolvedUserIds(records, userId, type) {
@@ -219,8 +219,8 @@ function filterByExclusions(allUsers, excludedUserIds) {
   // Get the user's distance unit
   let userDistanceUnit = userProfile.distanceUnit;
 
-  // console.log(user)
-  // console.log(allUsersWithProfiles)
+  console.log(user)
+  console.log(allUsersWithProfiles)
 
 
 
@@ -230,24 +230,24 @@ function filterByExclusions(allUsers, excludedUserIds) {
 
   // Filter based on age
   const ageMatches = filterByAge(user, locationMatches, userPreferences);
-  // console.log("ageMatches")
-  // console.log(ageMatches)
+  console.log("ageMatches")
+  console.log(ageMatches)
 
   // Filter based on weight
   const weightMatches = filterByWeight(user, ageMatches, userPreferences);
-  // console.log("weightMatches")
-  // console.log(weightMatches)      
+  console.log("weightMatches")
+  console.log(weightMatches)      
 
   // Filter based on fighting style
   const styleMatches = filterByStyle(user, weightMatches, userPreferences);
-  // console.log("styleMatches")
-  // console.log(styleMatches)    
+  console.log("styleMatches")
+  console.log(styleMatches)    
 
   // Filter based on fighting level
   const levelMatches = filterByLevel(user, styleMatches, userPreferences);
 
-  // console.log("levelMatches")    
-  // console.log(levelMatches)
+  console.log("levelMatches")    
+  console.log(levelMatches)
 
 
   const filteredMatches = levelMatches.map(match => {
@@ -264,8 +264,8 @@ function filterByExclusions(allUsers, excludedUserIds) {
     };
   });
 
-  // console.log("filteredMatches")
-  // console.log(filteredMatches)
+  console.log("filteredMatches")
+  console.log(filteredMatches)
 
   // Return the matches
   res.send(filteredMatches);

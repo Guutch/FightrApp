@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, FlatList, StatusBar } from 'react-native';
+import { View, Text, TextInput, FlatList, StatusBar, Keyboard, KeyboardAvoidingView } from 'react-native';
 import Navbar from '../../components/Navbar';
 import PopUp from '../../components/PopUp';
 import ChatMessage from '../../components/ChatMessage';
-import { matchedUsersInterface, firstNameScreen } from '../../components/styles2';
-import { useSelector, useDispatch } from 'react-redux';
+import { matchedUsersInterface } from '../../components/styles2';
+import { useDispatch } from 'react-redux';
 import { sendMessage as sendMessageAction } from '../../redux/actions';
 import { saveMessageToDatabase, fetchMessages, markMessagesAsRead, handleUserAction } from '../../api';
 import { getWebSocketInstance } from '../../Backend/websocketInstance'
@@ -16,10 +16,39 @@ const RealTimeMessaging = ({ route, navigation }) => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [selectedPreference, setSelectedPreference] = useState(null);
   const [message, setMessage] = useState('');
-  const [chatMessages, setChatMessages] = useState([]);  // New state to hold messages
+  const [chatMessages, setChatMessages] = useState([]);
   const [actionCompleted, setActionCompleted] = useState(false);
+  const [keyboardPadding, setKeyboardPadding] = useState(0);
   // const [shouldRefreshMatches, setShouldRefreshMatches] = useShouldRefreshMatches();
 
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      _keyboardDidShow,
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      _keyboardDidHide,
+    );
+  
+    // Cleanup
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+  
+  const _keyboardDidShow = (e) => {
+    const keyboardHeight = e.endCoordinates.height;
+    setKeyboardPadding(keyboardHeight);
+    // Scroll to end of FlatList
+    flatListRef.current.scrollToEnd({ animated: true });
+  };
+  
+  const _keyboardDidHide = () => {
+    setKeyboardPadding(0);
+  };
 
   const ws = getWebSocketInstance();
   // console.log("ws", ws)
@@ -95,9 +124,9 @@ const RealTimeMessaging = ({ route, navigation }) => {
   const handlePreferenceClick = async (preference, userId, selectedUserId) => {
     if (preference === 'Unmatch user') {
       try {
-        console.log("bye nike")
         await handleUserAction(selectedPreference, userId, selectedUserId);
         setActionCompleted(true);
+        resetAndNavigate();
       } catch (error) {
         console.error('An error occurred:', error);
       }
@@ -136,7 +165,7 @@ const RealTimeMessaging = ({ route, navigation }) => {
     
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
+    <View style={{ flex: 1, backgroundColor: '#fff', marginBottom: keyboardPadding }}>
       <StatusBar backgroundColor="black" barStyle="light-content"/>
       <Navbar navigation={navigation}
         title={selectedUser.name}
@@ -163,9 +192,10 @@ const RealTimeMessaging = ({ route, navigation }) => {
       actionCompleted={actionCompleted}
       resetAndNavigate={resetAndNavigate}
       />
-      <View style={[matchedUsersInterface.rtMsgCont, Platform.OS === 'ios' ? matchedUsersInterface.rtMsgContiPhone : {}]}>
+
+<View style={[matchedUsersInterface.rtMsgCont, Platform.OS === 'ios' ? matchedUsersInterface.rtMsgContiPhone : {}]}>
       <FlatList
-      // style={{}}
+      
       ref={flatListRef}
       data={chatMessages}
       renderItem={({ item }) => <ChatMessage message={item.message} isSent={item.isSent} />}
@@ -176,13 +206,14 @@ const RealTimeMessaging = ({ route, navigation }) => {
 
       </View>
 
-      <View style={matchedUsersInterface.textInputContainer}>
+      <View style={[matchedUsersInterface.textInputContainer]}>
         <TextInput
           style={matchedUsersInterface.textInput}
           placeholder="Type a message..."
           value={message}
           onChangeText={text => setMessage(text)}
           onSubmitEditing={handleSendMessage}
+          // style={{paddingBottom: keyboardPadding}}
         />
         <Text
           style={matchedUsersInterface.sendText}
