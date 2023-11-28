@@ -10,7 +10,10 @@ const Block = require('../models/block')
 router.delete('/unmatch', async (req, res) => {
   const { userId, selectedUserId } = req.body;
 
+  console.log("Unmatch request received for userId:", userId, "and selectedUserId:", selectedUserId); // Debug line
+
   try {
+    console.log("Searching for match..."); // Debug line
     const match = await Match.findOne({
       $or: [
         { user1_id: userId, user2_id: selectedUserId },
@@ -18,16 +21,23 @@ router.delete('/unmatch', async (req, res) => {
       ]
     });
 
+    console.log("Match found:", match); // Debug line
+
     if (!match) {
+      console.log("No match found for given user IDs"); // Debug line
       return res.status(404).send({ message: 'Match not found.' });
     }
 
+    console.log("Deleting match with ID:", match._id); // Debug line
     await Match.findByIdAndDelete(match._id);
+    console.log("Match deleted successfully"); // Debug line
     res.status(200).send({ message: 'Unmatched successfully.' });
   } catch (error) {
+    console.error("Error during unmatching:", error); // Debug line
     res.status(500).send({ message: 'Error unmatching.', error });
   }
 });
+
 
 
 // GET all matches
