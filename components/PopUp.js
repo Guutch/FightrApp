@@ -49,10 +49,12 @@ const PopUp = ({ isVisible, onClose, options, selectedPreference, onPreferenceCl
         navigateToViewProfile(match)
       }
     } else {
-      if (sexSelector = true) {
+      if (sexSelector === true) {
         console.log(option)
         onPreferenceChange(option);
       } else {
+        console.log("here mate")
+        console.log(option)
         onPreferenceClick(option, userId, selectedUserId)
       }
     }

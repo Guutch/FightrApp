@@ -611,21 +611,24 @@ export const markMessagesAsRead = async (senderId, receiverId) => {
 
 // Handle report, unmatch, block
 export const handleUserAction = async (actionType, userId, selectedUserId) => {
-
   try {
+    console.log("Starting handleUserAction with actionType:", actionType);  // Debug line
+
     // Remove the match record
-    // console.log("Unmatch User replacement")
+    console.log("Before axios delete request"); // Debug line
     await axios.delete(`${API_URL}/connections/unmatch`, {
       data: {
         userId,
         selectedUserId,
       }
     });
+    console.log("After axios delete request"); // Debug line
 
     console.log("Action Type:", actionType);  // Debug line
 
     switch (actionType) {
       case 'Block user':
+        console.log("Inside Block user case"); // Debug line
         // API call to remove match record and create block record
         await axios.post(`${API_URL}/connections/handleSerious`, {
           actionType,
@@ -634,6 +637,7 @@ export const handleUserAction = async (actionType, userId, selectedUserId) => {
         });
         break;
       case 'Report user':
+        console.log("Inside Report user case"); // Debug line
         // API call to remove match record and create report record
         // You should also pass 'reason' here if you have it
         await axios.post(`${API_URL}/connections/handleSerious`, {
@@ -644,10 +648,13 @@ export const handleUserAction = async (actionType, userId, selectedUserId) => {
         });
         break;
       default:
-      // Handle other cases or errors
+        console.log("Default case reached", actionType); // Debug line
+        // Handle other cases or errors
     }
 
   } catch (error) {
+    console.error(`Error in handleUserAction: ${error}`);  // Debug line
     throw new Error(`Error handling action: ${error}`);
   }
 };
+

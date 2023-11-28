@@ -3,7 +3,7 @@ import { View, Text, TextInput, FlatList, StatusBar } from 'react-native';
 import Navbar from '../../components/Navbar';
 import PopUp from '../../components/PopUp';
 import ChatMessage from '../../components/ChatMessage';
-import { matchedUsersInterface } from '../../components/styles2';
+import { matchedUsersInterface, firstNameScreen } from '../../components/styles2';
 import { useSelector, useDispatch } from 'react-redux';
 import { sendMessage as sendMessageAction } from '../../redux/actions';
 import { saveMessageToDatabase, fetchMessages, markMessagesAsRead, handleUserAction } from '../../api';
@@ -93,8 +93,9 @@ const RealTimeMessaging = ({ route, navigation }) => {
   };
 
   const handlePreferenceClick = async (preference, userId, selectedUserId) => {
-    if (preference === 'Yes') {
+    if (preference === 'Unmatch user') {
       try {
+        console.log("bye nike")
         await handleUserAction(selectedPreference, userId, selectedUserId);
         setActionCompleted(true);
       } catch (error) {
@@ -121,8 +122,8 @@ const RealTimeMessaging = ({ route, navigation }) => {
     ? [{ preference: 'Yes' }, { preference: 'No' }]
     : [
       { preference: 'Unmatch user' },
-      { preference: 'Report user' },
-      { preference: 'Block user' }
+      // { preference: 'Report user' },
+      // { preference: 'Block user' }
     ];
 
     const flatListRef = useRef(null);
@@ -162,7 +163,7 @@ const RealTimeMessaging = ({ route, navigation }) => {
       actionCompleted={actionCompleted}
       resetAndNavigate={resetAndNavigate}
       />
-      <View style={matchedUsersInterface.rtMsgCont}>
+      <View style={[matchedUsersInterface.rtMsgCont, Platform.OS === 'ios' ? matchedUsersInterface.rtMsgContiPhone : {}]}>
       <FlatList
       // style={{}}
       ref={flatListRef}

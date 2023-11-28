@@ -1433,7 +1433,11 @@ const matchedUsersInterface = StyleSheet.create({
     flex: 1,
     paddingTop: 0,
     marginBottom: screenHeight * 0.08,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+  },
+  rtMsgContiPhone: {
+    paddingTop: screenHeight * 0.105,
+    marginTop: 25
   },
   centeredTextContainer: {
     flex: 1,
