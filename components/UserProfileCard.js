@@ -73,7 +73,7 @@ const UserProfileCard = ({
     if (!viewOnly) {
       Animated.timing(pan, {
         toValue: { x: -800, y: -125 }, // change 500 to the value you want
-        duration: 150, // change 500 to the duration you want
+        duration: 250, // change 500 to the duration you want
         useNativeDriver: false,
       }).start(() => {
         // reset the position of the card after the animation is done
