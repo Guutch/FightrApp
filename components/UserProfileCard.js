@@ -39,23 +39,25 @@ const UserProfileCard = ({
 
 
   const swipeRight = () => {
-    Animated.timing(pan, {
-      toValue: { x: 800, y: -125 }, // change 500 to the value you want
-      duration: 150, // change 500 to the duration you want
-      useNativeDriver: false,
-    }).start(() => {
-      // reset the position of the card after the animation is done
-      handleSwipe("right")
+    if (!viewOnly) {
+      Animated.timing(pan, {
+        toValue: { x: 800, y: -125 }, // change 500 to the value you want
+        duration: 250, // change 500 to the duration you want
+        useNativeDriver: false,
+      }).start(() => {
+        // reset the position of the card after the animation is done
+        handleSwipe("right")
 
-      // remove the swiped card from the stack and load the next card
-      // you'll need to implement this part
-    });
+        // remove the swiped card from the stack and load the next card
+        // you'll need to implement this part
+      });
+    }
   };
 
   const swipeRightAfterMatch = () => {
     Animated.timing(pan, {
       toValue: { x: 800, y: -125 }, // change 500 to the value you want
-      duration: 150, // change 500 to the duration you want
+      duration: 250, // change 500 to the duration you want
       useNativeDriver: false,
     }).start(() => {
       // reset the position of the card after the animation is done
@@ -68,16 +70,19 @@ const UserProfileCard = ({
 
 
   const swipeLeft = () => {
-    Animated.timing(pan, {
-      toValue: { x: -800, y: -125 }, // change 500 to the value you want
-      duration: 150, // change 500 to the duration you want
-      useNativeDriver: false,
-    }).start(() => {
-      // reset the position of the card after the animation is done
-      handleSwipe("left")
-      // remove the swiped card from the stack and load the next card
-      // you'll need to implement this part
-    });
+    if (!viewOnly) {
+      Animated.timing(pan, {
+        toValue: { x: -800, y: -125 }, // change 500 to the value you want
+        duration: 250, // change 500 to the duration you want
+        useNativeDriver: false,
+      }).start(() => {
+        // reset the position of the card after the animation is done
+        handleSwipe("left")
+        // remove the swiped card from the stack and load the next card
+        // you'll need to implement this part
+      });
+    }
+
   };
 
   const handleImageTap = () => {
@@ -140,9 +145,12 @@ const UserProfileCard = ({
         <ProgressBar progress={progress} isInsideCard={true} />
 
         <Image
-          source={{ uri: user.images[currentImageIndex].url }}
+          source={{
+            uri: user?.images[currentImageIndex]?.url || 'default-image-url'
+          }}
           style={swipingStyles.cardImage}
         />
+
 
         {/* User's Details Cards */}
         <View style={swipingStyles.card2}>

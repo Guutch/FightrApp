@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Geolocation from 'react-native-geolocation-service';
@@ -10,8 +10,12 @@ import { useDispatch } from 'react-redux';
 import { userLoggedIn } from '../../redux/actions';
 
 const SignUpLocation = ({ navigation, route }) => {
+  const [isButtonPressed, setIsButtonPressed] = useState(false);
+
+
   const dispatch = useDispatch();
   const requestLocationPermission = useCallback(async () => {
+    setIsButtonPressed(true);
     try {
       let permissionGranted = false;
 
@@ -99,14 +103,14 @@ let mydate = new Date(parts[2], parts[1] - 1, parts[0]);
         </Text>
       </View>
       <TouchableOpacity
-        style={signUpLocation.enableLocationButton}
-        // onPress={handlePress}
+      style={signUpLocation.enableLocationButton}
       onPress={requestLocationPermission}
-      >
-        <Text style={signUpLocation.enableLocationButtonText}>
-          Enable Location
-        </Text>
-      </TouchableOpacity>
+      disabled={isButtonPressed} // Disable the button based on isButtonPressed
+    >
+      <Text style={signUpLocation.enableLocationButtonText}>
+        Enable Location
+      </Text>
+    </TouchableOpacity>
     </View>
   );
 };
