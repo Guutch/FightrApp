@@ -86,28 +86,43 @@ router.get('/:userId/getAll', async (req, res) => {
 router.post('/newMatch', async (req, res) => {
   const { user1_id, user2_id } = req.body;
 
-  // Delete the existing right swipe
-  await Swipe.findOneAndDelete({
-    swiper_id: user2_id,
-    swiped_id: user1_id,
-    direction: 'right',
-  });
-
-  // Create a new match document
-  const match = new Match({
-    user1_id,
-    user2_id,
-    matchedAt: Date.now(),
-  });
-
   try {
+    // Check if a match already exists with the same user IDs
+    const existingMatch = await Match.findOne({
+      $or: [
+        { user1_id: user1_id, user2_id: user2_id },
+        { user1_id: user2_id, user2_id: user1_id }
+      ]
+    });
+
+    // If a match exists, do not create a new one and return a message
+    if (existingMatch) {
+      return res.status(409).send({ message: 'Match already exists.' });
+    }
+
+    // Delete the existing right swipe
+    await Swipe.findOneAndDelete({
+      swiper_id: user2_id,
+      swiped_id: user1_id,
+      direction: 'right',
+    });
+
+    // Create a new match document
+    const match = new Match({
+      user1_id,
+      user2_id,
+      matchedAt: Date.now(),
+    });
+
     // Save the match
     await match.save();
     res.status(201).send(match);
+
   } catch (error) {
     res.status(400).send(error);
   }
 });
+
 
 
 

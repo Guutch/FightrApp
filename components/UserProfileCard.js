@@ -10,6 +10,8 @@ const UserProfileCard = ({
   user, navigation, viewOnly, pan, handlers, currentImageIndex, setCurrentImageIndex, handleImagePress,
   style, level, weightClass, handleSwipe, showMissedMatchAlert, matchMade, fightingStyleDict
 }) => {
+  const [isLeftButtonDisabled, setIsLeftButtonDisabled] = useState(false);
+  const [isRightButtonDisabled, setIsRightButtonDisabled] = useState(false);
   const [alertVisible, setAlertVisible] = useState(false);
   const totalImages = user.images.length;
   const progress = (currentImageIndex + 1) / totalImages;
@@ -39,7 +41,9 @@ const UserProfileCard = ({
 
 
   const swipeRight = () => {
+    
     if (!viewOnly) {
+      setIsRightButtonDisabled(true); // Disable right button
       Animated.timing(pan, {
         toValue: { x: 800, y: -125 }, // change 500 to the value you want
         duration: 250, // change 500 to the duration you want
@@ -51,6 +55,7 @@ const UserProfileCard = ({
         // remove the swiped card from the stack and load the next card
         // you'll need to implement this part
       });
+      setIsRightButtonDisabled(false);
     }
   };
 
@@ -71,6 +76,7 @@ const UserProfileCard = ({
 
   const swipeLeft = () => {
     if (!viewOnly) {
+setIsLeftButtonDisabled(true); // Disable right button
       Animated.timing(pan, {
         toValue: { x: -800, y: -125 }, // change 500 to the value you want
         duration: 250, // change 500 to the duration you want
@@ -81,6 +87,7 @@ const UserProfileCard = ({
         // remove the swiped card from the stack and load the next card
         // you'll need to implement this part
       });
+      setIsLeftButtonDisabled(false);
     }
 
   };
@@ -182,21 +189,21 @@ const UserProfileCard = ({
               <Icon name="step-backward" size={30} color="#FF4D00" />
             </View>
           </TouchableOpacity> */}
-            <TouchableOpacity onPress={swipeLeft}>
-              <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: '#FA3030', justifyContent: 'center', alignItems: 'center' }}>
-                <Icon name="arrow-left" size={30} color="#FA3030" />
-              </View>
-            </TouchableOpacity>
+            <TouchableOpacity onPress={swipeLeft} disabled={viewOnly} activeOpacity={1}>
+  <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: '#FA3030', justifyContent: 'center', alignItems: 'center' }}>
+    <Icon name="arrow-left" size={30} color={viewOnly ? '#ccc' : "#FA3030"} />
+  </View>
+</TouchableOpacity>
             {/* <TouchableOpacity onPress={() => console.log('refresh pressed')}>
             <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: '#5D5FEF', justifyContent: 'center', alignItems: 'center' }}>
               <Icon name="refresh" size={30} color="#5D5FEF" />
             </View>
           </TouchableOpacity> */}
-            <TouchableOpacity onPress={swipeRight}>
-              <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: '#8AFF9D', justifyContent: 'center', alignItems: 'center' }}>
-                <Icon name="arrow-right" size={30} color="#8AFF9D" />
-              </View>
-            </TouchableOpacity>
+            <TouchableOpacity onPress={swipeRight} disabled={viewOnly} activeOpacity={1}>
+  <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: '#8AFF9D', justifyContent: 'center', alignItems: 'center' }}>
+    <Icon name="arrow-right" size={30} color={viewOnly ? '#ccc' : "#8AFF9D"} />
+  </View>
+</TouchableOpacity>
             {/* <TouchableOpacity onPress={() => console.log('step-forward pressed')}>
             <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: '#FFB800', justifyContent: 'center', alignItems: 'center' }}>
               <Icon name="step-forward" size={30} color="#FFB800" />
