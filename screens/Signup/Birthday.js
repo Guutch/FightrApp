@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert, Platform, StatusBar } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+// import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { firstNameScreen, birthdayScreen, lastNameScreen, navbarStyles } from '../../components/styles2';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Navbar from '../../components/Navbar';
@@ -22,9 +23,9 @@ const formatDate = (date) => {
 };
 
 const BirthdayScreen = ({ navigation, route }) => {
-  const [date, setDate] = useState(null);
   const [sex, setSex] = useState(null);
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [date, setDate] = useState();
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [selectedPreference, setSelectedPreference] = useState("Please Select");
   const options =
@@ -39,14 +40,26 @@ const BirthdayScreen = ({ navigation, route }) => {
     
   };
 
-  const onChange = (event, selectedDate) => {
-    setShowDatePicker(false); // Hide the date picker
-    if (selectedDate) {
-      setDate(selectedDate);
-      console.log('Selected date:', selectedDate);
-    }
-  };
+  // const onChange = (event, selectedDate) => {
+  //   setShowDatePicker(false); // Hide the date picker
+  //   if (selectedDate) {
+  //     setDate(selectedDate);
+  //     console.log('Selected date:', selectedDate);
+  //   }
+  // };
   
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (selectedDate) => {
+    setDate(selectedDate);
+    hideDatePicker();
+  };
 
   const togglePopup = () => {
     setPopupVisible(!isPopupVisible);
@@ -96,19 +109,17 @@ const BirthdayScreen = ({ navigation, route }) => {
       />
       <ProgressBar progress={5 / 8} />
       <Text style={firstNameScreen.questionText}>When is your birthday?</Text>
-      <TouchableOpacity onPress={toggleDatePicker} activeOpacity={0.5} style={birthdayScreen.birthdayTouchable}>
+      <TouchableOpacity onPress={showDatePicker} activeOpacity={0.5} style={birthdayScreen.birthdayTouchable}>
   <Text style={birthdayScreen.birthdaydateText}>{formatDate(date)}</Text>
 </TouchableOpacity>
 
-      {showDatePicker && (
-        <DateTimePicker
-          value={date || new Date()}
-          mode="date"
-          display="default"
-          onChange={onChange}
-          maximumDate={new Date()}
-        />
-      )}
+<DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+        maximumDate={new Date()}
+      />
       <Text style={lastNameScreen.questionText}>What's your biological sex?</Text>
       {/* Top of view */}
       <TouchableOpacity style={lastNameScreen.rectangle} onPress={togglePopup}>

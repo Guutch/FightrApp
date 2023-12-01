@@ -21,6 +21,16 @@ const ViewProfileScreen = ({ navigation, route }) => {
   const totalImages = route.params.totalImages; // Since totalImages is static, we can just take it from route.params
   const [progress, setProgress] = useState(1 / totalImages); // Initialize progress
 
+  // function getAge(birthday) {
+  //   const today = new Date();
+  //   let age = today.getFullYear() - birthday.getFullYear();
+  //   const m = today.getMonth() - birthday.getMonth();
+  //   if (m < 0 || (m === 0 && today.getDate() < birthday.getDate())) {
+  //     age--;
+  //   }
+  //   return age;
+  // }
+
   const weightUnitMapping = {
     1: 'kg',
     2: 'lbs'
@@ -99,7 +109,9 @@ const ViewProfileScreen = ({ navigation, route }) => {
 
           console.log("Plz", profileData)
           const loggedInMetrics = await fetchMetrics(userId.userId);
+
           let additionalData = await fetchAdditionalUserData(matchId);
+          console.log("Plz2", additionalData)
           const styleNames = profileData.usersFightStyles.map(styleId => fightingStyles[styleId]);
           
           // Handle unit conversion for height and weight
@@ -217,7 +229,9 @@ const weightClassName = weightClasses[weightClassNumber];
 
         {images &&
           <TouchableOpacity onPress={handleImagePress} activeOpacity={1}>
-            <ProgressBar progress={progress} isInsideCard={true} viewProfile={true} />
+{!route.params.matchId && (
+  <ProgressBar progress={progress} isInsideCard={true} viewProfile={true} />
+)}
             <Image
               source={{ uri: images[currentImageIndex].url }}
               fadeDuration={0}
