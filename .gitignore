@@ -64,3 +64,6 @@ yarn-error.log
 
 #Environment variables
 .env
+
+#Gradle
+gradle.properties
