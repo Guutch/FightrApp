@@ -35,10 +35,10 @@ const BirthdayScreen = ({ navigation, route }) => {
         // { preference: 'Oth' }
       ];
 
-  const toggleDatePicker = () => {
-    setShowDatePicker(prevShowDatePicker => !prevShowDatePicker);
+  // const toggleDatePicker = () => {
+  //   setShowDatePicker(prevShowDatePicker => !prevShowDatePicker);
     
-  };
+  // };
 
   // const onChange = (event, selectedDate) => {
   //   setShowDatePicker(false); // Hide the date picker

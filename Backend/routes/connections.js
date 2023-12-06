@@ -50,7 +50,7 @@ router.get('/allMatches/:userId', async (req, res) => {
         { user2_id: userId }
       ]
     });
-    res.send(matches);
+
   } catch (error) {
     res.status(500).send();
   }
