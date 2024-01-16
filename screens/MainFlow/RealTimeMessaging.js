@@ -23,29 +23,42 @@ const RealTimeMessaging = ({ route, navigation }) => {
 
 
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
-      _keyboardDidShow,
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
-      _keyboardDidHide,
-    );
-  
+    let keyboardDidShowListener;
+    let keyboardDidHideListener;
+
+    if (Platform.OS === 'ios') {
+      // Add listeners for iOS only
+      keyboardDidShowListener = Keyboard.addListener(
+        'keyboardWillShow', _keyboardDidShow,
+      );
+      keyboardDidHideListener = Keyboard.addListener(
+        'keyboardWillHide', _keyboardDidHide,
+      );
+    }
+
     // Cleanup
     return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
+      if (keyboardDidShowListener) {
+        keyboardDidShowListener.remove();
+      }
+      if (keyboardDidHideListener) {
+        keyboardDidHideListener.remove();
+      }
     };
   }, []);
-  
+
+
   const _keyboardDidShow = (e) => {
+    console.log('_keyboardDidShow called');
     const keyboardHeight = e.endCoordinates.height;
     setKeyboardPadding(keyboardHeight);
-    // Scroll to end of FlatList
-    flatListRef.current.scrollToEnd({ animated: true });
+    if (chatMessages.length > 0 && flatListRef.current) {
+      console.log('Scrolling to end due to keyboard show...');
+      flatListRef.current.scrollToEnd({ animated: true });
+    }
   };
   
+
   const _keyboardDidHide = () => {
     setKeyboardPadding(0);
   };
@@ -55,15 +68,15 @@ const RealTimeMessaging = ({ route, navigation }) => {
 
   const dispatch = useDispatch();
 
-    // Mark messages as read when returning to the previous screen
-    const markRead = async () => {
-      try {
-        // SenderId, receiverId
-        await markMessagesAsRead(selectedUser.id, userId);
-      } catch (error) {
-        console.error("Failed to mark messages as read:", error);
-      }
-    };
+  // Mark messages as read when returning to the previous screen
+  const markRead = async () => {
+    try {
+      // SenderId, receiverId
+      await markMessagesAsRead(selectedUser.id, userId);
+    } catch (error) {
+      console.error("Failed to mark messages as read:", error);
+    }
+  };
 
   // Inside RealTimeMessaging component
   useEffect(() => {
@@ -95,9 +108,15 @@ const RealTimeMessaging = ({ route, navigation }) => {
 
   }, [ws, userId, selectedUser.id]);
 
+  useEffect(() => {
+    if (flatListRef.current && chatMessages.length > 0) {
+      flatListRef.current.scrollToEnd({ animated: true });
+    }
+  }, []); // Dependency array includes chatMessages
+
   const handleSendMessage = async () => {
     // Dispatch the message to be sent via WebSocket
-    if(message!="") {
+    if (message != "") {
       dispatch(sendMessageAction(message, selectedUser.id));  // Include the recipientId
 
       // Save the message to the database
@@ -106,14 +125,14 @@ const RealTimeMessaging = ({ route, navigation }) => {
       } catch (error) {
         console.error("Failed to save message:", error);
       }
-  
+
       // Update the local state to display the message
       setChatMessages([...chatMessages, { message, isSent: true }]);
-  
+
       // Clear the input field
       setMessage('');
     }
-    
+
   };
 
   const togglePopup = () => {
@@ -145,7 +164,7 @@ const RealTimeMessaging = ({ route, navigation }) => {
     setshouldRefreshMatches(true);
     navigation.goBack();
   };
-  
+
 
   const options = selectedPreference
     ? [{ preference: 'Yes' }, { preference: 'No' }]
@@ -155,18 +174,21 @@ const RealTimeMessaging = ({ route, navigation }) => {
       // { preference: 'Block user' }
     ];
 
-    const flatListRef = useRef(null);
+  const flatListRef = useRef(null);
 
-    const handleLayout = () => {
-      if (chatMessages.length > 0 && flatListRef.current) {
-        flatListRef.current.scrollToEnd({ animated: false });
-      }
-    };
-    
+  const handleLayout = () => {
+    console.log('handleLayout called');
+    if (chatMessages.length > 0 && flatListRef.current) {
+      console.log('Scrolling to end...');
+      flatListRef.current.scrollToEnd({ animated: false });
+    }
+  };
+  
+
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff', marginBottom: keyboardPadding }}>
-      <StatusBar backgroundColor="black" barStyle="light-content"/>
+      <StatusBar backgroundColor="black" barStyle="light-content" />
       <Navbar navigation={navigation}
         title={selectedUser.name}
         backgroundColor="#000000"
@@ -188,21 +210,25 @@ const RealTimeMessaging = ({ route, navigation }) => {
         selectedPreference={selectedPreference}
         onPreferenceClick={handlePreferenceClick}
         userId={userId}
-      selectedUserId={selectedUser.id}
-      actionCompleted={actionCompleted}
-      resetAndNavigate={resetAndNavigate}
+        selectedUserId={selectedUser.id}
+        actionCompleted={actionCompleted}
+        resetAndNavigate={resetAndNavigate}
       />
 
-<View style={[matchedUsersInterface.rtMsgCont, Platform.OS === 'ios' ? matchedUsersInterface.rtMsgContiPhone : {}]}>
-      <FlatList
-      
-      ref={flatListRef}
-      data={chatMessages}
-      renderItem={({ item }) => <ChatMessage message={item.message} isSent={item.isSent} />}
-      keyExtractor={(item, index) => index.toString()}
-      onLayout={handleLayout}
-      onContentSizeChange={handleLayout}
-    />
+      <View style={[matchedUsersInterface.rtMsgCont, Platform.OS === 'ios' ? matchedUsersInterface.rtMsgContiPhone : {}]}>
+        <FlatList
+
+          ref={flatListRef}
+          data={chatMessages}
+          // renderItem={({ item }) => <ChatMessage message={item.message} isSent={item.isSent} />}
+          renderItem={({ item }) => {
+            console.log('Rendering item', item);
+            return <ChatMessage message={item.message} isSent={item.isSent} />;
+          }}
+          keyExtractor={(item, index) => index.toString()}
+          onLayout={handleLayout}
+          onContentSizeChange={handleLayout}
+        />
 
       </View>
 
@@ -213,7 +239,7 @@ const RealTimeMessaging = ({ route, navigation }) => {
           value={message}
           onChangeText={text => setMessage(text)}
           onSubmitEditing={handleSendMessage}
-          // style={{paddingBottom: keyboardPadding}}
+        // style={{paddingBottom: keyboardPadding}}
         />
         <Text
           style={matchedUsersInterface.sendText}

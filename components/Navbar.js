@@ -7,6 +7,7 @@ import { changeUserPreferences, changePhotoPositions, updateEditProfileData, upd
 import { useDispatch } from 'react-redux';
 import { updateWeight } from '../redux/actions';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { checkNotifications } from 'react-native-permissions';
 
 
 const Navbar = ({
@@ -14,6 +15,7 @@ const Navbar = ({
   showBackButton,
   showNextButton,
   onNext,
+  updatedSettings,
   homeStyle,
   backgroundColor,
   textColor,
@@ -137,12 +139,17 @@ const Navbar = ({
 
 
     } else {
-      console.log("lmaolmaolmao")
-      handleSavePreferences(dataToUpdate);
+      if(updatedSettings) {
+        console.log("Show popup")
+      } else {
+        console.log("Grafeful exit")
+      }
+      // console.log("BIG LMAO MATTE " + updatedSettings)
+      // handleSavePreferences(dataToUpdate);
+      // console.log(chan)
 
-
-      // // Update preferences in the backend
-      await changeUserPreferences(dataToUpdate.userId, dataToUpdate);
+      // // // Update preferences in the backend
+      // await changeUserPreferences(dataToUpdate.userId, dataToUpdate);
     }
     // Navigate back
     console.log("lol")
@@ -219,6 +226,7 @@ const Navbar = ({
           {showNextButton && (
             <TouchableOpacity
               style={[navbarStyles.nextButton, { paddingTop: insets.top }]}
+              // onPress={console.log("lmO")}
               onPress={onNext}
             >
               <Icon name="check" size={navbarStyles.iconSize.width} color={textColor} />

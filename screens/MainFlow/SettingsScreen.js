@@ -17,13 +17,13 @@ const DividerTitle = ({ title }) => {
 };
 
 
-const MetricsSection = ({ title, option1, option2, selected, onSelect, iPhone=false }) => {
+const MetricsSection = ({ title, option1, option2, selected, onSelect, iPhone = false }) => {
   return (
     <View style={[
       settingsStyles.metricsMargin,
       iPhone === true ? { marginBottom: 35 } : null
     ]}>
-    
+
       <StatusBar backgroundColor="black" barStyle="light-content" />
 
       <View style={settingsStyles.titleAndValueContainer}>
@@ -54,18 +54,37 @@ const SettingsScreen = ({ navigation }) => {
   const [fightingStylePreference, setFightingStylePreference] = useState('');  // Add this line
   const [fightingLevelPreference, setFightingLevelPreference] = useState('');  // Add this line
   const [usersFightLevel, setusersFightLevel] = useState('');  // Add this line
-  const [availableClasses, setavailableClasses] = useState('');
+  const [changesSaved, setChangesSaved] = useState(true);
   const [weightRange, setWeightRange] = useState("");
   const [height, setHeight] = useState(null);
   const [weight, setWeight] = useState(null);
+  const [valuesSet, setValuesSet] = useState(false);
+  const [updatedSettings, setUpdatedSettings] = useState(false); // Shows the tick
+  const [defaultSettings, setDefaultSettings] = useState({
+    distance: 10,
+    ageRange: [18, 30],
+    heightUnit: null,
+    weightUnit: null,
+    distanceUnit: null,
+    weightClass: null,
+    fightingStylePreference: '',
+    fightingLevelPreference: '',
+    usersFightLevel: '',
+    // availableClasses: '',
+    weightRange: '',
+    height: null,
+    weight: null,
+  });
+
 
   const dispatch = useDispatch();
-  const preferences = useSelector((state) => state.preferences);
+  // const preferences = useSelector((state) => state.preferences);
 
   const userId = useSelector(state => state.user);  // Gets the userId from the Redux state
 
   const handleSavePreferences = (dataToUpdate) => {
     // Update preferences in the Redux store
+    console.log("Bash")
     dispatch(updateFightingLevelEdit(dataToUpdate));
   };
 
@@ -130,8 +149,54 @@ const SettingsScreen = ({ navigation }) => {
     }
   };
 
+  // Function to check if any setting has changed
+  const hasSettingChanged = () => {
+    return heightUnit !== defaultSettings.heightUnit ||
+      weightUnit !== defaultSettings.weightUnit ||
+      distanceUnit !== defaultSettings.distanceUnit;
+    // ... add checks for other settings if necessary
+  };
 
+  const handleSave = () => {
+    // Save logic goes here
+    const currentSettings = {
+      ageRange: ageRange,
+      distance: distance,
+      fightingStylePreference: fightingStylePreference,
+      fightingLevelPreference: fightingLevelPreference,
+      usersFightLevel: usersFightLevel,
+      weightRange: weightRange,
+      height: height,
+      weight: weight,
+      heightUnit: heightUnit,
+      weightClass: weightClass,
+      weightUnit: weightUnit,
+      distanceUnit: distanceUnit,
+    };
 
+    setDefaultSettings(currentSettings)
+
+    // After saving, update states
+    setChangesSaved(true);
+    setUpdatedSettings(false);
+  };
+
+  useEffect(() => {
+    if (valuesSet) {
+      // const changeMade
+      if (hasSettingChanged()) {
+        // console.log(weightUnit + " "+ defaultSettings.weightUnit)
+        // console.log("There was a change")
+        setUpdatedSettings(true)
+        setChangesSaved(true)
+      } else {
+        // console.log("There was NO change")
+        setUpdatedSettings(false);
+        setChangesSaved(false)
+      }
+    }
+
+  }, [heightUnit, weightUnit, distanceUnit]);
 
   const fightingStyles = {
     1: 'Boxing',
@@ -240,24 +305,32 @@ const SettingsScreen = ({ navigation }) => {
     const fetchData = async () => {
       const data = await fetchUserPreferences(userId.userId);  // replace with the user's id
       if (data && data.age_range) {
+        console.log("pow " + data.age_range)
+        defaultSettings.ageRange = data.age_range;
+        console.log("mmkay" + defaultSettings.ageRange)
         setAgeRange(data.age_range);
       }
-      if (data && data.age_range) {
+      if (data && data.location_range) {
+        defaultSettings.distance = data.location_range;
         setDistance(data.location_range);
       }
       if (data && data.fightingStyle) {
+        defaultSettings.fightingStylePreference = data.fightingStyle;
         const styleNames = data.fightingStyle.map(getFightingStyleName);
         setFightingStylePreference(styleNames.join(', '));
       }
       if (data && data.fightingLevel) {
+        defaultSettings.fightingStylePreference = data.fightingLevel;
         const levelNames = data.fightingLevel.map(getFightingLevelName);
         setFightingLevelPreference(levelNames.join(', '));
       }
       if (data && data.usersFightLevel) {
+        defaultSettings.usersFightLevel = data.fightingLevel;
         setusersFightLevel(data.usersFightLevel);
       }
       // Need to calculate the user's weight class pref from weight_range
       if (data && data.weight_range) {
+        defaultSettings.weightRange = data.weight_range;
         const weightClassNames = data.weight_range.map(getWeightClassName);
         setWeightRange(weightClassNames.join(', '));
       }
@@ -265,24 +338,57 @@ const SettingsScreen = ({ navigation }) => {
       if (data && data.heightUnit !== undefined) {
         setHeightUnit(heightUnitMapping[data.heightUnit]);
         setOriginalHeightUnit(heightUnitMapping[data.heightUnit]);
+        defaultSettings.height = data.actualHeight;
         setHeight(data.actualHeight);
       }
       if (data && data.weightClass !== undefined) {
         setWeightClass(data.weightClass);
         setWeight(data.actualWeight);
+        defaultSettings.weightClass = data.weightClass;
         setOriginalWeightUnit(weightUnitMapping[data.weightUnit]);
       }
+
       if (data && data.weightUnit !== undefined) {
         setWeightUnit(weightUnitMapping[data.weightUnit]);
+        defaultSettings.height = data.actualHeight;
       }
+
       if (data && data.distanceUnit !== undefined) {
         setDistanceUnit(distanceUnitMapping[data.distanceUnit]);
+        defaultSettings.distanceUnit = data.distanceUnit;
+
       }
+
+      const newSettings = {
+        ageRange: data.age_range || [18, 30],
+        distance: data.location_range || 10,
+        fightingStylePreference: data.fightingStyle ? data.fightingStyle.map(getFightingStyleName).join(', ') : '',
+        fightingLevelPreference: data.fightingLevel ? data.fightingLevel.map(getFightingLevelName).join(', ') : '',
+        usersFightLevel: data.usersFightLevel || '',
+        weightRange: data.weight_range ? data.weight_range.map(getWeightClassName).join(', ') : '',
+        height: data.actualHeight || null,
+        weight: data.actualWeight || null,
+        heightUnit: data.heightUnit !== undefined ? heightUnitMapping[data.heightUnit] : null,
+        weightClass: data.weightClass !== undefined ? data.weightClass : null,
+        weightUnit: data.weightUnit !== undefined ? weightUnitMapping[data.weightUnit] : null,
+        distanceUnit: data.distanceUnit !== undefined ? distanceUnitMapping[data.distanceUnit] : null,
+      };
+
+      // Update the defaultSettings state
+      setDefaultSettings(newSettings);
+
+      setValuesSet(true);
 
     };
 
+    console.log("okay lol " + JSON.stringify(defaultSettings, null, 2));
+
     fetchData();
   }, []);
+
+  const saveSettings = () => {
+    console.log(defaultSettings)
+  }
 
   return (
     <View>
@@ -291,7 +397,10 @@ const SettingsScreen = ({ navigation }) => {
         backgroundColor="#000000"
         textColor="#FFFFFF"
         showBackButton={true}
-        // showNextButton={true}
+        showNextButton={updatedSettings}
+        onNext={handleSave}
+        // handleSave={handleSave}
+        updatedSettings={updatedSettings}
         navigation={navigation}
         title="Settings"
         dataToUpdate={{
@@ -313,7 +422,7 @@ const SettingsScreen = ({ navigation }) => {
       />
       <ScrollView contentContainerStyle={[settingsStyles.container, Platform.OS === 'ios' ? firstNameScreen.iPhone : {}]}>
 
-        <Text style={settingsStyles.fytrPlus}>Match unlimited Fytrs and elevate your fighting game with Fytr+</Text>
+        {/* <Text style={settingsStyles.fytrPlus}>Match unlimited FYTRs and elevate your fighting game with Fytr+</Text> */}
 
         <DividerTitle title="Preferences" />
 
@@ -409,7 +518,7 @@ const SettingsScreen = ({ navigation }) => {
         {/* Weight and Height is connected, just need to do Distance */}
         <MetricsSection title="Height" option1="cm" option2="ft" selected={heightUnit} onSelect={setHeightUnit} />
         <MetricsSection title="Weight" option1="kg" option2="lbs" selected={weightUnit} onSelect={setWeightUnit} />
-        <MetricsSection title="Distance" option1="mi" option2="km" selected={distanceUnit} onSelect={setDistanceUnit} iPhone={true}/>
+        <MetricsSection title="Distance" option1="mi" option2="km" selected={distanceUnit} onSelect={setDistanceUnit} iPhone={true} />
 
 
 

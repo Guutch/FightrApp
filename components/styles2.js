@@ -1075,14 +1075,15 @@ const swipingStyles = StyleSheet.create({
   },
   card2: {
     position: 'absolute',
-    width: '90%', // Adjust as per your requirement
-    height: '23%', // Adjust as per your requirement
+    width: '90%', // Keep this to maintain the card's width
+    minHeight: '23%', // This allows the height to grow if content wraps
     backgroundColor: 'rgba(137, 137, 137, 0.5)', // 50% opaque gray
     borderRadius: 10,
-    // marginBotton: 20,
     bottom: Platform.OS === 'ios' ? "12%" : "10%",
-    alignSelf: 'center', // This will center the card horizontally
+    alignSelf: 'center', // Centers the card horizontally
+    overflow: 'hidden', // Ensures content does not spill outside the container
   },
+  
 
   userInfoText: {
     fontSize: 38,
@@ -1103,6 +1104,7 @@ const swipingStyles = StyleSheet.create({
     // remove padding and background color from here
   },
   fightingStylesContainer: {
+    // paddingBottom: 100,
     flexDirection: 'row', // display styles in a row
     flexWrap: 'wrap', // allow wrapping to the next line
   },
